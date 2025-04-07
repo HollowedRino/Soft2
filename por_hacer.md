@@ -6,7 +6,7 @@
 1. Diagrama de casos de uso
 2. Diagrama UML
 3. Diagrama E/R
-4. 
+4. poto
 5. 
 
 
