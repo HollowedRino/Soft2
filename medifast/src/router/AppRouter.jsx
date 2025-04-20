@@ -5,16 +5,16 @@ import { LoginPage } from '../auth'
 
 export const AppRouter = () => {
 
-  const authStatus = 'not-authenticated' 
+  const authStatus = 'authenticated' //not-authenticated 
 
   return (
     <Routes>
-      {
-        (authStatus === 'not-authenticated')
+        {
+          (authStatus === 'not-authenticated')
           ? <Route path='/auth/*' element={<LoginPage />} />
           : <Route path='/*' element={<MedifastPage />} />
-      }
-      <Route path='/*' element={<Navigate to='/auth/login' />} />
+        }
+        <Route path='/*' element={<Navigate to='/auth/login' />} />
     </Routes>
   )
 }
