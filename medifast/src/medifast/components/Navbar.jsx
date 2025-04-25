@@ -10,7 +10,7 @@ export const Navbar = ({ cartCount = 0 }) =>{
         <div className="flex items-center space-x-5">
           <Link to="/" >
             <div className="flex items-center space-x-3">
-              <img src="/logo.png" alt="Medifast Logo" className="h-10 w-10" />
+              <img src="https://res.cloudinary.com/dgxakgsuo/image/upload/v1745558934/b70d2277bb620e474ae830f58c44ad6b8583dfc6_fvmncj.png" alt="Medifast Logo" className="h-10 w-10" />
               <span className="text-xl font-bold text-black-600">Medifast</span>
             </div>
           </Link>
@@ -28,21 +28,23 @@ export const Navbar = ({ cartCount = 0 }) =>{
         </div>
 
         <div className="flex items-center space-x-6 relative">
-          <button className="text-white bg-green-600 hover:bg-gray-700 px-4 py-2 rounded-md text-sm">
+          <Link to="/login" className="text-white bg-green-600 hover:bg-gray-700 px-4 py-2 rounded-md text-sm">
             Iniciar sesión
-          </button>
+          </Link>
           
           <div className="flex flex-col items-center">
-            <a href="#contacto" className="text-sm text-black-500 hover:underline">
+            <Link to="/contacto" className="text-sm text-black-500 hover:underline">
               Contáctenos
-            </a>
+            </Link>
             <div className="relative">
-              <ShoppingCartIcon className="h-6 w-6 text-gray-700 cursor-pointer" />
-              {cartCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1.5">
-                  {cartCount}
-                </span>
-              )}
+              <Link to="/carrito" className="text-sm text-black-500 hover:underline">
+                <ShoppingCartIcon className="h-6 w-6 text-gray-700 cursor-pointer" />
+                {cartCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1.5">
+                    {cartCount}
+                  </span>
+                )}
+              </Link>
             </div>
           </div>
 
