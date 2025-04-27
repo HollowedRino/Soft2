@@ -2,6 +2,7 @@ import { MagnifyingGlassIcon } from '@heroicons/react/16/solid';
 import { ShoppingCartIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { LoginPage } from '../Pages/LoginPage';
 
 export const Navbar = ({ cartCount = 0 }) =>{
   return (
@@ -28,10 +29,10 @@ export const Navbar = ({ cartCount = 0 }) =>{
         </div>
 
         <div className="flex items-center space-x-6 relative">
-          <button className="text-white bg-green-600 hover:bg-gray-700 px-4 py-2 rounded-md text-sm">
+          <button className="text-white bg-green-600 hover:bg-gray-700 px-4 py-2 rounded-md text-sm" >
             Iniciar sesión
           </button>
-          
+
           <div className="flex flex-col items-center">
             <a href="#contacto" className="text-sm text-black-500 hover:underline">
               Contáctenos

@@ -2,12 +2,15 @@ import React from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { MedifastPage } from '../medifast'
 import { LoginPage } from '../auth'
+import { Navbar } from '../auth/components/Navbar'
 
 export const AppRouter = () => {
 
-  const authStatus = 'authenticated' //not-authenticated 
+  const authStatus = 'not-authenticated' //not-authenticated 
 
   return (
+    <>
+    <Navbar/>
     <Routes>
         {
           (authStatus === 'not-authenticated')
@@ -16,5 +19,7 @@ export const AppRouter = () => {
         }
         <Route path='/*' element={<Navigate to='/auth/login' />} />
     </Routes>
+
+    </>
   )
 }
