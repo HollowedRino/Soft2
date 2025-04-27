@@ -2,7 +2,7 @@ import { MagnifyingGlassIcon } from '@heroicons/react/16/solid';
 import { ShoppingCartIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { LoginPage } from '../Pages/LoginPage';
+import { LoginPage } from '../pages/LoginPage';
 
 export const Navbar = ({ cartCount = 0 }) =>{
   return (
