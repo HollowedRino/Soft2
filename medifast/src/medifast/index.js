@@ -1,2 +1,2 @@
 
-export * from './Pages/MedifastPage'
+export * from './pages/MedifastPage'

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
-export function LoginPage() {
+export const  LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -16,7 +17,7 @@ export function LoginPage() {
     return (
         <div className="flex justify-center items-center h-screen bg-gray-100">
             <div className="bg-white p-20 rounded-xl shadow-md w-140 mb-50 ">
-                <p className="text-center text-xl font-light mb-6">Ingreso para clientes registrados</p>
+                <p className="text-center text-xl font-normal mb-6">Ingreso para clientes registrados</p>
                 
                 <div className="mb-4">
                     <input
@@ -36,25 +37,32 @@ export function LoginPage() {
                 </div>
 
                 <button
-                    className="w-full bg-gray-800 text-white py-3 rounded-md hover:bg-gray-500 focus:outline-none mb-4"   
+                    className="w-full bg-black text-white py-3 rounded-md hover:bg-gray-800 focus:outline-none mb-4"   
                 >
                     Ingresar
                 </button>
 
+
+
+                
+                
+
+
+
                 <div className="text-center">
-                    <button
+                    <Link
                         className="text-gray-800 text-sm hover:underline"
-                        onClick={handleForgotPassword}
+                        to = "/forgotpass"
                     >
                         Olvidé mi password
-                    </button>
+                    </Link>
                     <br />
-                    <button
+                    <Link
                         className="text-gray-800 text-sm hover:underline"
-                        onClick={handleRegister}
+                        to = "/registro"
                     >
                         No tengo cuenta, deseo registrarme
-                    </button>
+                    </Link>
                 </div>
             </div>
         </div>

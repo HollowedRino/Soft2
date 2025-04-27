@@ -1,2 +1,2 @@
 
-export * from './Pages/LoginPage'
+export * from './pages/LoginPage'
