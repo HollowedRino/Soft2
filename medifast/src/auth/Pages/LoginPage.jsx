@@ -6,12 +6,11 @@ export function LoginPage() {
 
     const handleForgotPassword = () => {
         // Redirigir a la página de recuperación de contraseña
-        window.location.href = '/restorePassword';
+ 
     };
 
     const handleRegister = () => {
         // Redirigir a la página de registro
-        window.location.href = '/register';
     };
 
     return (

@@ -1,8 +1,9 @@
 import React from 'react'
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import { MedifastPage } from '../medifast'
 import { LoginPage } from '../auth'
-import { Navbar } from '../medifast/components/Navbar'
+import { Navbar } from '../auth/components/Navbar'
+import { AdditionalNavbar } from '../auth/components/AdditionalNavbar'
 
 export const AppRouter = () => {
 
@@ -10,7 +11,8 @@ export const AppRouter = () => {
 
   return (
     <>
-      <Navbar/>
+      <Navbar />
+      <AdditionalNavbar/>
       <Routes>
         {/* Si no estas autenticado no deberias poder ver tu carrito ni tu perfil xd */}
           {/* {
@@ -18,8 +20,10 @@ export const AppRouter = () => {
             ? <Route path='/auth/*' element={<MyAccountPage />} />
             : <Route path='/*' element={<LoginPage />} />
           } */}
-          <Route path='/login/*' element={<LoginPage />} />
-          <Route path='/*' element={<MedifastPage />} />
+          <Route path='/login/' element={<LoginPage />} />
+          <Route path='/' element={<MedifastPage />} />
+          <Route path='/medicinas' element={<LoginPage />} />
+
       </Routes>
     </>
   )
