@@ -3,28 +3,27 @@ import React, { useEffect, useState } from 'react';
 
 export const AdditionalNavbar = () => {
   const [showNavbar, setShowNavbar] = useState(false);
-  const location = useLocation(); // Hook para obtener la ruta actual
+  const location = useLocation();
 
   useEffect(() => {
-    // Muestra el navbar adicional solo en rutas específicas
     if (location.pathname !== '/') {
-      setShowNavbar(true); // Muestra el navbar adicional en estas rutas
+      setShowNavbar(true);
     } else {
-      setShowNavbar(false); // Oculta el navbar adicional en otras rutas
+      setShowNavbar(false);
     }
-  }, [location]); // Se ejecuta cada vez que cambia la ruta
+  }, [location]);
 
-  if (!showNavbar) return null; // Si no se debe mostrar, no renderiza nada
+  if (!showNavbar) return null;
 
   return (
     <div className="bg-green-600 p-2 shadow-md">
-      <div className="flex space-x-4 items-center justify-between px-40">
-        <Link to="/medicamentos" className="text-white hover:underline font-bold text-xl">Medicamentos</Link>
-        <Link to="/medicamentos-naturales" className="text-white hover:underline font-bold text-xl">Medicamentos Naturales</Link>
-        <Link to="/adulto-mayor" className="text-white hover:underline font-bold text-xl">Adulto Mayor</Link>
-        <Link to="/infantil" className="text-white hover:underline font-bold text-xl">Infantil</Link>
-        <Link to="/belleza" className="text-white hover:underline font-bold text-xl">Belleza</Link>
-        <Link to="/vitaminas" className="text-white hover:underline font-bold text-xl">Vitaminas y Suplementos</Link>
+      <div className="flex flex-wrap items-center justify-around gap-4 px-4 sm:px-10 md:px-20 lg:px-40">
+        <Link to="/medicamentos" className="text-white hover:underline font-bold text-base sm:text-lg">Medicamentos</Link>
+        <Link to="/medicamentos-naturales" className="text-white hover:underline font-bold text-base sm:text-lg">Medicamentos Naturales</Link>
+        <Link to="/adulto-mayor" className="text-white hover:underline font-bold text-base sm:text-lg">Adulto Mayor</Link>
+        <Link to="/infantil" className="text-white hover:underline font-bold text-base sm:text-lg">Infantil</Link>
+        <Link to="/belleza" className="text-white hover:underline font-bold text-base sm:text-lg">Belleza</Link>
+        <Link to="/vitaminas" className="text-white hover:underline font-bold text-base sm:text-lg">Vitaminas y Suplementos</Link>
       </div>
     </div>
   );
