@@ -1,5 +1,7 @@
 
 export * from './pages/MedifastPage'
-export * from './Pages/MyCartPage'
-export * from './Components/MyCartItem'
-export * from './Components/DropdownPresentacion'
+export * from './pages/CategoryPage'
+export * from './pages/MyCartPage'
+export * from './components/DropdownPresentation'
+export * from './components/MyCartItem'
+export * from './components/ProductItem'

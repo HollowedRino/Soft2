@@ -1,8 +1,7 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
-import { MedifastPage } from '../medifast'
 import { AdditionalNavbar, ForgotPass, LoginPage, Navbar, RegisterUser } from '../auth'
-import { MyCartPage } from '../medifast/Pages/MyCartPage'
+import { CategoryPage, MedifastPage, MyCartPage } from '../medifast'
 
 export const AppRouter = () => {
 
@@ -24,6 +23,7 @@ export const AppRouter = () => {
           <Route path='/registro/' element={<RegisterUser/>} />
           <Route path='/forgotpass/' element={<ForgotPass/>} />
           <Route path='/mycart' element={<MyCartPage/>} />
+          <Route path='/category/:categoryName' element={<CategoryPage/>} />
           
       </Routes>
     </>

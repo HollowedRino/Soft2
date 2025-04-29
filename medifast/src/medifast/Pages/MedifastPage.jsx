@@ -13,7 +13,7 @@ export const MedifastPage = () => {
 
       <div className="flex flex-wrap justify-center gap-20 w-full">
         <Link
-          to="/medicinas"
+          to="/category/medications"
           className="w-72 h-72 rounded-3xl flex flex-col items-center justify-center bg-green-600 hover:bg-green-700 transition-all duration-300"
         >
           <MagnifyingGlassIcon className="h-20 w-20 mb-4 text-white" />
