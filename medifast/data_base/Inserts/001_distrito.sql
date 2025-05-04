@@ -1,0 +1,28 @@
+-- Distritos de Lima
+INSERT INTO distrito(id, nombre_distrito) VALUES (1, 'Ancón');
+INSERT INTO distrito(id, nombre_distrito) VALUES (2, 'Puente Piedra');
+INSERT INTO distrito(id, nombre_distrito) VALUES (3, 'Santa Rosa');
+INSERT INTO distrito(id, nombre_distrito) VALUES (4, 'Carabayllo');
+INSERT INTO distrito(id, nombre_distrito) VALUES (5, 'Comas');
+INSERT INTO distrito(id, nombre_distrito) VALUES (6, 'Los Olivos');
+INSERT INTO distrito(id, nombre_distrito) VALUES (7, 'Independencia');
+INSERT INTO distrito(id, nombre_distrito) VALUES (8, 'San Martín de Porres');
+INSERT INTO distrito(id, nombre_distrito) VALUES (9, 'San Juan de Lurigancho');
+INSERT INTO distrito(id, nombre_distrito) VALUES (10, 'Santa Anita');
+INSERT INTO distrito(id, nombre_distrito) VALUES (11, 'Cieneguilla');
+INSERT INTO distrito(id, nombre_distrito) VALUES (12, 'Ate Vitarte');
+INSERT INTO distrito(id, nombre_distrito) VALUES (13, 'La Molina');
+INSERT INTO distrito(id, nombre_distrito) VALUES (14, 'Chaclacayo');
+INSERT INTO distrito(id, nombre_distrito) VALUES (15, 'Lurigancho');
+INSERT INTO distrito(id, nombre_distrito) VALUES (16, 'El Agustino');
+INSERT INTO distrito(id, nombre_distrito) VALUES (17, 'San Juan de Miraflores');
+INSERT INTO distrito(id, nombre_distrito) VALUES (18, 'Villa María del Triunfo');
+INSERT INTO distrito(id, nombre_distrito) VALUES (19, 'Villa El Salvador');
+INSERT INTO distrito(id, nombre_distrito) VALUES (20, 'Lurín');
+INSERT INTO distrito(id, nombre_distrito) VALUES (21, 'Pachacámac');
+INSERT INTO distrito(id, nombre_distrito) VALUES (22, 'Punta Hermosa');
+INSERT INTO distrito(id, nombre_distrito) VALUES (23, 'Pucusana');
+INSERT INTO distrito(id, nombre_distrito) VALUES (24, 'Punta Negra');
+INSERT INTO distrito(id, nombre_distrito) VALUES (25, 'San Bartolo');
+INSERT INTO distrito(id, nombre_distrito) VALUES (26, 'Santa María');
+INSERT INTO distrito(id, nombre_distrito) VALUES (27, 'Provincia');

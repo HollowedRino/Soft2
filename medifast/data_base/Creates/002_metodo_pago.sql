@@ -1,0 +1,4 @@
+CREATE TABLE metodo_pago (
+  id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  nombre_metodo_pago VARCHAR(40) NOT NULL
+);
