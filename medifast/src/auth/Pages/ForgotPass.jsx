@@ -66,4 +66,3 @@ export const ForgotPass= () => {
   );
 }
 
-export default ForgotPass;
