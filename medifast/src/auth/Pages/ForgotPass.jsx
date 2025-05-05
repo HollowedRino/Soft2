@@ -1,56 +1,47 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-export const ForgotPass= () => {
+
+export const ForgotPass = () => {
+  // Estado para manejar el email
   const [email, setEmail] = useState('');
+  const [message, setMessage] = useState(''); // Estado para mostrar el mensaje
 
-  const regresarLogin = () => {
- 
-  };
-
-  const handleInputChange = (e) => {
-    setEmail(e.target.value);
-  };
-
+  // Funcion que se ejecuta al presionar el botón de recuperar contraseña
   const handleSubmit = () => {
-    console.log('Enviar email para recuperar contraseña:', email);
-    // lógica real para enviar el correo
-  };
+    // aqui es donde se busca el email en la base de datos y enviara la contraseña 
 
-  
-  const CampoText = ({ placeholder, type, value, onChange }) => (
-    <input
-      type={type}
-      placeholder={placeholder}
-      className="block w-[360px] p-2.5 my-2 mx-auto text-base border border-gray-300 rounded-md text-center focus:outline-none focus:ring-2 focus:ring-black"
-      required
-      value={value}
-      onChange={onChange}
-    />
-  );
+    // Simulamos que la contraseña se ha enviado al correo
+    setMessage('La contraseña ha sido enviada a tu correo.');
+  };
 
   return (
     <div className="flex justify-center items-center h-[90vh] bg-gray-200">
       <div className="text-center bg-white p-6 rounded-lg shadow-md relative w-[600px] h-85">
-        
         <p className="font-semibold text-[18px] mb-5">
-          Ingrese su correo para enviar contraseña
+          Ingrese su correo para recuperar la contraseña
         </p>
 
-        <div className="my-8">
-          <CampoText
-            placeholder="Email"
+        <div className="mb-4">
+          <input
             type="email"
+            placeholder="Email"
+            className="w-full p-3 border border-gray-300 rounded-md mb-4"
             value={email}
-            onChange={handleInputChange}
+            onChange={(e) => setEmail(e.target.value)} // Guardar el email
           />
         </div>
 
         <button
-          onClick={handleSubmit}
-          className="w-[360px] h-[50px] bg-black text-white font-semibold rounded-md hover:bg-gray-800 transition mx-auto block mt-5"
+          onClick={handleSubmit} // aqui llamamos a la funcion para enviar el correo
+          className="w-full bg-black text-white py-3 rounded-md hover:bg-gray-800 transition mt-5"
         >
-          Ingresar
+          Recuperar Contraseña
         </button>
+
+        
+        {message && ( //Mostrar mensaje despues de hacer clic en el boton
+          <p className="mt-4 text-green-500">{message}</p>
+        )}
 
         <div className="mt-5">
           <Link
@@ -64,5 +55,4 @@ export const ForgotPass= () => {
       </div>
     </div>
   );
-}
-
+};
