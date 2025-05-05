@@ -1,50 +1,74 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { registerUserWithEmailPassword } from '../../firebase/providers';
 
 export const RegisterUser = () => {
-  const [usuarios, setUsuarios] = useState([]);
-  const [userData, setUserData] = useState({
-    nombre: '',
-    apellido: '',
-    correo: '',
-    password: '',
-    confirmPassword: '',
-  });
+  const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState('');
 
-  useEffect(() => {
-    const usuariosGuardados = JSON.parse(localStorage.getItem('usuarios'));
-    if (usuariosGuardados) {
-      setUsuarios(usuariosGuardados);
+  const handleRegister = async () => {
+    setErrorMessage(''); // Limpia errores anteriores
+
+    const nombre = document.querySelector('input[name="nombre"]').value.trim();
+    const apellido = document.querySelector('input[name="apellido"]').value.trim();
+    const email = document.querySelector('input[name="correo"]').value.trim();
+    const telefono = document.querySelector('input[name="Telefono"]').value.trim();
+    const password = document.querySelector('input[name="password"]').value;
+    const confirmPassword = document.querySelector('input[name="confirmPassword"]').value;
+
+    // Validaciones básicas
+    if (!nombre || !apellido || !email || !telefono || !password || !confirmPassword) {
+      setErrorMessage('Por favor completa todos los campos.');
+      return;
     }
-  }, []);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setUserData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    if (password !== confirmPassword) {
+      setErrorMessage('Las contraseñas no coinciden.');
+      return;
+    }
+
+    // Registro en Firebase
+    const result = await registerUserWithEmailPassword({
+      email,
+      password,
+      displayName: `${nombre} ${apellido}`
+    });
+
+    if (!result.ok) {
+      const customMessage = getFirebaseErrorMessage(result.errorCode);
+      setErrorMessage(customMessage);
+      return;
+    }
+
+    // Registro exitoso
+    navigate('/login');
   };
 
-  const handleRegister = () => {
-    setUsuarios((prevUsuarios) => [...prevUsuarios, userData]);
-    localStorage.setItem('usuarios', JSON.stringify([...usuarios, userData]));
-    console.log('Usuario registrado:', userData);
-    window.location.href = '/userOrderesMenu';
-  };
-
-  const Campotext = ({ placeholder, id, type, required, value, onChange, name }) => (
+  // Campo de texto reutilizable
+  const Campotext = ({ placeholder, type, name }) => (
     <input
       type={type}
-      id={id}
       placeholder={placeholder}
       className="block w-[400px] p-4 my-2 mx-auto text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-      required={required}
-      value={value}
-      onChange={onChange}
       name={name}
     />
   );
+
+  // Función para traducir errores de Firebase
+  const getFirebaseErrorMessage = (code) => {
+    switch (code) {
+      case 'auth/email-already-in-use':
+        return 'El correo ya está registrado.';
+      case 'auth/invalid-email':
+        return 'El correo no es válido.';
+      case 'auth/weak-password':
+        return 'La contraseña debe tener al menos 6 caracteres.';
+      case 'auth/missing-password':
+        return 'Por favor, escribe una contraseña.';
+      default:
+        return 'Ocurrió un error inesperado. Intenta de nuevo.';
+    }
+  };
 
   return (
     <div className="flex justify-center items-center h-[90vh] bg-gray-200">
@@ -53,43 +77,18 @@ export const RegisterUser = () => {
           Registra una nueva cuenta
         </p>
 
-        <div className="mt-10 mb-9">
-          <Campotext
-            placeholder="Nombre"
-            type="text"
-            name="nombre"
-            value={userData.nombre}
-            onChange={handleInputChange}
-          />
-          <Campotext
-            placeholder="Apellido"
-            type="text"
-            name="apellido"
-            value={userData.apellido}
-            onChange={handleInputChange}
-          />
-          <Campotext
-            placeholder="Correo"
-            type="email"
-            name="correo"
-            value={userData.correo}
-            onChange={handleInputChange}
-          />
-          <Campotext
-            placeholder="Password"
-            type="password"
-            name="password"
-            value={userData.password}
-            onChange={handleInputChange}
-          />
-          <Campotext
-            placeholder="Confirm Password"
-            type="password"
-            name="confirmPassword"
-            value={userData.confirmPassword}
-            onChange={handleInputChange}
-          />
+        <div className="mt-10 mb-4">
+          <Campotext placeholder="Nombre" type="text" name="nombre" />
+          <Campotext placeholder="Apellido" type="text" name="apellido" />
+          <Campotext placeholder="Correo" type="email" name="correo" />
+          <Campotext placeholder="Teléfono" type="text" name="Telefono" />
+          <Campotext placeholder="Contraseña" type="password" name="password" />
+          <Campotext placeholder="Confirmar Contraseña" type="password" name="confirmPassword" />
         </div>
+
+        {errorMessage && (
+          <p className="text-red-600 font-medium text-sm mt-2">{errorMessage}</p>
+        )}
 
         <button
           onClick={handleRegister}
@@ -99,7 +98,6 @@ export const RegisterUser = () => {
         </button>
 
         <Link
-          type="button"
           to="/login"
           className="text-black underline hover:text-gray-600 transition mt-6 block"
         >
@@ -109,4 +107,3 @@ export const RegisterUser = () => {
     </div>
   );
 };
-
