@@ -10,6 +10,6 @@
 3. Diagrama E/R (Goñas)
 4. Recordar uso y creación de frontend (Todos)
 5. Recordar uso y creación de backend (Todos)
-6. Generar ramas de trabajo (Sebastian)
+6. Generar ramas de trabajo (Sebastian) - rama frontend creado
 
 
