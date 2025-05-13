@@ -71,7 +71,7 @@ export const RegisterUser = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-[90vh] bg-gray-200">
+    <div className="flex justify-center items-center h-screen bg-gray-200">
       <div className="text-center bg-white p-6 rounded-lg shadow-md relative w-[500px]">
         <p className="font-sans font-normal text-[20px] leading-[28px] mb-5 absolute top-5 w-full left-0">
           Registra una nueva cuenta

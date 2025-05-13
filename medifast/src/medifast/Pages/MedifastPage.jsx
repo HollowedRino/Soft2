@@ -23,7 +23,7 @@ export const MedifastPage = () => {
     <motion.div
       initial="hidden"
       animate="visible"
-      className="flex flex-col py-10 px-4 sm:px-10 md:px-20 lg:px-40"
+      className="flex flex-col py-10 px-4 sm:px-10 md:px-20 lg:px-40 flex-1"
     >
       <motion.h1
         variants={fadeInUp}
@@ -32,7 +32,7 @@ export const MedifastPage = () => {
         ¿En qué le podemos ayudar?
       </motion.h1>
 
-      <div className="flex flex-wrap justify-center gap-20 w-full">
+      <div className="flex flex-wrap justify-center gap-20 w-full mb-11">
         {[{
           to: '/category/medications',
           Icon: MagnifyingGlassIcon,
@@ -70,3 +70,4 @@ export const MedifastPage = () => {
     </motion.div>
   );
 };
+
