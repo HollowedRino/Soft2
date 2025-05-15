@@ -85,10 +85,12 @@ CREATE TABLE pedido (
   botica_id INTEGER,
   metodo_pago_id INTEGER,
   direccion_usuario_id INTEGER,
+  repartidor_id INTEGER,
   FOREIGN KEY (usuario_id) REFERENCES usuario(id),
   FOREIGN KEY (botica_id) REFERENCES botica(id),
   FOREIGN KEY (metodo_pago_id) REFERENCES metodo_pago(id),
-  FOREIGN KEY (direccion_usuario_id) REFERENCES direccion_usuario(id)
+  FOREIGN KEY (direccion_usuario_id) REFERENCES direccion_usuario(id),
+  FOREIGN KEY (repartidor_id) REFERENCES repartidor(id)
 );
 
 CREATE TABLE detalle_pedido (
@@ -185,11 +187,11 @@ INSERT INTO cupon (id, codigo, descripcion, descuento) VALUES (4,'DESC5', '5% de
 INSERT INTO cupon (id, codigo, descripcion, descuento) VALUES (5,'DESC50', '50% de descuento', 0.5);
 
 -- Repartidor
-INSERT INTO repartidor (nombre, numero) VALUES ('Carlos Pérez', 987654321);
-INSERT INTO repartidor (nombre, numero) VALUES ('Lucía Gómez', 912345678);
-INSERT INTO repartidor (nombre, numero) VALUES ('Juan Torres', 998877665);
-INSERT INTO repartidor (nombre, numero) VALUES ('Ana Martínez', 934567890);
-INSERT INTO repartidor (nombre, numero) VALUES ('Pedro Sánchez', 945612378);
+INSERT INTO repartidor (id, nombre, numero) VALUES (1, 'Carlos Pérez', 987654321);
+INSERT INTO repartidor (id, nombre, numero) VALUES (2, 'Lucía Gómez', 912345678);
+INSERT INTO repartidor (id, nombre, numero) VALUES (3, 'Juan Torres', 998877665);
+INSERT INTO repartidor (id, nombre, numero) VALUES (4, 'Ana Martínez', 934567890);
+INSERT INTO repartidor (id, nombre, numero) VALUES (5, 'Pedro Sánchez', 945612378);
 
 
 -- Medicamentos
@@ -293,26 +295,26 @@ INSERT INTO inventario_botica(id, cantidad_disponible, fecha_actualizacion, boti
 VALUES (10, 110, '2025-05-04', 3, 10);
 
 -- Pedido
-INSERT INTO pedido(id, fecha_pedido, estado_pedido, usuario_id, botica_id, metodo_pago_id, direccion_usuario_id)
-VALUES (1, '2025-05-01', 'Completado', 1, 1, 1, 1);
-INSERT INTO pedido(id, fecha_pedido, estado_pedido, usuario_id, botica_id, metodo_pago_id, direccion_usuario_id)
-VALUES (2, '2025-05-01', 'Completado', 1, 1, 1, 2);
-INSERT INTO pedido(id, fecha_pedido, estado_pedido, usuario_id, botica_id, metodo_pago_id, direccion_usuario_id)
-VALUES (3, '2025-05-02', 'En proceso', 2, 2, 2, 3);
-INSERT INTO pedido(id, fecha_pedido, estado_pedido, usuario_id, botica_id, metodo_pago_id, direccion_usuario_id)
-VALUES (4, '2025-05-02', 'Pendiente de pago', 3, 1, 3, 4);
-INSERT INTO pedido(id, fecha_pedido, estado_pedido, usuario_id, botica_id, metodo_pago_id, direccion_usuario_id)
-VALUES (5, '2025-05-03', 'Completado', 4, 2, 1, 5);
-INSERT INTO pedido(id, fecha_pedido, estado_pedido, usuario_id, botica_id, metodo_pago_id, direccion_usuario_id)
-VALUES (6, '2025-05-03', 'Cancelado', 2, 3, 2, 6);
-INSERT INTO pedido(id, fecha_pedido, estado_pedido, usuario_id, botica_id, metodo_pago_id, direccion_usuario_id)
-VALUES (7, '2025-05-03', 'En reparto', 5, 3, 1, 7);
-INSERT INTO pedido(id, fecha_pedido, estado_pedido, usuario_id, botica_id, metodo_pago_id, direccion_usuario_id)
-VALUES (8, '2025-05-04', 'Completado', 4, 2, 3, 8);
-INSERT INTO pedido(id, fecha_pedido, estado_pedido, usuario_id, botica_id, metodo_pago_id, direccion_usuario_id)
-VALUES (9, '2025-05-04', 'Pendiente de confirmación', 3, 1, 1, 9);
-INSERT INTO pedido(id, fecha_pedido, estado_pedido, usuario_id, botica_id, metodo_pago_id, direccion_usuario_id)
-VALUES (10, '2025-05-04', 'Completado', 5, 3, 2, 10);
+INSERT INTO pedido(id, fecha_pedido, estado_pedido, usuario_id, botica_id, metodo_pago_id, direccion_usuario_id, repartidor_id)
+VALUES (1, '2025-05-01', 'Completado', 1, 1, 1, 1, 1);
+INSERT INTO pedido(id, fecha_pedido, estado_pedido, usuario_id, botica_id, metodo_pago_id, direccion_usuario_id, repartidor_id)
+VALUES (2, '2025-05-01', 'Completado', 1, 1, 1, 2, 2);
+INSERT INTO pedido(id, fecha_pedido, estado_pedido, usuario_id, botica_id, metodo_pago_id, direccion_usuario_id, repartidor_id)
+VALUES (3, '2025-05-02', 'En proceso', 2, 2, 2, 3, 3);
+INSERT INTO pedido(id, fecha_pedido, estado_pedido, usuario_id, botica_id, metodo_pago_id, direccion_usuario_id, repartidor_id)
+VALUES (4, '2025-05-02', 'Pendiente de pago', 3, 1, 3, 4, 4);
+INSERT INTO pedido(id, fecha_pedido, estado_pedido, usuario_id, botica_id, metodo_pago_id, direccion_usuario_id, repartidor_id)
+VALUES (5, '2025-05-03', 'Completado', 4, 2, 1, 5, 5);
+INSERT INTO pedido(id, fecha_pedido, estado_pedido, usuario_id, botica_id, metodo_pago_id, direccion_usuario_id, repartidor_id)
+VALUES (6, '2025-05-03', 'Cancelado', 2, 3, 2, 6, 2);
+INSERT INTO pedido(id, fecha_pedido, estado_pedido, usuario_id, botica_id, metodo_pago_id, direccion_usuario_id, repartidor_id)
+VALUES (7, '2025-05-03', 'En reparto', 5, 3, 1, 7, 3);
+INSERT INTO pedido(id, fecha_pedido, estado_pedido, usuario_id, botica_id, metodo_pago_id, direccion_usuario_id, repartidor_id)
+VALUES (8, '2025-05-04', 'Completado', 4, 2, 3, 8, 5);
+INSERT INTO pedido(id, fecha_pedido, estado_pedido, usuario_id, botica_id, metodo_pago_id, direccion_usuario_id, repartidor_id)
+VALUES (9, '2025-05-04', 'Pendiente de confirmación', 3, 1, 1, 9, 1);
+INSERT INTO pedido(id, fecha_pedido, estado_pedido, usuario_id, botica_id, metodo_pago_id, direccion_usuario_id, repartidor_id)
+VALUES (10, '2025-05-04', 'Completado', 5, 3, 2, 10, 4);
 
 -- detalle del pedido 
 INSERT INTO detalle_pedido(cantidad, precio_unitario, pedido_id, medicamento_id)

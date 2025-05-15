@@ -83,10 +83,12 @@ CREATE TABLE pedido (
   botica_id INTEGER,
   metodo_pago_id INTEGER,
   direccion_usuario_id INTEGER,
+  repartidor_id INTEGER,
   FOREIGN KEY (usuario_id) REFERENCES usuario(id),
   FOREIGN KEY (botica_id) REFERENCES botica(id),
   FOREIGN KEY (metodo_pago_id) REFERENCES metodo_pago(id),
-  FOREIGN KEY (direccion_usuario_id) REFERENCES direccion_usuario(id)
+  FOREIGN KEY (direccion_usuario_id) REFERENCES direccion_usuario(id),
+  FOREIGN KEY (repartidor_id) REFERENCES repartidor(id)
 );
 
 CREATE TABLE detalle_pedido (
