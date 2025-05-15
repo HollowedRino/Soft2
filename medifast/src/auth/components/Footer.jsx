@@ -9,7 +9,7 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 export const Footer = () => {
     return (
         <>
-            <footer className="grid grid-cols-5 gap-5 px-12 py-2 bg-[#e7e7e7] border-t border-[#ccc] mt-8">
+            <footer className="grid grid-cols-5 gap-5 px-12 py-2 bg-[#e7e7e7] border-t border-[#ccc]">
                 <div className="footer-item col-span-1">
                     <h3 className="font-bold text-lg">Medifast</h3>
                     <p>© 2025</p>

@@ -10,6 +10,7 @@ export const publicRoutes = [
   <Route key="map" path="/map" element={<MapPage />} />,
   <Route key="medical" path="/medical-assistance" element={<AttendancePage />} />,
   <Route key="category" path="/category/:categoryName" element={<CategoryPage />} />,
-  <Route key="home" path="/*" element={<MedifastPage />} />,
-  <Route key="contactUs" path="/contactUs*" element={<ContactUsPage />} />,
+  <Route key="home" path="/" element={<MedifastPage />} />,
+  <Route key="auxiliar" path="/*" element={<MedifastPage />} />,
+  <Route key="contactUs" path="/contactUs" element={<ContactUsPage />} />,
 ]
