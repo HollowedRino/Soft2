@@ -9,6 +9,20 @@ CREATE TABLE metodo_pago (
   nombre_metodo_pago VARCHAR(40) NOT NULL
 );
 
+CREATE TABLE cupon (
+  id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  codigo VARCHAR(20),
+  descripcion VARCHAR(20),
+  descuento REAL
+);
+
+CREATE TABLE repartidor (
+  id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  nombre VARCHAR(100) NOT NULL,
+  numero INTEGER NOT NULL
+);
+
+
 CREATE TABLE medicamento (
   id INTEGER PRIMARY KEY NOT NULL,
   nombre VARCHAR(50) NOT NULL,
@@ -88,7 +102,7 @@ CREATE TABLE detalle_pedido (
   FOREIGN KEY (medicamento_id) REFERENCES medicamento(id)
 );
 
-CREATE TABLE pagos (
+CREATE TABLE pago (
   id INTEGER PRIMARY KEY NOT NULL,
   monto_total REAL,
   fecha_pago DATE NOT NULL,
@@ -96,10 +110,13 @@ CREATE TABLE pagos (
   usuario_id INTEGER,
   detalle_pedido_id INTEGER,
   metodo_pago_id INTEGER,
+  cupon_id INTEGER NOT NULL DEFAULT 1,
   FOREIGN KEY (usuario_id) REFERENCES usuario(id),
   FOREIGN KEY (detalle_pedido_id) REFERENCES detalle_pedido(id),
-  FOREIGN KEY (metodo_pago_id) REFERENCES metodo_pago(id)
+  FOREIGN KEY (metodo_pago_id) REFERENCES metodo_pago(id),
+  FOREIGN KEY (cupon_id) REFERENCES cupon(id)
 );
+
 
 CREATE TABLE carrito (
   id INTEGER PRIMARY KEY NOT NULL,
@@ -116,6 +133,8 @@ CREATE TABLE item_carrito (
   FOREIGN KEY (carrito_id) REFERENCES carrito(id),
   FOREIGN KEY (medicamento_id) REFERENCES medicamento(id)
 );
+
+
 
 
 -- INSERTS
@@ -157,6 +176,21 @@ INSERT INTO metodo_pago(id, nombre_metodo_pago) VALUES (4, 'Transferencia bancar
 INSERT INTO metodo_pago(id, nombre_metodo_pago) VALUES (5, 'Yape');
 INSERT INTO metodo_pago(id, nombre_metodo_pago) VALUES (6, 'Plin');
 INSERT INTO metodo_pago(id, nombre_metodo_pago) VALUES (7, 'Pago contra entrega');
+
+-- Cupon
+INSERT INTO cupon (id, codigo, descripcion, descuento) VALUES (1, null, null, 0.0);
+INSERT INTO cupon (id, codigo, descripcion, descuento) VALUES (2,'DESC10', '10% de descuento', 0.1);
+INSERT INTO cupon (id, codigo, descripcion, descuento) VALUES (3,'DESC20', '20% de descuento', 0.2);
+INSERT INTO cupon (id, codigo, descripcion, descuento) VALUES (4,'DESC5', '5% de descuento', 0.05);
+INSERT INTO cupon (id, codigo, descripcion, descuento) VALUES (5,'DESC50', '50% de descuento', 0.5);
+
+-- Repartidor
+INSERT INTO repartidor (nombre, numero) VALUES ('Carlos Pérez', 987654321);
+INSERT INTO repartidor (nombre, numero) VALUES ('Lucía Gómez', 912345678);
+INSERT INTO repartidor (nombre, numero) VALUES ('Juan Torres', 998877665);
+INSERT INTO repartidor (nombre, numero) VALUES ('Ana Martínez', 934567890);
+INSERT INTO repartidor (nombre, numero) VALUES ('Pedro Sánchez', 945612378);
+
 
 -- Medicamentos
 INSERT INTO medicamento(id, nombre, descripcion, fabricante, precio, requiere_receta, estado_medicamento) 
@@ -282,38 +316,38 @@ VALUES (10, '2025-05-04', 'Completado', 5, 3, 2, 10);
 
 -- detalle del pedido 
 INSERT INTO detalle_pedido(cantidad, precio_unitario, pedido_id, medicamento_id)
-VALUES (2, 3.50, 1, 1);
+select null, precio, 1, 1 from medicamento where id = 1;
 INSERT INTO detalle_pedido(cantidad, precio_unitario, pedido_id, medicamento_id)
-VALUES (1, 5.00, 1, 2);
+select null, precio, 1, 2 from medicamento where id = 2;
 INSERT INTO detalle_pedido(cantidad, precio_unitario, pedido_id, medicamento_id)
-VALUES (3, 8.75, 2, 3);
+select null, precio, 2, 3 from medicamento where id = 3;
 INSERT INTO detalle_pedido(cantidad, precio_unitario, pedido_id, medicamento_id)
-VALUES (1, 4.20, 2, 4);
+select null, precio, 2, 4 from medicamento where id = 4;
 INSERT INTO detalle_pedido(cantidad, precio_unitario, pedido_id, medicamento_id)
-VALUES (2, 10.00, 3, 5);
+select null, precio, 3, 5 from medicamento where id = 5;
 INSERT INTO detalle_pedido(cantidad, precio_unitario, pedido_id, medicamento_id)
-VALUES (4, 3.90, 3, 6);
+select null, precio, 3, 6 from medicamento where id = 6;
 INSERT INTO detalle_pedido(cantidad, precio_unitario, pedido_id, medicamento_id)
-VALUES (1, 9.00, 4, 7);
+select null, precio, 4, 7 from medicamento where id = 7;
 INSERT INTO detalle_pedido(cantidad, precio_unitario, pedido_id, medicamento_id)
-VALUES (2, 6.30, 4, 8);
+select null, precio, 4, 8 from medicamento where id = 8;
 INSERT INTO detalle_pedido(cantidad, precio_unitario, pedido_id, medicamento_id)
-VALUES (3, 7.45, 5, 9);
+select null, precio, 5, 9 from medicamento where id = 9;
 INSERT INTO detalle_pedido(cantidad, precio_unitario, pedido_id, medicamento_id)
-VALUES (5, 2.50, 5, 10);
+select null, precio, 5, 10 from medicamento where id = 10;
 
--- Inserciones en la tabla pagos selects para obtener el subtotal desde detalle_pedido
-INSERT INTO pagos (monto_total, fecha_pago, estado_pago, usuario_id, detalle_pedido_id, metodo_pago_id)
+
+-- Pago
+INSERT INTO pago (monto_total, fecha_pago, estado_pago, usuario_id, detalle_pedido_id, metodo_pago_id)
 SELECT subtotal, CURRENT_DATE, 'Pagado', 1, id, 1 FROM detalle_pedido WHERE id = 1;
-INSERT INTO pagos (monto_total, fecha_pago, estado_pago, usuario_id, detalle_pedido_id, metodo_pago_id)
+INSERT INTO pago (monto_total, fecha_pago, estado_pago, usuario_id, detalle_pedido_id, metodo_pago_id)
 SELECT subtotal, CURRENT_DATE, 'Pagado', 1, id, 1 FROM detalle_pedido WHERE id = 2;
-INSERT INTO pagos (monto_total, fecha_pago, estado_pago, usuario_id, detalle_pedido_id, metodo_pago_id)
+INSERT INTO pago (monto_total, fecha_pago, estado_pago, usuario_id, detalle_pedido_id, metodo_pago_id)
 SELECT subtotal, CURRENT_DATE, 'Pagado', 2, id, 2 FROM detalle_pedido WHERE id = 3;
-INSERT INTO pagos (monto_total, fecha_pago, estado_pago, usuario_id, detalle_pedido_id, metodo_pago_id)
+INSERT INTO pago (monto_total, fecha_pago, estado_pago, usuario_id, detalle_pedido_id, metodo_pago_id)
 SELECT subtotal, CURRENT_DATE, 'Pendiente', 3, id, 3 FROM detalle_pedido WHERE id = 4;
-INSERT INTO pagos (monto_total, fecha_pago, estado_pago, usuario_id, detalle_pedido_id, metodo_pago_id)
+INSERT INTO pago (monto_total, fecha_pago, estado_pago, usuario_id, detalle_pedido_id, metodo_pago_id)
 SELECT subtotal, CURRENT_DATE, 'Pagado', 4, id, 5 FROM detalle_pedido WHERE id = 5;
-
 
 -- Carrito
 INSERT INTO carrito(id, usuario_id, fecha_actualizacion)
@@ -349,5 +383,4 @@ INSERT INTO item_carrito(id, carrito_id, medicamento_id, cantidad)
 VALUES (9, 5, 10, 1);
 INSERT INTO item_carrito(id, carrito_id, medicamento_id, cantidad)
 VALUES (10, 5, 8, 2);
-
 

@@ -1,7 +1,7 @@
 CREATE TABLE detalle_pedido(
   id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   cantidad INTEGER,
-  precio_unitario REAL NOT NULL,
+  precio_unitario REAL, -- se aceptan valores vacios/nulos
   subtotal REAL GENERATED ALWAYS AS (cantidad * precio_unitario) STORED,  
   pedido_id INTEGER,
   medicamento_id INTEGER,
