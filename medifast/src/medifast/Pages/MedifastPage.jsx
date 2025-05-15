@@ -1,7 +1,6 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
 import { BuildingStorefrontIcon } from '@heroicons/react/24/outline';
 import { UserIcon } from '@heroicons/react/24/solid';
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
@@ -23,7 +22,7 @@ export const MedifastPage = () => {
     <motion.div
       initial="hidden"
       animate="visible"
-      className="flex flex-col py-10 px-4 sm:px-10 md:px-20 lg:px-40 flex-1"
+      className="flex flex-col py-10 px-4 sm:px-10 md:px-20 lg:px-40"
     >
       <motion.h1
         variants={fadeInUp}

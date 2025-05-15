@@ -15,8 +15,8 @@ export const ForgotPass = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-200">
-      <div className="text-center bg-white p-6 rounded-lg shadow-md relative w-[600px] h-85">
+    <div className="flex justify-center items-center h-full">
+      <div className="text-center bg-white p-6 rounded-lg shadow-md relative w-[600px] h-85 mb-15 mt-15">
         <p className="font-semibold text-[18px] mb-5">
           Ingrese su correo para recuperar la contraseña
         </p>

@@ -1,5 +1,3 @@
-
-import React from "react";
 import { useParams } from "react-router-dom";
 import { ProductItem } from "../components/ProductItem";
   
@@ -24,13 +22,13 @@ import { ProductItem } from "../components/ProductItem";
           {"Inicio > " + categoriaTraducida}
         </h1>
   
-        <div className="w-full bg-green-100 min-h-screen">
+        <div className="w-full bg-green-100 min-h-120">
           <div className=" w-full p-6 sm:px-10">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 gap-8">
               {/* ProductItem */}
 
                 <ProductItem />
-
+                <ProductItem />
             </div>
           </div>
         </div>
