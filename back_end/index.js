@@ -7,7 +7,7 @@ const router = express.Router();*/
 const sqlite3 = require('sqlite3').verbose();
 
 // Conectar a la base de datos SQLite
-const db = new sqlite3.Database('./data_base/bd_01.db', (err) => {
+const db = new sqlite3.Database('./data_base/base_03.db', (err) => {
   if (err) {
     console.error('Error al conectar con la base de datos:', err.message);
   } else {
@@ -17,6 +17,8 @@ const db = new sqlite3.Database('./data_base/bd_01.db', (err) => {
 
 // Middleware para procesar JSON
 app.use(express.json());
+
+///////////////////////BOTICA///////////////////////
 
 // Ruta para obtener todos los registros de la tabla botica
 app.get('/botica', (req, res) => {
@@ -49,6 +51,68 @@ app.get('/botica/:id', (req, res) => {
   });
 });
 
+///////////////////////USUARIO///////////////////////
+// Ruta para obtener todos los registros de la tabla usuario
+app.get('/usuario', (req, res) => {
+  db.all('SELECT * FROM usuario', [], (err, rows) => {
+    if (err) {
+      console.error('Error al consultar la tabla usuario:', err.message);
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.json(rows);
+  });
+});
+
+// Ruta para obtener un registro específico de la tabla usuario por ID
+app.get('/usuario/:id', (req, res) => {
+  const id = req.params.id;
+  db.get('SELECT * FROM usuario WHERE id = ?', [id], (err, row) => {
+    if (err) {
+      console.error('Error al consultar la tabla usuario por ID:', err.message);
+      res.status(500).json({ error: err.message });
+      return;
+    }
+
+    if (!row) {
+      res.status(404).json({ error: 'Registro no encontrado' });
+      return;
+    }
+
+    res.json(row);
+  });
+});
+
+///////////////////////INVENTARIO_BOTICA///////////////////////
+// Ruta para obtener todos los registros de la tabla inventario_botica
+app.get('/inventario_botica', (req, res) => {
+  db.all('SELECT * FROM inventario_botica', [], (err, rows) => {
+    if (err) {
+      console.error('Error al consultar la tabla inventario_botica:', err.message);
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.json(rows);
+  });
+});
+// Ruta para obtener un registro específico de la tabla inventario_botica por ID de botica
+app.get('/inventario_botica/:botica_id', (req, res) => {
+  const botica_id = req.params.botica_id;
+  db.all('SELECT * FROM inventario_botica WHERE botica_id = ?', [botica_id], (err, row) => {
+    if (err) {
+      console.error('Error al consultar la tabla inventario_botica por ID:', err.message);
+      res.status(500).json({ error: err.message });
+      return;
+    }
+
+    if (!row) {
+      res.status(404).json({ error: 'Registro no encontrado' });
+      return;
+    }
+
+    res.json(row);
+  });
+});
 
 // Ruta principal
 app.get('/', (req, res) => {
