@@ -1,8 +1,10 @@
 import {DataTypes} from "sequelize";
+import { Model } from "sequelize";
 import connection from "../configs/connect_database.js";
 
-const ItemCarrito = connection.define(
-    "ItemCarrito", {
+class ItemCarrito extends Model {}
+ItemCarrito.init(
+    {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -31,6 +33,8 @@ const ItemCarrito = connection.define(
             allowNull: false
         }
     }, {
+        sequelize: connection,
+        modelName: "ItemCarrito",
         freezeTableName: true,
         timestamps: false
     }

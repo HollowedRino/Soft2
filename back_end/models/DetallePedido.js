@@ -1,10 +1,12 @@
 import {DataTypes} from "sequelize";
+import { Model } from "sequelize";
 import connection from "../configs/connect_database.js";
 import Pedido from "./Pedido.js";
 import Medicamento from "./Medicamento.js";
 
-const DetallePedido = connection.define(
-    "DetallePedido", {
+class DetallePedido extends Model {}
+DetallePedido.init(
+    {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -42,6 +44,8 @@ const DetallePedido = connection.define(
             onDelete: "CASCADE"
         }
     }, {
+        sequelize: connection,
+        modelName: "DetallePedido",
         freezeTableName: true,
         timestamps: false
     }

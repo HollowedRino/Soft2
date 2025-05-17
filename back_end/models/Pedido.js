@@ -1,4 +1,5 @@
 import {DataTypes} from "sequelize";
+import { Model } from "sequelize";
 import connection from "../configs/connect_database.js";
 import Usuario from "./Usuario.js";
 import Botica from "./Botica.js";
@@ -7,8 +8,9 @@ import DireccionUsuario from ",/DireccionUsuario.js";
 import Repartidor from "./Repartidor.js";
 import { FOREIGNKEYS } from "sequelize/lib/query-types";
 
-const Pedido = connection.define(
-    "Pedido", {
+class Pedido extends Model {}
+Pedido.init(
+    {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -68,6 +70,8 @@ const Pedido = connection.define(
             onDelete: "CASCADE"
         }
     }, {
+        sequelize: connection,
+        modelName: "Pedido",
         freezeTableName: true,
         timestamps: false
     }

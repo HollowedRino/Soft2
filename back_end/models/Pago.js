@@ -1,12 +1,14 @@
 import {DataTypes} from "sequelize";
+import { Model } from "sequelize";
 import connection from "../configs/connect_database.js";
 import Usuario from "./Usuario.js";
 import DetallePedido from "./DetallePedido.js";
 import MetodoPago from "./MetodoPago.js";
 import Cupon from "./Cupon.js";
 
-const Pago = connection.define(
-    "Pago", {
+class Pago extends Model {}
+Pago.init(
+    {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -61,6 +63,8 @@ const Pago = connection.define(
             onDelete: "CASCADE"
         }
     }, {
+        sequelize: connection,
+        modelName: "Pago",
         freezeTableName: true,
         timestamps: false
     }

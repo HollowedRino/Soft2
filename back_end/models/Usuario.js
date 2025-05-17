@@ -1,8 +1,10 @@
 import {DataTypes} from "sequelize";
+import { Model } from "sequelize";
 import connection from "../configs/connect_database.js";
 
-const Usuario = connection.define(
-    "Usuario", {
+class Usuario extends Model {}
+Usuario.init(
+    {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -33,6 +35,8 @@ const Usuario = connection.define(
             allowNull: false
         }
     }, {
+        sequelize: connection,
+        modelName: "Usuario",
         freezeTableName: true,
         timestamps: false
     }

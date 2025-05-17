@@ -1,10 +1,12 @@
 import {DataTypes} from "sequelize";
+import { Model } from "sequelize";
 import connection from "../configs/connect_database.js";
 import Usuario from "./Usuario.js";
 import Distrito from "./Distrito.js";
 
-const DireccionUsuario = connection.define(
-    "DireccionUsuario", {
+class DireccionUsuario extends Model {}
+DireccionUsuario.init(
+    {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -37,6 +39,8 @@ const DireccionUsuario = connection.define(
             onDelete: "CASCADE"
         }
     }, {
+        sequelize: connection,
+        modelName: "DireccionUsuario",
         freezeTableName: true,
         timestamps: false
     }

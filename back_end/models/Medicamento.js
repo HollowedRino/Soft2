@@ -1,8 +1,10 @@
 import {DataTypes} from "sequelize";
+import { Model } from "sequelize";
 import connection from "../configs/connect_database.js";
 
-const Medicamento = connection.define(
-    "Medicamento", {
+class Medicamento extends Model {}
+Medicamento.init(
+    {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -36,6 +38,8 @@ const Medicamento = connection.define(
             type: DataTypes.TEXT,
         }
     },{
+        sequelize: connection,
+        modelName: "Medicamento",
         freezeTableName: true,
         timestamps: false
     }

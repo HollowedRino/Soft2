@@ -1,9 +1,10 @@
 import {DataTypes} from "sequelize";
+import { Model } from "sequelize";
 import connection from "../configs/connect_database.js";
 import Distrito from "./Distrito.js";
-
-const Botica = connection.define(
-    "Botica", {
+class Botica extends Model {}
+Botica.init(
+    {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -39,6 +40,8 @@ const Botica = connection.define(
             onDelete: "CASCADE"
         }
     }, {
+        sequelize: connection,
+        modelName: "Botica",
         freezeTableName: true,
         timestamps: false
     }

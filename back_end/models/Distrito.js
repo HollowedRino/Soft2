@@ -1,8 +1,10 @@
 import {DataTypes} from "sequelize";
+import { Model } from "sequelize";
 import connection from "../configs/connect_database.js";
 
-const Distrito = connection.define(
-    "Distrito", {
+class Distrito extends Model {}
+Distrito.init(
+    {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -13,7 +15,9 @@ const Distrito = connection.define(
             allowNull: false
         }
     },{
-        freezeTableName: true, //Nose para que es
+        sequelize: connection,
+        modelName: "Distrito",
+        freezeTableName: true,
         timestamps: false
     }
 );

@@ -1,10 +1,12 @@
 import {DataTypes} from "sequelize";
+import { Model } from "sequelize";
 import connection from "../configs/connect_database.js";
 import Botica from "./Botica.js";
 import Medicamento from "./Medicamento.js";
 
-const InventarioBotica = connection.define(
-    "InventarioBotica", {
+class InventarioBotica extends Model {}
+InventarioBotica.init(
+    {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -37,6 +39,8 @@ const InventarioBotica = connection.define(
             onDelete: "CASCADE"
         }
     }, {
+        sequelize: connection,
+        modelName: "InventarioBotica",
         freezeTableName: true,
         indexes: [
             {

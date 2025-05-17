@@ -1,8 +1,10 @@
 import {DataTypes} from "sequelize";
+import { Model } from "sequelize";
 import connection from "../configs/connect_database.js";
 
-const MetodoPago = connection.define(
-    "MetodoPago", {
+class MetodoPago extends Model {}
+MetodoPago.init(
+    {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -13,7 +15,9 @@ const MetodoPago = connection.define(
             allowNull: false
         }
     },{
-        freezeTableName: true, //Nose para que es
+        sequelize: connection,
+        modelName: "MetodoPago",
+        freezeTableName: true,
         timestamps: false
     }
 );

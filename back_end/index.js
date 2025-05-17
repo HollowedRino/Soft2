@@ -8,7 +8,7 @@ const port = 3000;
 app.use(express.json());
 
 // Usar las rutas de botica
-app.use('/api', boticaRoutes);
+app.use('/boticas', boticaRoutes);
 
 // Ruta principal
 app.get('/', (req, res) => {
