@@ -31,7 +31,6 @@ app.get('/botica', (req, res) => {
     res.json(rows);
   });
 });
-
 // Ruta para obtener un registro específico de la tabla botica por ID
 app.get('/botica/:id', (req, res) => {
   const id = req.params.id;
@@ -50,7 +49,7 @@ app.get('/botica/:id', (req, res) => {
     res.json(row);
   });
 });
-
+//asdasdadadad
 ///////////////////////USUARIO///////////////////////
 // Ruta para obtener todos los registros de la tabla usuario
 app.get('/usuario', (req, res) => {
