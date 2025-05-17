@@ -1,8 +1,8 @@
 import {DataTypes} from "sequelize";
-import {sequelize} from "../configs/connect_database.js";
+import connection from "../configs/connect_database.js";
 import Distrito from "./Distrito.js";
 
-const Botica = sequelize.define(
+const Botica = connection.define(
     "Botica", {
         id: {
             type: DataTypes.INTEGER,
@@ -39,11 +39,12 @@ const Botica = sequelize.define(
             onDelete: "CASCADE"
         }
     }, {
-        freezeTableName: true
+        freezeTableName: true,
+        timestamps: false
     }
 );
 
-Distrito.hasMany(Botica, {foreignKey: "distrido_id"});
+Distrito.hasMany(Botica, {foreignKey: "distrito_id"});
 Botica.belongsTo(Distrito, {foreignKey: "distrito_id"});
 
 export default Botica;

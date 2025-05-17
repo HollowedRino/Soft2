@@ -1,9 +1,9 @@
 import {DataTypes} from "sequelize";
-import {sequelize} from "../configs/connect_database.js";
+import connection from "../configs/connect_database.js";
 import Usuario from "./Usuario.js";
 import Distrito from "./Distrito.js";
 
-const DireccionUsuario = sequelize.define(
+const DireccionUsuario = connection.define(
     "DireccionUsuario", {
         id: {
             type: DataTypes.INTEGER,
@@ -37,7 +37,8 @@ const DireccionUsuario = sequelize.define(
             onDelete: "CASCADE"
         }
     }, {
-        freezeTableName: true
+        freezeTableName: true,
+        timestamps: false
     }
 );
 

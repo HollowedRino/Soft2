@@ -1,7 +1,7 @@
 import {DataTypes} from "sequelize";
-import {sequelize} from "../configs/connect_database.js";
+import connection from "../configs/connect_database.js";
 
-const Usuario = sequelize.define(
+const Usuario = connection.define(
     "Usuario", {
         id: {
             type: DataTypes.INTEGER,
@@ -33,7 +33,8 @@ const Usuario = sequelize.define(
             allowNull: false
         }
     }, {
-        freezeTableName: true
+        freezeTableName: true,
+        timestamps: false
     }
 );
 

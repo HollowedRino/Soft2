@@ -1,7 +1,7 @@
 import {DataTypes} from "sequelize";
-import {sequelize} from "../configs/connect_database.js";
+import connection from "../configs/connect_database.js";
 
-const Cupon = sequelize.define(
+const Cupon = connection.define(
     "Cupon", {
         id: {
             type: DataTypes.INTEGER,
@@ -21,7 +21,8 @@ const Cupon = sequelize.define(
             allowNull: false
         }
     },{
-        freezeTableName: true //Nose para que es
+        freezeTableName: true, //Nose para que es
+        timestamps: false
     }
 );
 

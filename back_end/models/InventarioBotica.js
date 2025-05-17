@@ -1,9 +1,9 @@
 import {DataTypes} from "sequelize";
-import {sequelize} from "../configs/connect_database.js";
+import connection from "../configs/connect_database.js";
 import Botica from "./Botica.js";
 import Medicamento from "./Medicamento.js";
 
-const InventarioBotica = sequelize.define(
+const InventarioBotica = connection.define(
     "InventarioBotica", {
         id: {
             type: DataTypes.INTEGER,
@@ -43,7 +43,8 @@ const InventarioBotica = sequelize.define(
                 unique: true,
                 fields: ["botica_id","medicamento_id"]
             }
-        ]
+        ],
+        timestamps: false
     }
 );
 

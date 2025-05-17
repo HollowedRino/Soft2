@@ -1,5 +1,5 @@
 import {DataTypes} from "sequelize";
-import {sequelize} from "../configs/connect_database.js";
+import connection from "../configs/connect_database.js";
 import Usuario from "./Usuario.js";
 import Botica from "./Botica.js";
 import MetodoPago from "./MetodoPago.js";
@@ -7,7 +7,7 @@ import DireccionUsuario from ",/DireccionUsuario.js";
 import Repartidor from "./Repartidor.js";
 import { FOREIGNKEYS } from "sequelize/lib/query-types";
 
-const Pedido = sequelize.define(
+const Pedido = connection.define(
     "Pedido", {
         id: {
             type: DataTypes.INTEGER,
@@ -68,7 +68,8 @@ const Pedido = sequelize.define(
             onDelete: "CASCADE"
         }
     }, {
-        freezeTableName: true
+        freezeTableName: true,
+        timestamps: false
     }
 );
 

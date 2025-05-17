@@ -1,7 +1,7 @@
 import {DataTypes} from "sequelize";
-import {sequelize} from "../configs/connect_database.js";
+import connection from "../configs/connect_database.js";
 
-const Carrito = sequelize.define(
+const Carrito = connection.define(
     "Carrito", {
         id: {
             type: DataTypes,
@@ -21,6 +21,10 @@ const Carrito = sequelize.define(
             type: DataTypes.TIME,
             allowNull: false
         }
+    },
+    {
+        freezeTableName: true,
+        timestamps: false
     }
 );
 

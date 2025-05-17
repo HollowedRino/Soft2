@@ -1,7 +1,7 @@
 import {DataTypes} from "sequelize";
-import {sequelize} from "../configs/connect_database.js";
+import connection from "../configs/connect_database.js";
 
-const MetodoPago = sequelize.define(
+const MetodoPago = connection.define(
     "MetodoPago", {
         id: {
             type: DataTypes.INTEGER,
@@ -13,7 +13,8 @@ const MetodoPago = sequelize.define(
             allowNull: false
         }
     },{
-        freezeTableName: true //Nose para que es
+        freezeTableName: true, //Nose para que es
+        timestamps: false
     }
 );
 

@@ -1,11 +1,11 @@
 import {DataTypes} from "sequelize";
-import {sequelize} from "../configs/connect_database.js";
+import connection from "../configs/connect_database.js";
 import Usuario from "./Usuario.js";
 import DetallePedido from "./DetallePedido.js";
 import MetodoPago from "./MetodoPago.js";
 import Cupon from "./Cupon.js";
 
-const Pago = sequelize.define(
+const Pago = connection.define(
     "Pago", {
         id: {
             type: DataTypes.INTEGER,
@@ -61,7 +61,8 @@ const Pago = sequelize.define(
             onDelete: "CASCADE"
         }
     }, {
-        freezeTableName: true
+        freezeTableName: true,
+        timestamps: false
     }
 );
 

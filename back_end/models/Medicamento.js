@@ -1,7 +1,7 @@
 import {DataTypes} from "sequelize";
-import {sequelize} from "../configs/connect_database.js";
+import connection from "../configs/connect_database.js";
 
-const Medicamento = sequelize.define(
+const Medicamento = connection.define(
     "Medicamento", {
         id: {
             type: DataTypes.INTEGER,
@@ -36,7 +36,8 @@ const Medicamento = sequelize.define(
             type: DataTypes.TEXT,
         }
     },{
-        freezeTableName: true
+        freezeTableName: true,
+        timestamps: false
     }
 );
 

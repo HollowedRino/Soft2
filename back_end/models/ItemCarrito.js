@@ -1,7 +1,7 @@
 import {DataTypes} from "sequelize";
-import {sequelize} from "../configs/connect_database.js";
+import connection from "../configs/connect_database.js";
 
-const ItemCarrito = sequelize.define(
+const ItemCarrito = connection.define(
     "ItemCarrito", {
         id: {
             type: DataTypes.INTEGER,
@@ -31,7 +31,8 @@ const ItemCarrito = sequelize.define(
             allowNull: false
         }
     }, {
-        freezeTableName: true
+        freezeTableName: true,
+        timestamps: false
     }
 );
 

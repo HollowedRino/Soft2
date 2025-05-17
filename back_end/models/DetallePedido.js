@@ -1,9 +1,9 @@
 import {DataTypes} from "sequelize";
-import {sequelize} from "../configs/connect_database.js";
+import connection from "../configs/connect_database.js";
 import Pedido from "./Pedido.js";
 import Medicamento from "./Medicamento.js";
 
-const DetallePedido = sequelize.define(
+const DetallePedido = connection.define(
     "DetallePedido", {
         id: {
             type: DataTypes.INTEGER,
@@ -42,7 +42,8 @@ const DetallePedido = sequelize.define(
             onDelete: "CASCADE"
         }
     }, {
-        freezeTableName: true
+        freezeTableName: true,
+        timestamps: false
     }
 );
 

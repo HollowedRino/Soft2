@@ -1,7 +1,7 @@
 import {DataTypes} from "sequelize";
-import {sequelize} from "../configs/connect_database.js";
+import connection from "../configs/connect_database.js";
 
-const Repartidor = sequelize.define(
+const Repartidor = connection.define(
     "Repartidor", {
         id: {
             type: DataTypes.INTEGER,
@@ -17,7 +17,8 @@ const Repartidor = sequelize.define(
             allowNull: false
         }
     }, {
-        freezeTableName: true
+        freezeTableName: true,
+        timestamps: false
     }
 );
 
