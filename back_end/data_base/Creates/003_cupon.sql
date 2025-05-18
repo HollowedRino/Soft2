@@ -1,0 +1,6 @@
+CREATE TABLE cupon (
+  id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  codigo VARCHAR(20),
+  descripcion VARCHAR(20),
+  descuento REAL
+);

@@ -10,9 +10,11 @@
 1. Diagrama E/R (Goñas)
 1. Recordar uso y creación de frontend (Todos)
 1. Recordar uso y creación de backend (Todos)
-1. Generar ramas de trabajo (Sebastian)
+1. Generar ramas de trabajo (Sebastian) - rama backend creado - rama frontend creado
 
 # Observaciones
+
+- Primer merge de frontend y backend
 
 - fixear login card.
 - USar schemas y react hook forms para formularios de checkout

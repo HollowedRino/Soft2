@@ -1,21 +1,21 @@
 -- detalle del pedido 
 INSERT INTO detalle_pedido(cantidad, precio_unitario, pedido_id, medicamento_id)
-VALUES (2, 3.50, 1, 1);
+select null, precio, 1, 1 from medicamento where id = 1;
 INSERT INTO detalle_pedido(cantidad, precio_unitario, pedido_id, medicamento_id)
-VALUES (1, 5.00, 1, 2);
+select null, precio, 1, 2 from medicamento where id = 2;
 INSERT INTO detalle_pedido(cantidad, precio_unitario, pedido_id, medicamento_id)
-VALUES (3, 8.75, 2, 3);
+select null, precio, 2, 3 from medicamento where id = 3;
 INSERT INTO detalle_pedido(cantidad, precio_unitario, pedido_id, medicamento_id)
-VALUES (1, 4.20, 2, 4);
+select null, precio, 2, 4 from medicamento where id = 4;
 INSERT INTO detalle_pedido(cantidad, precio_unitario, pedido_id, medicamento_id)
-VALUES (2, 10.00, 3, 5);
+select null, precio, 3, 5 from medicamento where id = 5;
 INSERT INTO detalle_pedido(cantidad, precio_unitario, pedido_id, medicamento_id)
-VALUES (4, 3.90, 3, 6);
+select null, precio, 3, 6 from medicamento where id = 6;
 INSERT INTO detalle_pedido(cantidad, precio_unitario, pedido_id, medicamento_id)
-VALUES (1, 9.00, 4, 7);
+select null, precio, 4, 7 from medicamento where id = 7;
 INSERT INTO detalle_pedido(cantidad, precio_unitario, pedido_id, medicamento_id)
-VALUES (2, 6.30, 4, 8);
+select null, precio, 4, 8 from medicamento where id = 8;
 INSERT INTO detalle_pedido(cantidad, precio_unitario, pedido_id, medicamento_id)
-VALUES (3, 7.45, 5, 9);
+select null, precio, 5, 9 from medicamento where id = 9;
 INSERT INTO detalle_pedido(cantidad, precio_unitario, pedido_id, medicamento_id)
-VALUES (5, 2.50, 5, 10);
+select null, precio, 5, 10 from medicamento where id = 10;
