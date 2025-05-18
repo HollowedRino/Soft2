@@ -1,7 +1,6 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
 import { BuildingStorefrontIcon } from '@heroicons/react/24/outline';
 import { UserIcon } from '@heroicons/react/24/solid';
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
@@ -32,7 +31,7 @@ export const MedifastPage = () => {
         ¿En qué le podemos ayudar?
       </motion.h1>
 
-      <div className="flex flex-wrap justify-center gap-20 w-full">
+      <div className="flex flex-wrap justify-center gap-20 w-full mb-11">
         {[{
           to: '/category/medications',
           Icon: MagnifyingGlassIcon,
@@ -58,7 +57,7 @@ export const MedifastPage = () => {
           >
             <Link
               to={item.to}
-              className="w-72 h-72 rounded-3xl flex flex-col items-center justify-center bg-green-600 hover:bg-green-700 transition-all duration-300"
+              className="w-72 h-72 rounded-3xl flex flex-col items-center justify-center bg-[#41b541] hover:bg-green-700 transition-all duration-300"
             >
               <item.Icon className="h-20 w-20 mb-4 text-white" />
               <span className="text-white text-xl font-semibold">{item.text1}</span>
@@ -70,3 +69,4 @@ export const MedifastPage = () => {
     </motion.div>
   );
 };
+

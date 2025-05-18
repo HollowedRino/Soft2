@@ -1,4 +1,5 @@
-
+export * from './Pages/AdminProfile'
+export * from './Pages/UserProfile'
 export * from './pages/MedifastPage'
 export * from './pages/CategoryPage'
 export * from './pages/MyCartPage'

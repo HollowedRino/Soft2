@@ -4,14 +4,14 @@ export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState({
-    name: '',
+    name: 'AlesW',
     lastName: '',
     email: '',
     password: '',
     addres: '',
     phoneNumber: '',
     state: '',
-    authStatus: true,
+    authStatus: false,
   });
 
   const login = (userData) => setUser(userData);

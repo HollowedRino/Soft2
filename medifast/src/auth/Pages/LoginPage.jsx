@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { loginWithEmailPassword, signInWithGoogle } from '../../firebase/providers';
 
-// Diccionario de errores de Firebase traducidos
 const firebaseErrorMessages = {
   'auth/invalid-email': 'El correo ingresado no es válido.',
   'auth/user-not-found': 'No existe una cuenta con este correo.',
@@ -43,9 +42,9 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
+    <div className="flex justify-center items-center bg-gray-100">
       <div className="bg-white p-20 rounded-xl shadow-md w-140 mb-50">
-        <p className="text-center text-xl font-normal mb-6">Ingreso para clientes registrados</p>
+        <p className="text-center text-xl font-normal mb-6">Ingreso para Usuarios registrados</p>
 
         <div className="mb-4">
           <input
@@ -90,6 +89,11 @@ export const LoginPage = () => {
           <Link className="text-gray-800 text-sm hover:underline" to="/registro">
             No tengo cuenta, deseo registrarme
           </Link>
+          <br />
+          <Link className="text-gray-800 text-sm hover:underline" to="/Admin">
+            Admin
+          </Link>
+
         </div>
       </div>
     </div>
