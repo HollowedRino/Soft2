@@ -4,8 +4,9 @@ import carritoRoutes from './routes/carritoRoutes.js';
 import detallePedidoRoutes from './routes/detallePedidoRoutes.js';
 import medicamentoRoutes from './routes/medicamentoRoutes.js';
 import pedidoRoutes from './routes/pedidoRoutes.js';
-import DistritoRoutes from './routes/DistritoRoutes.js';
 import direccionUsuarioRoutes from './routes/direccionUsuarioRoutes.js';
+import DistritoRoutes from './routes/DistritoRoutes.js';
+import MetodoPagoRoutes from './routes/MetodoPagoRoutes.js';
 
 const app = express();
 const port = 3000;
@@ -26,7 +27,9 @@ app.use('/pedido', pedidoRoutes);
 // Usar las rutas de detallePedido
 app.use('/detallepedido', detallePedidoRoutes);
 // Usar las rutas de distrito
-app.use('/distrito', DistritoRoutes),
+app.use('/distrito', DistritoRoutes);
+// Usar las rutas de metodo de pago
+app.use('/metodoPago', MetodoPagoRoutes)
 
 
 // Ruta principal
