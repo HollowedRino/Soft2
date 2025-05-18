@@ -54,6 +54,7 @@ DetallePedido.init(
 Pedido.hasMany(DetallePedido, {foreignKey: "pedido_id"});
 DetallePedido.belongsTo(Pedido, {foreignKey: "pedido_id"});
 Medicamento.hasMany(DetallePedido, {foreignKey: "medicamento_id"});
-DetallePedido.hasMany(Medicamento, {foreignKey: "medicamento_id"});
+//DetallePedido.hasMany(Medicamento, {foreignKey: "medicamento_id"});
+DetallePedido.belongsTo(Medicamento, {foreignKey: "medicamento_id"});
 
 export default DetallePedido;

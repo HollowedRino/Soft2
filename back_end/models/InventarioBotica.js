@@ -42,12 +42,12 @@ InventarioBotica.init(
         sequelize: connection,
         modelName: "InventarioBotica",
         freezeTableName: true,
-        indexes: [
+        /*indexes: [
             {
                 unique: true,
                 fields: ["botica_id","medicamento_id"]
             }
-        ],
+        ],*/
         timestamps: false
     }
 );
