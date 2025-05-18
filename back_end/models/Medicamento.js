@@ -45,4 +45,4 @@ Medicamento.init(
     }
 );
 
-export default Cupon;
+export default Medicamento;

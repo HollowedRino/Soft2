@@ -1,6 +1,7 @@
 import {DataTypes} from "sequelize";
 import { Model } from "sequelize";
 import connection from "../configs/connect_database.js";
+import Usuario from "./Usuario.js";
 
 class Carrito extends Model {}
 Carrito.init(

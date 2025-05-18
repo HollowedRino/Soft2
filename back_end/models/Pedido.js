@@ -4,9 +4,9 @@ import connection from "../configs/connect_database.js";
 import Usuario from "./Usuario.js";
 import Botica from "./Botica.js";
 import MetodoPago from "./MetodoPago.js";
-import DireccionUsuario from ",/DireccionUsuario.js";
+import DireccionUsuario from "./DireccionUsuario.js";
 import Repartidor from "./Repartidor.js";
-import { FOREIGNKEYS } from "sequelize/lib/query-types";
+//import { FOREIGNKEYS } from "sequelize/lib/query-types";
 
 class Pedido extends Model {}
 Pedido.init(
