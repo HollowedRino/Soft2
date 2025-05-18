@@ -53,7 +53,7 @@ export const Navbar = ({ cartCount = 0 }) => {
               placeholder="Buscar una marca o un producto"
               className="w-full border border-gray-300 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
             />
-            <button className="bg-green-600 text-white p-2 rounded-full hover:bg-gray-700 transition-all duration-300">
+            <button className="bg-[#41b541] text-white p-2 rounded-full hover:bg-gray-700 transition-all duration-300">
               <MagnifyingGlassIcon className="h-5 w-5" />
             </button>
           </div>
@@ -67,8 +67,8 @@ export const Navbar = ({ cartCount = 0 }) => {
         >
           {user.authStatus ? (
             <Link
-              to="/login"
-              className="flex items-center text-white bg-green-600 hover:bg-gray-700 px-4 py-2 rounded-md text-sm"
+              to="/userProfile"
+              className="flex items-center text-white bg-[#41b541] hover:bg-gray-700 px-4 py-2 rounded-md text-sm"
             >
               <UserIcon className="h-6 w-6 mr-2" />
               {user.name}

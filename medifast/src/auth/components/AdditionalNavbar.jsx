@@ -17,7 +17,7 @@ export const AdditionalNavbar = () => {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: 'easeOut' }}
-      className="bg-green-600 p-2 shadow-md"
+      className="bg-[#41b541] p-2 shadow-md"
     >
       <div className="flex flex-wrap items-center justify-around gap-4 px-4 sm:px-10 md:px-20 lg:px-40">
         <Link to="/category/medications" className="text-white hover:underline font-bold text-base sm:text-lg">Medicamentos</Link>

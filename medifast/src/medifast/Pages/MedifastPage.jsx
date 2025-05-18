@@ -57,7 +57,7 @@ export const MedifastPage = () => {
           >
             <Link
               to={item.to}
-              className="w-72 h-72 rounded-3xl flex flex-col items-center justify-center bg-green-600 hover:bg-green-700 transition-all duration-300"
+              className="w-72 h-72 rounded-3xl flex flex-col items-center justify-center bg-[#41b541] hover:bg-green-700 transition-all duration-300"
             >
               <item.Icon className="h-20 w-20 mb-4 text-white" />
               <span className="text-white text-xl font-semibold">{item.text1}</span>

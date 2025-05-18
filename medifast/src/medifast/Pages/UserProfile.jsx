@@ -105,7 +105,7 @@ function Coupons() {
   );
 }
 
-export default function UserProfile() {
+export const UserProfile = () => {
   const [activeSection, setActiveSection] = useState("info");
 
   const renderSection = () => {
@@ -123,7 +123,7 @@ export default function UserProfile() {
 
   return (
     <div className="flex flex-col md:flex-row w-full min-h-[calc(100vh-160px)]">
-      <main className="flex-1 bg-green-50 p-4 md:p-8 flex flex-wrap md:flex-nowrap gap-6 justify-center items-start">
+      <main className="flex-1 p-4 md:p-8 flex flex-wrap md:flex-nowrap gap-6 justify-center items-start">
 
         {/* Panel izquierdo con botones */}
         <div className="w-full md:w-[25%] min-w-[200px] h-[60vh] border-2 border-green-600 rounded-xl bg-white shadow-lg p-4 flex flex-col justify-between">

@@ -216,7 +216,7 @@ function PharmacyManagement({ pharmacies, setPharmacies }) {
 }
 
 // Panel principal
-export default function AdminDashboard() {
+export const AdminProfile = () => {
   const [activeSection, setActiveSection] = useState("coupons");
   const [pharmacies, setPharmacies] = useState([
     {
