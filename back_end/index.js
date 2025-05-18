@@ -4,6 +4,8 @@ import carritoRoutes from './routes/carritoRoutes.js';
 import detallePedidoRoutes from './routes/detallePedidoRoutes.js';
 import medicamentoRoutes from './routes/medicamentoRoutes.js';
 import pedidoRoutes from './routes/pedidoRoutes.js';
+import direccionUsuarioRoutes from './routes/direccionUsuarioRoutes.js';
+
 const app = express();
 const port = 3000;
 
@@ -14,9 +16,11 @@ app.use(express.json());
 app.use('/boticas', boticaRoutes);
 // Usar las rutas de carrito
 app.use('/carrito', carritoRoutes);
-// Usar las rutas de carrito
+// Usar las rutas de medicamento
 app.use('/medicamento', medicamentoRoutes);
-// Usar las rutas de detallePedido
+// Usar las rutas de medicamento
+app.use('/direccionusuario', direccionUsuarioRoutes);
+// Usar las rutas de Pedido
 app.use('/pedido', pedidoRoutes);
 // Usar las rutas de detallePedido
 app.use('/detallepedido', detallePedidoRoutes);
