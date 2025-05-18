@@ -14,6 +14,8 @@
 
 # Observaciones
 
+- Primer merge de frontend y backend
+
 - fixear login card.
 - USar schemas y react hook forms para formularios de checkout
 - Usar variables de entorno para ocultar las configuraciones de firebase usando env
