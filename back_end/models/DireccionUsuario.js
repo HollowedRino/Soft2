@@ -41,8 +41,10 @@ DireccionUsuario.init(
     }, {
         sequelize: connection,
         modelName: "DireccionUsuario",
+        tableName: "direccion_usuario",
         freezeTableName: true,
-        timestamps: false
+        timestamps: false,
+        underscored: true
     }
 );
 

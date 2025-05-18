@@ -14,7 +14,7 @@ Usuario.init(
             type: DataTypes.STRING,
             allowNull: false
         },
-        appellido: {
+        apellido: {
             type: DataTypes.STRING,
             allowNull: false
         },
