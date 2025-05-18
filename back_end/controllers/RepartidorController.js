@@ -1,10 +1,10 @@
-import CuponService from "../services/CuponService.js";
+import RepartidorService from "../services/RepartidorService.js";
 
-class CuponController {
+class RepartidorController {
     async findAll(req, res) {
         try {
-            const cupones = await CuponService.findAll();
-            res.status(200).json(cupones);
+            const repartidores = await RepartidorService.findAll();
+            res.status(200).json(repartidores);
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -12,10 +12,10 @@ class CuponController {
 
     async findById(req, res) {
         try {
-            const cupon = await CuponService.findById(req.params.id);
-            res.status(200).json(cupon);
+            const repartidor = await RepartidorService.findById(req.params.id);
+            res.status(200).json(repartidor);
         } catch (error) {
-            if (error.message === 'Cupon no encontrado') {
+            if (error.message === 'Repartidor no encontrado') {
                 res.status(404).json({ error: error.message });
             } else {
                 res.status(500).json({ error: error.message });
@@ -25,8 +25,8 @@ class CuponController {
 
     async create(req, res) {
         try {
-            const cupon = await CuponService.create(req.body);
-            res.status(201).json(cupon);
+            const repartidor = await RepartidorService.create(req.body);
+            res.status(201).json(repartidor);
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
@@ -34,10 +34,10 @@ class CuponController {
 
     async update(req, res) {
         try {
-            const cupon = await CuponService.update(req.params.id, req.body);
-            res.status(200).json(cupon);
+            const repartidor = await RepartidorService.update(req.params.id, req.body);
+            res.status(200).json(repartidor);
         } catch (error) {
-            if (error.message === 'Cupon no encontrado') {
+            if (error.message === 'Repartidor no encontrado') {
                 res.status(404).json({ error: error.message });
             } else {
                 res.status(500).json({ error: error.message });
@@ -47,10 +47,10 @@ class CuponController {
 
     async delete(req, res) {
         try {
-            await CuponService.delete(req.params.id);
+            await RepartidorService.delete(req.params.id);
             res.status(204).send();
         } catch (error) {
-            if (error.message === 'Cupon no encontrado') {
+            if (error.message === 'Repartidor no encontrado') {
                 res.status(404).json({ error: error.message });
             } else {
                 res.status(500).json({ error: error.message });
@@ -59,4 +59,4 @@ class CuponController {
     }
 }
 
-export default new CuponController();
+export default new RepartidorController();

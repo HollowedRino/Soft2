@@ -8,6 +8,7 @@ import direccionUsuarioRoutes from './routes/direccionUsuarioRoutes.js';
 import DistritoRoutes from './routes/DistritoRoutes.js';
 import MetodoPagoRoutes from './routes/MetodoPagoRoutes.js';
 import CuponRoutes from './routes/CuponRoutes.js';
+import RepartidorRoutes from './routes/RepartidorRoutes.js';
 
 const app = express();
 const port = 3000;
@@ -33,6 +34,8 @@ app.use('/distrito', DistritoRoutes);
 app.use('/metodoPago', MetodoPagoRoutes);
 // Usar las rutas de cupon
 app.use('/cupon', CuponRoutes);
+// Usar las rutas de repartidor
+app.use('/repartidor', RepartidorRoutes);
 
 
 // Ruta principal
