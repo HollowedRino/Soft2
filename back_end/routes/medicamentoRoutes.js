@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.get("/", MedicamentoController.findAll);
 router.get("/:id", MedicamentoController.findById);
+router.get("/detalle/:id",MedicamentoController.findByIdPlus);
 router.post("/", MedicamentoController.create);
 router.put("/:id", MedicamentoController.update);
 router.delete("/:id", MedicamentoController.delete);

@@ -1,6 +1,6 @@
 import { Route } from 'react-router-dom'
 import { ForgotPass, LoginPage, RegisterUser } from '../auth'
-import { AttendancePage, CategoryPage, ContactUsPage, MapPage, MedifastPage, MyCartPage } from '../medifast'
+import { AttendancePage, CategoryPage, ContactUsPage, MapPage, MedifastPage, MyCartPage, ProductPage } from '../medifast'
 
 export const publicRoutes = [
   <Route key="mycart" path="/mycart" element={<MyCartPage />} />,
@@ -13,4 +13,5 @@ export const publicRoutes = [
   <Route key="home" path="/" element={<MedifastPage />} />,
   <Route key="auxiliar" path="/*" element={<MedifastPage />} />,
   <Route key="contactUs" path="/contactUs" element={<ContactUsPage />} />,
+  <Route key="product" path="/product/:id" element={<ProductPage />} />,
 ]
