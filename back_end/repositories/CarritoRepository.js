@@ -3,7 +3,9 @@ import Carrito from "../models/Carrito.js";
 class CarritoRepository {
     async findAll() {
         try {
-            return await Carrito.findAll();
+            return await Carrito.findAll({
+                include: ['Usuario']
+            });
         } catch (error) {
             throw new Error(`Error al obtener todos los carritos: ${error.message}`);
         }
@@ -11,7 +13,9 @@ class CarritoRepository {
 
     async findById(id) {
         try {
-            return await Carrito.findByPk(id);
+            return await Carrito.findByPk(id, {
+                include: ['Usuario']
+            });
         } catch (error) {
             throw new Error(`Error al obtener el carrito: ${error.message}`);
         }

@@ -17,6 +17,14 @@ class MedicamentoService {
         }
     }
 
+    async findByIdPlus(id) {
+        try {
+            return await MedicamentoRepository.findByIdPlus(id);
+        } catch (error) {
+            throw new Error(`Error al obtener detalles del medicamento: ${error.message}`);
+        }
+    }
+
     async create(medicamento) {
         try {
             return await MedicamentoRepository.create(medicamento);
