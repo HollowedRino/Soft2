@@ -14,8 +14,8 @@ export const AppRouter = () => {
           <Route path="/checkout" element={<PrivateRoutes><CheckoutPage /></PrivateRoutes>} />
           <Route path="/checkout/payment" element={<PrivateRoutes><PaymentPage /></PrivateRoutes>} />
           <Route path="/checkout/order" element={<PrivateRoutes><OrderPage /></PrivateRoutes>} />
-          <Route path="/UserProfile" element={<PrivateRoutes>< UserProfile/></PrivateRoutes>} />
-          <Route path="/AdminProfile" element={<PrivateRoutes><AdminProfile/></PrivateRoutes>} />
+          <Route path="/userProfile" element={<PrivateRoutes>< UserProfile/></PrivateRoutes>} />
+          <Route path="/adminProfile" element={<PrivateRoutes><AdminProfile/></PrivateRoutes>} />
           {/* Rutas publicas */}
           {publicRoutes}
         </Route>
