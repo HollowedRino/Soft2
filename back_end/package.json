@@ -1,5 +1,15 @@
 {
+  "name": "botica-backend",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
   "dependencies": {
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "sequelize": "^6.37.1",
+    "sqlite3": "^5.1.7"
   }
 }
