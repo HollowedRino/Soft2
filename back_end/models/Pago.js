@@ -80,4 +80,6 @@ MetodoPago.hasMany(Pago, {foreignKey: "metodo_pago_id"});
 Pago.belongsTo(MetodoPago, {foreignKey: "metodo_pago_id"});
 
 Cupon.hasMany(Pago, {foreignKey: "cupon_id"});
-Pago.hasMany(Cupon, {foreignKey: "cupon_id"});
+Pago.belongsTo(Cupon, {foreignKey: "cupon_id"});
+
+export default Pago;
