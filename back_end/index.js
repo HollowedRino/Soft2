@@ -15,11 +15,10 @@ import UserRoutes from './routes/UserRoutes.js';
 const app = express();
 const port = 3000;
 
-
 // Middleware para procesar JSON
 app.use(express.json());
 // Middleware para procesar datos URL-encoded
-app.use(express.urlencoded({ extended: true })); 
+//app.use(express.urlencoded({ extended: true })); 
 
 // Usar las rutas de botica
 app.use('/boticas', BoticaRoutes);
