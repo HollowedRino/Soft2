@@ -6,7 +6,7 @@ import {
 import { ShoppingCartIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 import { useContext } from 'react';
-import { UserContext } from '../../contexts/UserContext';
+import { UserContext } from '../../contexts/UserProvider';
 import { motion } from 'framer-motion';
 
 const fadeDown = {

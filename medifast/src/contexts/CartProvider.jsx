@@ -1,22 +1,37 @@
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
+  const [loaded, setLoaded] = useState(false); // ← control para saber si ya cargó del localStorage
+
+  // ✅ Cargar desde localStorage solo una vez al montar
+  useEffect(() => {
+    const storedCart = localStorage.getItem("cartItems");
+    if (storedCart) {
+      setCartItems(JSON.parse(storedCart));
+    }
+    setLoaded(true);
+  }, []);
+
+  // ✅ Guardar en localStorage solo después de que se haya cargado
+  useEffect(() => {
+    if (loaded) {
+      localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    }
+  }, [cartItems, loaded]);
 
   const addToCart = (product) => {
-    setCartItems((prevItems) => {
+    setCartItems(prevItems => {
       const existingItem = prevItems.find(item => item.id === product.id);
       if (existingItem) {
-        // Si ya está en el carrito, aumenta cantidad
         return prevItems.map(item =>
           item.id === product.id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
       } else {
-        // Si no está, lo añade con cantidad 1
         return [...prevItems, { ...product, quantity: 1 }];
       }
     });
@@ -30,6 +45,7 @@ export const CartProvider = ({ children }) => {
 
   const clearCart = () => {
     setCartItems([]);
+    localStorage.removeItem("cartItems");
   };
 
   return (
