@@ -46,6 +46,7 @@ DetallePedido.init(
     }, {
         sequelize: connection,
         modelName: "DetallePedido",
+        tableName: "detalle_pedido",
         freezeTableName: true,
         timestamps: false
     }

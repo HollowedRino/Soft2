@@ -72,9 +72,14 @@ Pago.init(
 
 Usuario.hasMany(Pago, {foreignKey: "usuario_id"});
 Pago.belongsTo(Usuario, {foreignKey: "usuario_id"});
+
 DetallePedido.hasMany(Pago, {foreignKey: "detalle_pedido_id"});
 Pago.belongsTo(DetallePedido, {foreignKey: "detalle_pedido_id"});
+
 MetodoPago.hasMany(Pago, {foreignKey: "metodo_pago_id"});
 Pago.belongsTo(MetodoPago, {foreignKey: "metodo_pago_id"});
+
 Cupon.hasMany(Pago, {foreignKey: "cupon_id"});
-Pago.hasMany(Cupon, {foreignKey: "cupon_id"});
+Pago.belongsTo(Cupon, {foreignKey: "cupon_id"});
+
+export default Pago;

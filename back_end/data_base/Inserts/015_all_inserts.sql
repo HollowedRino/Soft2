@@ -56,26 +56,26 @@ INSERT INTO repartidor (id, nombre, numero) VALUES (5, 'Pedro Sánchez', 9456123
 
 
 -- Medicamentos
-INSERT INTO medicamento(id, nombre, descripcion, fabricante, precio, requiere_receta, estado_medicamento) 
-VALUES (1, 'Paracetamol', 'Analgésico y antipirético', 'Genfar', 3.50, 0, 1);
-INSERT INTO medicamento(id, nombre, descripcion, fabricante, precio, requiere_receta, estado_medicamento) 
-VALUES (2, 'Ibuprofeno', 'Antiinflamatorio no esteroideo', 'Bayer', 5.00, 0, 1);
-INSERT INTO medicamento(id, nombre, descripcion, fabricante, precio, requiere_receta, estado_medicamento) 
-VALUES (3, 'Amoxicilina', 'Antibiótico de amplio espectro', 'Pfizer', 8.75, 1, 1);
-INSERT INTO medicamento(id, nombre, descripcion, fabricante, precio, requiere_receta, estado_medicamento) 
-VALUES (4, 'Loratadina', 'Antihistamínico para alergias', 'Sanofi', 4.20, 0, 1);
-INSERT INTO medicamento(id, nombre, descripcion, fabricante, precio, requiere_receta, estado_medicamento) 
-VALUES (5, 'Losartán', 'Antihipertensivo', 'Sanofi', 10.00, 1, 1);
-INSERT INTO medicamento(id, nombre, descripcion, fabricante, precio, requiere_receta, estado_medicamento) 
-VALUES (6, 'Omeprazol', 'Inhibidor de la bomba de protones', 'AstraZeneca', 3.90, 0, 1);
-INSERT INTO medicamento(id, nombre, descripcion, fabricante, precio, requiere_receta, estado_medicamento) 
-VALUES (7, 'Diazepam', 'Ansiolítico y relajante muscular', 'Roche', 9.00, 1, 1);
-INSERT INTO medicamento(id, nombre, descripcion, fabricante, precio, requiere_receta, estado_medicamento) 
-VALUES (8, 'Metformina', 'Control de la glucosa en diabetes tipo 2', 'Merck', 6.30, 1, 1);
-INSERT INTO medicamento(id, nombre, descripcion, fabricante, precio, requiere_receta, estado_medicamento) 
-VALUES (9, 'Simvastatina', 'Reduce el colesterol en sangre', 'Novartis', 7.45, 1, 1);
-INSERT INTO medicamento(id, nombre, descripcion, fabricante, precio, requiere_receta, estado_medicamento) 
-VALUES (10, 'Aspirina', 'Analgésico y anticoagulante', 'Bayer', 2.50, 0, 1);
+INSERT INTO medicamento(id, nombre, descripcion, categoria, fabricante, precio, requiere_receta, estado_medicamento, imagen_url) 
+VALUES (1, 'Panadol Antigripal NF Tableta', 'SOBRE X2 TABS 1 UN', 'Medicamentos', 'GSK', 2.88, 0, 1, 'https://res.cloudinary.com/dgxakgsuo/image/upload/v1745927069/a4483dc3ae132b2ed181456f7232f5b6926cf91e_xq4jie.png');
+INSERT INTO medicamento(id, nombre, descripcion, categoria, fabricante, precio, requiere_receta, estado_medicamento, imagen_url) 
+VALUES (2, 'Ibuprofeno', 'Antiinflamatorio no esteroideo', 'Medicamentos','Bayer', 5.00, 0, 1,'');
+INSERT INTO medicamento(id, nombre, descripcion, categoria, fabricante, precio, requiere_receta, estado_medicamento, imagen_url) 
+VALUES (3, 'Amoxicilina', 'Antibiótico de amplio espectro', 'Medicamentos','Pfizer', 8.75, 1, 1,'');
+INSERT INTO medicamento(id, nombre, descripcion, categoria, fabricante, precio, requiere_receta, estado_medicamento, imagen_url) 
+VALUES (4, 'Loratadina', 'Antihistamínico para alergias', 'Medicamentos', 'Sanofi', 4.20, 0, 1,'');
+INSERT INTO medicamento(id, nombre, descripcion, categoria, fabricante, precio, requiere_receta, estado_medicamento, imagen_url) 
+VALUES (5, 'Losartán', 'Antihipertensivo', 'Medicamentos', 'Sanofi', 10.00, 1, 1,'');
+INSERT INTO medicamento(id, nombre, descripcion, categoria, fabricante, precio, requiere_receta, estado_medicamento, imagen_url) 
+VALUES (6, 'Omeprazol', 'Inhibidor de la bomba de protones', 'Medicamentos', 'AstraZeneca', 3.90, 0, 1,'');
+INSERT INTO medicamento(id, nombre, descripcion, categoria, fabricante, precio, requiere_receta, estado_medicamento, imagen_url) 
+VALUES (7, 'Diazepam', 'Ansiolítico y relajante muscular', 'Medicamentos', 'Roche', 9.00, 1, 1,'');
+INSERT INTO medicamento(id, nombre, descripcion, categoria, fabricante, precio, requiere_receta, estado_medicamento, imagen_url) 
+VALUES (8, 'Metformina', 'Control de la glucosa en diabetes tipo 2', 'Medicamentos', 'Merck', 6.30, 1, 1,'');
+INSERT INTO medicamento(id, nombre, descripcion, categoria, fabricante, precio, requiere_receta, estado_medicamento, imagen_url) 
+VALUES (9, 'Simvastatina', 'Reduce el colesterol en sangre', 'Medicamentos', 'Novartis', 7.45, 1, 1,'');
+INSERT INTO medicamento(id, nombre, descripcion, categoria, fabricante, precio, requiere_receta, estado_medicamento, imagen_url) 
+VALUES (10, 'Aspirina', 'Analgésico y anticoagulante', 'Medicamentos', 'Bayer', 2.50, 0, 1,'');
 
 -- Usuarios
 INSERT INTO usuario(id, nombre, apellido, email, contrasena, telefono_usuario, estado) 
@@ -124,9 +124,9 @@ VALUES (10, 'Calle San Martín 999', 'Casa', 5, 5);
 
 -- Botica
 INSERT INTO botica(id, nombre, direccion, telefono_botica, horario_apertura, horario_cierre, distrito_id)
-VALUES (1, 'Mifarma', 'Av. Grau 123', 987654321, '08:00', '21:00', 1);
+VALUES (1, 'BTL', 'Av. Universitaria 123', 989898989, '08:00', '22:00', 3);
 INSERT INTO botica(id, nombre, direccion, telefono_botica, horario_apertura, horario_cierre, distrito_id)
-VALUES (2, 'Inkafarma', 'Jr. San Martín 456', 986532147, '09:00', '22:00', 2);
+VALUES (2, 'Hogar y Salud', 'Av. Arequipa 456', 987654321, '09:00', '21:00', 5);
 INSERT INTO botica(id, nombre, direccion, telefono_botica, horario_apertura, horario_cierre, distrito_id)
 VALUES (3, 'Botica Peru', 'Calle Comercio 789', 984321789, '07:30', '20:30', 3);
 INSERT INTO botica(id, nombre, direccion, telefono_botica, horario_apertura, horario_cierre, distrito_id)
@@ -136,9 +136,9 @@ VALUES (5, 'Boticas Arcangel', 'Psj. Bolívar 654', 982345678, '08:00', '21:00',
 
 -- Inventario de botica
 INSERT INTO inventario_botica(id, cantidad_disponible, fecha_actualizacion, botica_id, medicamento_id)
-VALUES (1, 120, '2025-05-01', 1, 1);
+VALUES (1, 20, '2025-05-16', 1, 1);
 INSERT INTO inventario_botica(id, cantidad_disponible, fecha_actualizacion, botica_id, medicamento_id)
-VALUES (2, 85, '2025-05-01', 1, 2);
+VALUES (2, 15, '2025-05-15', 1, 2);
 INSERT INTO inventario_botica(id, cantidad_disponible, fecha_actualizacion, botica_id, medicamento_id)
 VALUES (3, 40, '2025-05-02', 1, 3);
 INSERT INTO inventario_botica(id, cantidad_disponible, fecha_actualizacion, botica_id, medicamento_id)
@@ -155,6 +155,7 @@ INSERT INTO inventario_botica(id, cantidad_disponible, fecha_actualizacion, boti
 VALUES (9, 50, '2025-05-04', 3, 9);
 INSERT INTO inventario_botica(id, cantidad_disponible, fecha_actualizacion, botica_id, medicamento_id)
 VALUES (10, 110, '2025-05-04', 3, 10);
+
 
 -- Pedido
 INSERT INTO pedido(id, fecha_pedido, estado_pedido, usuario_id, botica_id, metodo_pago_id, direccion_usuario_id, repartidor_id)

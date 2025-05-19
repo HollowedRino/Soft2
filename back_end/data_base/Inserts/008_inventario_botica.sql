@@ -1,8 +1,8 @@
 -- Inventario de botica
 INSERT INTO inventario_botica(id, cantidad_disponible, fecha_actualizacion, botica_id, medicamento_id)
-VALUES (1, 120, '2025-05-01', 1, 1);
+VALUES (1, 20, '2025-05-16', 1, 1);
 INSERT INTO inventario_botica(id, cantidad_disponible, fecha_actualizacion, botica_id, medicamento_id)
-VALUES (2, 85, '2025-05-01', 1, 2);
+VALUES (2, 15, '2025-05-15', 1, 2);
 INSERT INTO inventario_botica(id, cantidad_disponible, fecha_actualizacion, botica_id, medicamento_id)
 VALUES (3, 40, '2025-05-02', 1, 3);
 INSERT INTO inventario_botica(id, cantidad_disponible, fecha_actualizacion, botica_id, medicamento_id)
