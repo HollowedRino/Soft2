@@ -41,6 +41,7 @@ InventarioBotica.init(
     }, {
         sequelize: connection,
         modelName: "InventarioBotica",
+        tableName: "inventario_botica",
         freezeTableName: true,
         /*indexes: [
             {

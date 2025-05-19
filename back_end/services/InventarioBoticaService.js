@@ -3,7 +3,7 @@ import InventarioBoticaRepository from '../repositories/InventarioBoticaReposito
 class InventarioBoticaService {
     async findAll() {
         try {
-            return await BoticaRepository.findAll();
+            return await InventarioBoticaRepository.findAll();
         } catch (error) {
             throw new Error(`Error al obtener los inventarios de las boticas: ${error.message}`);
         }
