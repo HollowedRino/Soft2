@@ -9,7 +9,7 @@ export const MyCartPage = () => {
         Mi carrito (1)
       </h1>
 
-      <div className="flex flex-col md:flex-row justify-between gap-8 w-full px-10 bg-green-100 p-10">
+      <div className="flex flex-col md:flex-row justify-between gap-8 w-full px-10 bg-green-100 rounded-3xl p-10">
 
         <div className="flex flex-col gap-4 w-full md:w-2/3 bg-white p-6 rounded-lg shadow-md h-full">
 

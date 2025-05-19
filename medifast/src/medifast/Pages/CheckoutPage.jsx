@@ -16,7 +16,7 @@ export const CheckoutPage = () => {
 
       {/* Formulario de direccion */}
       <motion.div
-        className="w-full bg-white p-6 rounded-lg shadow-md max-w-3xl mx-auto"
+        className="w-full bg-white p-6 rounded-lg shadow-md max-w-3xl mx-auto rounded-3xl"
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
