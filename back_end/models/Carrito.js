@@ -34,6 +34,6 @@ Carrito.init(
 );
 
 Usuario.hasMany(Carrito, {foreignKey: "usuario_id"});
-Carrito.belongsTo(Carrito, {foreignKey: "usuario_id"});
+Carrito.belongsTo(Usuario, {foreignKey: "usuario_id"});
 
 export default Carrito;

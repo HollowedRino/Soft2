@@ -17,6 +17,7 @@ MetodoPago.init(
     },{
         sequelize: connection,
         modelName: "MetodoPago",
+        tableName: "metodo_pago",
         freezeTableName: true,
         timestamps: false
     }
