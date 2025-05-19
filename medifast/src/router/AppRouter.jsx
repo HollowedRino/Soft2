@@ -5,6 +5,8 @@ import { PrivateRoutes } from './PrivateRoutes'
 import { publicRoutes } from './PublicRoutes'
 import UserProfile from '../medifast/pages/UserProfile'
 import AdminProfile from '../medifast/pages/AdminProfile'
+import { Layout } from '../layout/Layout'
+
 export const AppRouter = () => {
 
 
