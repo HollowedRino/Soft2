@@ -11,7 +11,7 @@ export const UserProvider = ({ children }) => {
     addres: '',
     phoneNumber: '',
     state: '',
-    authStatus: false,
+    authStatus: true,
   });
 
   const login = (userData) => setUser(userData);
