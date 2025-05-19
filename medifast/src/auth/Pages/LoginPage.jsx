@@ -42,7 +42,7 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
+    <div className="flex justify-center items-center bg-gray-100">
       <div className="bg-white p-20 rounded-xl shadow-md w-140 mb-50">
         <p className="text-center text-xl font-normal mb-6">Ingreso para Usuarios registrados</p>
 

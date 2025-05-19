@@ -1,4 +1,4 @@
-const { Sequelize } = require('sequelize');
+import { Sequelize } from 'sequelize';
 
 const connection = new Sequelize({
   dialect: 'sqlite',
@@ -6,4 +6,4 @@ const connection = new Sequelize({
   storage: 'data_base/base_03.db',
 });
 
-module.exports = connection;
+export default connection;
