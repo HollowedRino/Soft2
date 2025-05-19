@@ -10,7 +10,7 @@ import MetodoPagoRoutes from './routes/MetodoPagoRoutes.js';
 import CuponRoutes from './routes/CuponRoutes.js';
 import RepartidorRoutes from './routes/RepartidorRoutes.js';
 import InventarioBoticaRoutes from './routes/InventarioBoticaRoutes.js';
-
+import UserRoutes from './routes/UserRoutes.js';
 const app = express();
 const port = 3000;
 
@@ -39,6 +39,8 @@ app.use('/cupon', CuponRoutes);
 app.use('/repartidor', RepartidorRoutes);
 // Usar las rutas de inventario botica
 app.use('/inventarioBotica', InventarioBoticaRoutes);
+// Usar las rutas de usuario
+app.use('/user', UserRoutes);
 
 
 // Ruta principal
