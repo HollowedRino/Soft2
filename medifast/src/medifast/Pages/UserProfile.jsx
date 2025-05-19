@@ -1,10 +1,25 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Orders from "../components/orders";
 import Coupons from "../components/Coupons";
 import UserInfo from "../components/UserInfo";
 
 export const UserProfile = () => {
   const [activeSection, setActiveSection] = useState("info");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Verificar si el usuario está autenticado
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/login');
+    }
+  }, [navigate]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
 
   const renderSection = () => {
     switch (activeSection) {
@@ -62,7 +77,7 @@ export const UserProfile = () => {
           </div>
 
           <button
-            onClick={() => {}}
+            onClick={handleLogout}
             className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 rounded mt-4"
           >
             Cerrar sesión
