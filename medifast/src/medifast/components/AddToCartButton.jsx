@@ -7,9 +7,9 @@ export const AddToCartButton = ({ producto }) => {
   const { cartItems, addToCart, removeFromCart } = useContext(CartContext);
   const [count, setCount] = useState(0);
 
-  useEffect(() => {
-  console.log("🛒 Carrito actualizado:", cartItems);
-  }, [cartItems]);
+  // useEffect(() => {
+  // console.log("🛒 Carrito actualizado:", cartItems);
+  // }, [cartItems]);
 
 
   // Sincronizar con contexto si se recarga o ya hay productos agregados

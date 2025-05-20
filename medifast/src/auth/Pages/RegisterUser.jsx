@@ -50,7 +50,7 @@ export const RegisterUser = () => {
         email,
         contrasena: password,
         telefono_usuario: telefono,
-        estado: true
+        estado: "Cliente"
       });
 
       if (!backendResult.ok) {

@@ -1,10 +1,19 @@
 import { useParams } from "react-router-dom";
 import { ProductItem } from "../components/ProductItem";
 import { motion } from "framer-motion";
+import { findMedsByCategory } from "../services/medicamentoService";
+import { useEffect } from "react";
   
   export const CategoryPage = () => {
 
     const { categoryName } = useParams();
+    let medicamentos = [];
+
+    useEffect(() => {
+      medicamentos = findMedsByCategory("Medicamentos");
+      console.log(medicamentos)
+    }, [categoryName])
+    
     
     const productos = [
       {
