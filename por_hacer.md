@@ -12,7 +12,7 @@
 1. Recordar uso y creación de backend (Todos)
 1. Generar ramas de trabajo (Sebastian) - rama backend creado - rama frontend creado
 
-# Observaciones
+# Observaciones.
 
 - Tercer merge de frontend y backend
 
