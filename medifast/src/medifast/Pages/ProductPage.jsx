@@ -21,7 +21,14 @@ export const ProductPage = () => {
         >
           {/* Imagen del producto */}
           <div className="flex flex-col items-center justify-center md:w-1/3 transition-transform hover:scale-[1.02] cursor-pointer">
-            <img src={producto.imagen_url} alt={producto.nombre} className="w-48 h-auto" />
+            <img 
+              src={producto.imagen_url ? 
+                  imagen_url : 
+                  "https://res.cloudinary.com/dgxakgsuo/image/upload/v1747766681/pngtree-flat-design-medication-bottle-vector-illustration-png-image_7037036_hdhblb.png"
+                } 
+              alt={producto.nombre} 
+              className="w-48 h-auto" 
+            />
             <AddToCartButton
               producto={producto}
             />
