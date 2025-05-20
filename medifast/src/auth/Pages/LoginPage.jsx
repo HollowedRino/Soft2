@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { loginWithEmailPassword, signInWithGoogle } from '../../firebase/providers';
-import { registerGoogleUser } from '../../medifast/services/UserService';
+import { registerGoogleUser } from '../../medifast/services/userService';
 
 const firebaseErrorMessages = {
   'auth/invalid-email': 'El correo ingresado no es válido.',

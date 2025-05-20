@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { registerUserWithEmailPassword } from '../../firebase/providers';
-import { registerUserInBackend } from '../../medifast/services/UserService';
+import { registerUserInBackend } from '../../medifast/services/userService';
 
 export const RegisterUser = () => {
   const navigate = useNavigate();
