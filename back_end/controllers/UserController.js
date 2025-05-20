@@ -9,7 +9,7 @@ class UserController {
             res.status(500).json({ error: error.message });
         }
     }
-
+    
     async getUserById(req, res) {
         try {
             const { id } = req.params;
@@ -62,6 +62,27 @@ class UserController {
         }
     }
 
+
+async createUserGoogle(req, res) {
+  try {
+    const { nombre, apellido, email } = req.body;
+    if (!nombre || !apellido || !email) {
+      return res.status(400).json({ error: 'Faltan datos obligatorios' });
+    }
+
+    const existingUser = await UserService.getUserByEmail(email);
+    if (existingUser) {
+
+      return res.status(409).json({ message: 'El usuario ya existe', exists: true });
+
+    }
+
+    const newUser = await UserService.createGoogleUser({ nombre, apellido, email });
+    res.status(201).json(newUser);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
 
 
     

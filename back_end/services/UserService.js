@@ -80,6 +80,22 @@ class UserService {
     }
   }
 
+async createGoogleUser(userData) {
+  // Aquí puedes evitar la validación de todos los campos, o hacer una más simple
+  // Asignar valores por defecto a los campos que no llegan:
+  const defaultData = {
+    contrasena: null,
+    telefono_usuario: 0,
+    estado: 'activo',
+  };
+  const fullUserData = { ...userData, ...defaultData };
+  return await UserRepository.create(fullUserData);
+}
+
+async getUserByEmail(email) {
+  return await UserRepository.findByEmail(email);
+}
+
 
 
 }

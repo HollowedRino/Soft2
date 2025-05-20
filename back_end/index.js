@@ -20,6 +20,8 @@ const port = 3000;
 
 // Middleware para procesar JSON
 app.use(express.json());
+// Middleware para procesar datos URL-encoded
+//app.use(express.urlencoded({ extended: true })); 
 
 // Middleware para habilitar CORS y permitir peticiones desde tu frontend
 app.use(cors({
