@@ -7,13 +7,6 @@ import { useEffect } from "react";
   export const CategoryPage = () => {
 
     const { categoryName } = useParams();
-    let medicamentos = [];
-
-    useEffect(() => {
-      medicamentos = findMedsByCategory("Medicamentos");
-      console.log(medicamentos)
-    }, [categoryName])
-    
     
     const productos = [
       {
