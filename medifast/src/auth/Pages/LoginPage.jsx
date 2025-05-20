@@ -49,7 +49,7 @@ const handleGoogleSignIn = async () => {
   const backendResponse = await registerGoogleUser({ email, nombre, apellido });
 
   if (!backendResponse.ok) {
-    setErrorMessage(backendResponse.errorMessage || 'Error en backend');
+    setErrorMessage(backendResponse.errorMessage || 'Error en backend.');
     return;
   }
 

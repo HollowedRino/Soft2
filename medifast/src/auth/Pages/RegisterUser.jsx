@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { registerUserWithEmailPassword } from '../../firebase/providers';
 import { registerUserInBackend } from '../../medifast/services/userService';
 
+
 export const RegisterUser = () => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState('');
@@ -127,3 +128,5 @@ export const RegisterUser = () => {
     </div>
   );
 };
+
+
