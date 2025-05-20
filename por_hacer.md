@@ -14,8 +14,7 @@
 
 # Observaciones
 
-- Primer merge de frontend y backend
-- Frontend actualizado
+- Segundo merge de frontend y backend
 
 - fixear login card.
 - USar schemas y react hook forms para formularios de checkout

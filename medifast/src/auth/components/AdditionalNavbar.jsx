@@ -20,7 +20,7 @@ export const AdditionalNavbar = () => {
       className="bg-[#41b541] p-2 shadow-md"
     >
       <div className="flex flex-wrap items-center justify-around gap-4 px-4 sm:px-10 md:px-20 lg:px-40">
-        <Link to="/category/medications" className="text-white hover:underline font-bold text-base sm:text-lg">Medicamentos</Link>
+        <Link to="/category/medications" className="text-white hover:underline font-bold text-base sm:text-lg transition-all duration-300">Medicamentos</Link>
         <Link to="/category/natural-medicines" className="text-white hover:underline font-bold text-base sm:text-lg">Medicamentos Naturales</Link>
         <Link to="/category/older-adult" className="text-white hover:underline font-bold text-base sm:text-lg">Adulto Mayor</Link>
         <Link to="/category/childish" className="text-white hover:underline font-bold text-base sm:text-lg">Infantil</Link>
