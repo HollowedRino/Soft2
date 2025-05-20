@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { registerUserWithEmailPassword } from '../../firebase/providers';
 import { registerUserInBackend } from '../../medifast/services/UserService';
+
 export const RegisterUser = () => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState('');
