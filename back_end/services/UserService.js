@@ -79,6 +79,9 @@ class UserService {
       throw new Error('La contraseña debe tener al menos 6 caracteres');
     }
   }
+
+
+
 }
 
 export default new UserService();

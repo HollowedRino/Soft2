@@ -60,6 +60,9 @@ class UserRepository {
       throw new Error(`Error al eliminar el usuario: ${error.message}`);
     }
   }
+
+
+
 }
 
 export default new UserRepository();

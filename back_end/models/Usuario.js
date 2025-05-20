@@ -24,7 +24,7 @@ Usuario.init(
         },
         contrasena: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: true
         },
         telefono_usuario: {
             type: DataTypes.INTEGER,

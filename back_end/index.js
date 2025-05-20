@@ -1,4 +1,6 @@
 import express from 'express';
+import cors from 'cors';
+
 import BoticaRoutes from './routes/BoticaRoutes.js';
 import CarritoRoutes from './routes/CarritoRoutes.js';
 import DetallePedidoRoutes from './routes/DetallePedidoRoutes.js';
@@ -12,11 +14,17 @@ import RepartidorRoutes from './routes/RepartidorRoutes.js';
 import InventarioBoticaRoutes from './routes/InventarioBoticaRoutes.js';
 import PagoRoutes from './routes/PagoRoutes.js';
 import UserRoutes from './routes/UserRoutes.js';
+
 const app = express();
 const port = 3000;
 
 // Middleware para procesar JSON
 app.use(express.json());
+
+// Middleware para habilitar CORS y permitir peticiones desde tu frontend
+app.use(cors({
+  origin: 'http://localhost:5173'  // Ajusta esta URL según el puerto donde corre tu frontend
+}));
 
 // Usar las rutas de botica
 app.use('/boticas', BoticaRoutes);
@@ -44,7 +52,6 @@ app.use('/inventarioBotica', InventarioBoticaRoutes);
 app.use('/pago', PagoRoutes);
 // Usar las rutas de usuario
 app.use('/user', UserRoutes);
-
 
 // Ruta principal
 app.get('/', (req, res) => {
