@@ -1,6 +1,8 @@
 import { useParams } from "react-router-dom";
 import { ProductItem } from "../components/ProductItem";
 import { motion } from "framer-motion";
+import { findMedsByCategory } from "../services/medicamentoService";
+import { useEffect } from "react";
   
   export const CategoryPage = () => {
 

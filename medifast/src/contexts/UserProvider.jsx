@@ -4,17 +4,37 @@ export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState({
-    name: 'AlesW',
-    lastName: '',
-    email: '',
-    password: '',
-    addres: '',
+    name: 'AlesW', //Esto
+    lastName: '', //Esto
+    email: '', //Esto
+    address: '',
     phoneNumber: '',
-    state: '',
-    authStatus: false,
+    state: '', //Cliente o Admin
+    authStatus: false, //Cambiar cuando se loguea
   });
 
-  const login = (userData) => setUser(userData);
+  const login = (userData) => {
+    // Adaptar y transformar solo los campos necesarios
+    const adaptedUser = {
+      name: userData.nombre || '',             // <- Transformación
+      lastName: userData.apellido || '',
+      email: userData.email || '',
+      address: '',
+      phoneNumber: userData.telefono_usuario || '',
+      state: userData.estado || 'Cliente',        // <- valor por defecto
+      authStatus: true,                        // <- marcado como logueado
+    };
+
+    setUser(adaptedUser);
+  };
+
+  const updateAddress = (direccion) => {
+    setUser((prevUser) => ({
+      ...prevUser,
+      addres: direccion,
+    }));
+  };
+  
   const logout = () => setUser({
     name: '',
     lastName: '',
@@ -27,7 +47,7 @@ export const UserProvider = ({ children }) => {
   });
 
   return (
-    <UserContext.Provider value={{ user, login, logout }}>
+    <UserContext.Provider value={{ user, login, logout, updateAddress }}>
       {children}
     </UserContext.Provider>
   );
