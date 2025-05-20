@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { registerUserWithEmailPassword } from '../../firebase/providers';
 import { registerUserInBackend } from '../../medifast/services/UserService';
 
+
 export const RegisterUser = () => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState('');
@@ -51,7 +52,7 @@ export const RegisterUser = () => {
         email,
         contrasena: password,
         telefono_usuario: telefono,
-        estado: true
+        estado: "Cliente"
       });
 
       if (!backendResult.ok) {
@@ -127,3 +128,5 @@ export const RegisterUser = () => {
     </div>
   );
 };
+
+
