@@ -1,24 +1,28 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { registerUserWithEmailPassword } from '../../firebase/providers';
-
+import { registerUserInBackend } from '../../medifast/services/UserService';
 export const RegisterUser = () => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleRegister = async () => {
-    setErrorMessage(''); // Limpia errores anteriores
+    setErrorMessage('');
 
     const nombre = document.querySelector('input[name="nombre"]').value.trim();
     const apellido = document.querySelector('input[name="apellido"]').value.trim();
     const email = document.querySelector('input[name="correo"]').value.trim();
-    const telefono = document.querySelector('input[name="Telefono"]').value.trim();
+    const telefono = document.querySelector('input[name="telefono"]').value.trim();
     const password = document.querySelector('input[name="password"]').value;
     const confirmPassword = document.querySelector('input[name="confirmPassword"]').value;
 
-    // Validaciones básicas
     if (!nombre || !apellido || !email || !telefono || !password || !confirmPassword) {
       setErrorMessage('Por favor completa todos los campos.');
+      return;
+    }
+
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      setErrorMessage('El correo no tiene un formato válido.');
       return;
     }
 
@@ -27,24 +31,40 @@ export const RegisterUser = () => {
       return;
     }
 
-    // Registro en Firebase
-    const result = await registerUserWithEmailPassword({
-      email,
-      password,
-      displayName: `${nombre} ${apellido}`
-    });
+    try {
+      const result = await registerUserWithEmailPassword({
+        email,
+        password,
+        displayName: `${nombre} ${apellido}`
+      });
 
-    if (!result.ok) {
-      const customMessage = getFirebaseErrorMessage(result.errorCode);
-      setErrorMessage(customMessage);
-      return;
+      if (!result.ok) {
+        const customMessage = getFirebaseErrorMessage(result.errorCode);
+        setErrorMessage(customMessage);
+        return;
+      }
+
+      const backendResult = await registerUserInBackend({
+        nombre,
+        apellido,
+        email,
+        contrasena: password,
+        telefono_usuario: telefono,
+        estado: true
+      });
+
+      if (!backendResult.ok) {
+        setErrorMessage(`Error en backend: ${backendResult.errorMessage}`);
+        return;
+      }
+
+      navigate('/login');
+    } catch (err) {
+      setErrorMessage('Ocurrió un error inesperado. Intenta nuevamente.');
+      console.error(err);
     }
-
-    // Registro exitoso
-    navigate('/login');
   };
 
-  // Campo de texto reutilizable
   const Campotext = ({ placeholder, type, name }) => (
     <input
       type={type}
@@ -54,7 +74,6 @@ export const RegisterUser = () => {
     />
   );
 
-  // Función para traducir errores de Firebase
   const getFirebaseErrorMessage = (code) => {
     switch (code) {
       case 'auth/email-already-in-use':
@@ -81,7 +100,7 @@ export const RegisterUser = () => {
           <Campotext placeholder="Nombre" type="text" name="nombre" />
           <Campotext placeholder="Apellido" type="text" name="apellido" />
           <Campotext placeholder="Correo" type="email" name="correo" />
-          <Campotext placeholder="Teléfono" type="text" name="Telefono" />
+          <Campotext placeholder="Teléfono" type="text" name="telefono" />
           <Campotext placeholder="Contraseña" type="password" name="password" />
           <Campotext placeholder="Confirmar Contraseña" type="password" name="confirmPassword" />
         </div>

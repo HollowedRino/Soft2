@@ -1,46 +1,40 @@
+//UserService.js
+const BASE_URL = 'http://localhost:3000/user';
 
-const API_URL = 'http://localhost:3000'; // Reemplaza con tu URL base
+export const registerUserInBackend = async (userData) => {
+  try {
+    const response = await fetch(BASE_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userData),
+    });
 
-export const userService = {
-  // Obtener información del usuario actual
-  getCurrentUser: async () => {
-    try {
-      const response = await fetch.get(`${API_URL}/users/me`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-      return response.data;
-    } catch (error) {
-      throw error;
+    const data = await response.json();
+
+    if (!response.ok) {
+      return {
+        ok: false,
+        errorMessage: data.error || 'Error al registrar el usuario',
+      };
     }
-  },
 
-  // Actualizar información del usuario
-  updateUser: async (userData) => {
-    try {
-      const response = await fetch.put(`${API_URL}/users/me`, userData, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  },
-
-  // Cambiar contraseña
-  changePassword: async (passwordData) => {
-    try {
-      const response = await fetch.put(`${API_URL}/users/me/password`, passwordData, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    return {
+      ok: true,
+      user: data,
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      errorMessage: error.message,
+    };
   }
-}; 
+};
+
+
+
+
+
+
+
