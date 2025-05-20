@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { loginWithEmailPassword, signInWithGoogle } from '../../firebase/providers';
+import { registerGoogleUser } from '../../medifast/services/UserService';
 
 const firebaseErrorMessages = {
   'auth/invalid-email': 'El correo ingresado no es válido.',
@@ -30,23 +31,37 @@ export const LoginPage = () => {
     navigate('/dashboard');
   };
 
-  const handleGoogleSignIn = async () => {
-    const result = await signInWithGoogle();
-    const email = result.email;
-    const displayName = result.displayName;
+const handleGoogleSignIn = async () => {
+  const result = await signInWithGoogle();
 
-    console.log(displayName)
-    console.log(email)
+  if (!result.ok) {
+    setErrorMessage('Error con Google Sign-In.');
+    return;
+  }
+
+  const email = result.email;
+  const displayName = result.displayName;
+
+  // Separa nombre y apellido
+  const [nombre, ...rest] = displayName.split(" ");
+  const apellido = rest.join(" ");
+
+  const backendResponse = await registerGoogleUser({ email, nombre, apellido });
+
+  if (!backendResponse.ok) {
+    setErrorMessage(backendResponse.errorMessage || 'Error en backend');
+    return;
+  }
+
+  // Si llegamos acá, usuario creado o ya existente: vamos al dashboard
+  navigate("/dashboard");
+};
 
 
-    if (!result.ok) {
-      const customMessage = firebaseErrorMessages[result.errorCode] || 'Error con Google Sign-In.';
-      setErrorMessage(customMessage);
-      return;
-    }
 
-    navigate('/dashboard');
-  };
+
+
+
 
   return (
     <div className="flex justify-center items-center bg-gray-100">

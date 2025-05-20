@@ -18,9 +18,17 @@ export const post = async (path, data) => {
     body: JSON.stringify(data),
   });
 
-  if (!res.ok) throw new Error("Error en POST");
-  return res.json();
+  const json = await res.json();
+
+  if (!res.ok) {
+    const error = new Error(json.message || "Error en POST");
+    error.status = res.status;  // Guardamos el status para manejarlo después
+    throw error;
+  }
+
+  return json;
 };
+
 
 // Función PUT con body JSON
 export const put = async (path, data) => {
