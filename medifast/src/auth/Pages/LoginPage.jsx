@@ -32,6 +32,12 @@ export const LoginPage = () => {
 
   const handleGoogleSignIn = async () => {
     const result = await signInWithGoogle();
+    const email = result.email;
+    const displayName = result.displayName;
+
+    console.log(displayName)
+    console.log(email)
+
 
     if (!result.ok) {
       const customMessage = firebaseErrorMessages[result.errorCode] || 'Error con Google Sign-In.';

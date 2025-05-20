@@ -1,40 +1,18 @@
-//UserService.js
-const BASE_URL = 'http://localhost:3000/user';
+import { post } from "./api";
+
+const BASE_PATH = "/user";
 
 export const registerUserInBackend = async (userData) => {
   try {
-    const response = await fetch(BASE_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(userData),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      return {
-        ok: false,
-        errorMessage: data.error || 'Error al registrar el usuario',
-      };
-    }
-
+    const user = await post(BASE_PATH, userData);
     return {
       ok: true,
-      user: data,
+      user,
     };
   } catch (error) {
     return {
       ok: false,
-      errorMessage: error.message,
+      errorMessage: error.message || "Error al registrar el usuario",
     };
   }
 };
-
-
-
-
-
-
-
