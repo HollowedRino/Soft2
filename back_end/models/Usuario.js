@@ -1,7 +1,7 @@
 import {DataTypes} from "sequelize";
 import { Model } from "sequelize";
 import connection from "../configs/connect_database.js";
-
+//Clase Usuario
 class Usuario extends Model {}
 Usuario.init(
     {
