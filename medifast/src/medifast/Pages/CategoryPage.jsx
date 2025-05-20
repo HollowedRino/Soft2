@@ -8,6 +8,8 @@ import { useEffect } from "react";
 
     const { categoryName } = useParams();
     
+    console.log("WAAAAAAAAA");
+
     const productos = [
       {
         id: 1,
