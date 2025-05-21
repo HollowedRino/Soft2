@@ -4,7 +4,7 @@ import cors from 'cors';
 import BoticaRoutes from './routes/BoticaRoutes.js';
 import CarritoRoutes from './routes/CarritoRoutes.js';
 import DetallePedidoRoutes from './routes/DetallePedidoRoutes.js';
-import MedicamentoRoutes from './routes/medicamentoRoutes.js';
+import MedicamentoRoutes from './routes/MedicamentoRoutes.js';
 import PedidoRoutes from './routes/PedidoRoutes.js';
 import DireccionUsuarioRoutes from './routes/DireccionUsuarioRoutes.js';
 import DistritoRoutes from './routes/DistritoRoutes.js';
