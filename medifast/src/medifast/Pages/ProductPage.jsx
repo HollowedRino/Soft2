@@ -23,7 +23,7 @@ export const ProductPage = () => {
           <div className="flex flex-col items-center justify-center md:w-1/3 transition-transform hover:scale-[1.02] cursor-pointer">
             <img 
               src={producto.imagen_url ? 
-                  imagen_url : 
+                  producto.imagen_url : 
                   "https://res.cloudinary.com/dgxakgsuo/image/upload/v1747766681/pngtree-flat-design-medication-bottle-vector-illustration-png-image_7037036_hdhblb.png"
                 } 
               alt={producto.nombre} 
