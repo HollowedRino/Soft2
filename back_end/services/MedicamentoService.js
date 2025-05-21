@@ -31,6 +31,14 @@ class MedicamentoService {
             throw new Error(`Error al obtener detalles del medicamento por categoria: ${error.message}`);
         }
     }
+    
+    async findByNombreParcial(nombre) {
+        try {
+            return await MedicamentoRepository.findByNombreParcial(nombre);
+        } catch (error) {
+            throw new Error(`Error al obtener medicamentos por nombre parcial: ${error.message}`);
+        }
+    }
 
     async create(medicamento) {
         try {

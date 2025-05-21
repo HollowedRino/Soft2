@@ -2,6 +2,7 @@ import Medicamento from '../models/Medicamento.js';
 import InventarioBotica from '../models/InventarioBotica.js';
 import Botica from '../models/Botica.js';
 import Distrito from '../models/Distrito.js';
+import { Op } from 'sequelize';
 class MedicamentoRepository {
     async findAll() {
         try {
@@ -161,6 +162,57 @@ class MedicamentoRepository {
 }
 
 
+    async findByNombreParcial(nombre) {
+            const whereClause = nombre
+            ? { nombre: { [Op.like]: `%${nombre}%` } }
+            : undefined; // si no hay nombre, no se filtra
+            
+            const medicamentos = await Medicamento.findAll({
+            where: whereClause,
+            attributes: [
+                "id",
+                "nombre",
+                "descripcion",
+                "fabricante",
+                "categoria",
+                "precio",
+                "requiere_receta",
+                "estado_medicamento",
+                "imagen_url"
+            ],
+            include: [
+                {
+                model: InventarioBotica,
+                attributes: ["cantidad_disponible", "fecha_actualizacion"],
+                include: [
+                    {
+                    model: Botica,
+                    attributes: [
+                        "id",
+                        "nombre",
+                        "direccion",
+                        "telefono_botica",
+                        "horario_apertura",
+                        "horario_cierre"
+                    ],
+                    include: [
+                        {
+                        model: Distrito,
+                        attributes: ["id", "nombre_distrito"]
+                        }
+                    ]
+                    }
+                ]
+                }
+            ]
+            });
+        
+            if (!medicamentos || medicamentos.length === 0) {
+            throw new Error("Medicamento no encontrado");
+            }
+        
+            return medicamentos;
+    }
 
 
 
