@@ -36,6 +36,33 @@ class MedicamentoController {
         }
     }
 
+    async findByCategoriaPlus(req,res) {
+        try {
+            const detalles = await MedicamentoService.findByCategoriaPlus(req.params.categoria);
+            res.status(200).json(detalles);
+        } catch (error) {
+            if (error.message === 'Medicamento no encontrado') {
+                res.status(404).json({error: error.message});
+            } else {
+                res.status(500).json({error: error.message});
+            }
+        }
+    }
+
+    async findByNombreParcial(req, res) {
+        try {
+          const detalles = await MedicamentoService.findByNombreParcial(req.params.nombre);
+          res.status(200).json({ ok: true, res: detalles });
+        } catch (error) {
+          if (error.message === 'Medicamento no encontrado') {
+            res.status(404).json({ ok: false, error: error.message });
+          } else {
+            res.status(500).json({ ok: false, error: error.message });
+          }
+        }
+      }
+
+
     async create(req, res) {
         try {
             const medicamento = await MedicamentoService.create(req.body);
