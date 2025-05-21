@@ -1,7 +1,7 @@
 const API_URL = "http://localhost:3000"; // Cambia según tu entorno
 
 // Función GET con soporte para query params opcionales
-export const get = async (path, params = {}) => {
+export const getWithQueryParams = async (path, params = {}) => {
   const queryString = new URLSearchParams(params).toString();
   const url = `${API_URL}${path}${queryString ? `?${queryString}` : ""}`;
   
@@ -9,6 +9,15 @@ export const get = async (path, params = {}) => {
   if (!res.ok) throw new Error("Error en GET");
   return res.json();
 };
+
+export const getWithPathParam = async (basePath, param) => {
+  const url = `${API_URL}${basePath}/${encodeURIComponent(param)}`;
+  
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("Error en GET con path param");
+  return res.json();
+};
+
 
 // Función POST con body JSON
 export const post = async (path, data) => {

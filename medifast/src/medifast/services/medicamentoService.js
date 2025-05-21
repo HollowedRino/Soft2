@@ -1,10 +1,10 @@
-import { get } from "./api";
+import { getWithPathParam } from "./api";
 
 const BASE_PATH = "/medicamento";
 
 export const findMedsByCategory = async (category) => {
     try {
-        const res = await get(`${BASE_PATH}/detalle/categoria/`, { category });
+        const res = await getWithPathParam(`${BASE_PATH}/detalle/categoria`,  category );
         return {
             ok: true,
             res,
