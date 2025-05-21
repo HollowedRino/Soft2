@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { userService } from "../services/userService";
+
+
 
 function UserInfo() {
   const [userData, setUserData] = useState({

@@ -24,6 +24,13 @@ class MedicamentoService {
             throw new Error(`Error al obtener detalles del medicamento: ${error.message}`);
         }
     }
+    async findByCategoriaPlus(categoria) {
+        try {
+            return await MedicamentoRepository.findByCategoriaPlus(categoria);
+        } catch (error) {
+            throw new Error(`Error al obtener detalles del medicamento por categoria: ${error.message}`);
+        }
+    }
 
     async create(medicamento) {
         try {
