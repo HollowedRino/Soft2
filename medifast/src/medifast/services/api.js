@@ -6,15 +6,25 @@ export const getWithQueryParams = async (path, params = {}) => {
   const url = `${API_URL}${path}${queryString ? `?${queryString}` : ""}`;
   
   const res = await fetch(url);
-  if (!res.ok) throw new Error("Error en GET");
+  if (!res.ok) throw new Error("Error en GET con query params");
   return res.json();
 };
 
 export const getWithPathParam = async (basePath, param) => {
   const url = `${API_URL}${basePath}/${encodeURIComponent(param)}`;
   
+
   const res = await fetch(url);
   if (!res.ok) throw new Error("Error en GET con path param");
+  return res.json();
+};
+
+export const getSimple = async (path) => {
+  const url = `${API_URL}${path}`;
+
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("Error en GET simple");
+
   return res.json();
 };
 
