@@ -40,6 +40,14 @@ class MedicamentoService {
         }
     }
 
+    async findAllWithDetalle() {
+        try {
+            return await MedicamentoRepository.findAllWithDetalle();
+        } catch (error) {
+            throw new Error(`Error al obtener medicamentos con detalles: ${error.message}`);
+        }
+    }
+
     async create(medicamento) {
         try {
             return await MedicamentoRepository.create(medicamento);

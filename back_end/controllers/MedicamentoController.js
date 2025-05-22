@@ -28,7 +28,7 @@ class MedicamentoController {
             const detalles = await MedicamentoService.findByIdPlus(req.params.id);
             res.status(200).json(detalles);
         } catch (error) {
-            if (error.message === 'Medicamento no encontrado') {
+            if (error.message === 'Medicamento por Id no encontrado') {
                 res.status(404).json({error: error.message});
             } else {
                 res.status(500).json({error: error.message});
@@ -41,7 +41,7 @@ class MedicamentoController {
             const detalles = await MedicamentoService.findByCategoriaPlus(req.params.categoria);
             res.status(200).json(detalles);
         } catch (error) {
-            if (error.message === 'Medicamento no encontrado') {
+            if (error.message === 'Medicamentos por categorias no encontrado') {
                 res.status(404).json({error: error.message});
             } else {
                 res.status(500).json({error: error.message});
@@ -52,16 +52,28 @@ class MedicamentoController {
     async findByNombreParcial(req, res) {
         try {
           const detalles = await MedicamentoService.findByNombreParcial(req.params.nombre);
-          res.status(200).json({ ok: true, res: detalles });
+          res.status(200).json(detalles);
         } catch (error) {
           if (error.message === 'Medicamento no encontrado') {
-            res.status(404).json({ ok: false, error: error.message });
+            res.status(404).json({error: error.message});
           } else {
-            res.status(500).json({ ok: false, error: error.message });
+            res.status(500).json({error: error.message});
           }
         }
       }
 
+    async findAllWithDetalle(req, res) {
+        try {
+          const detalles = await MedicamentoService.findAllWithDetalle();
+          res.status(200).json(detalles);
+        } catch (error) {
+          if (error.message === 'Medicamentos no encontrado') {
+            res.status(404).json({error: error.message});
+          } else {
+            res.status(500).json({error: error.message});
+          }
+        }
+      }
 
     async create(req, res) {
         try {
