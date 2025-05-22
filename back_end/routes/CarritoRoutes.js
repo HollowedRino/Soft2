@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.get("/", CarritoController.findAll);
 router.get("/:id", CarritoController.findById);
+router.get("/usuario/:usuarioId", CarritoController.findCarritoCompletoByUsuarioId);
 router.post("/", CarritoController.create);
 router.put("/:id", CarritoController.update);
 router.delete("/:id", CarritoController.delete);
