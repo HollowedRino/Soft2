@@ -37,6 +37,7 @@ ItemCarrito.init(
     }, {
         sequelize: connection,
         modelName: "ItemCarrito",
+        tableName: "item_carrito",
         freezeTableName: true,
         timestamps: false
     }
