@@ -1,4 +1,4 @@
-import { getWithPathParam, post } from "./api";
+import { getWithPathParam, post, put } from "./api";
 
 const BASE_PATH = "/user";
 
@@ -57,6 +57,25 @@ export const getUserByEmail = async (email) => {
     
   }
 }
+
+
+
+
+
+export const updateUser = async (id, userData) => {
+  try {
+    const updatedUser = await put(`${BASE_PATH}/${id}`, userData);
+    return {
+      ok: true,
+      user: updatedUser,
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      errorMessage: error.message || "Error al actualizar el usuario",
+    };
+  }
+};
 
 
 
