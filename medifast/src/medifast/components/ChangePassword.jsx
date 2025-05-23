@@ -1,6 +1,9 @@
 import { useState } from "react";
+import { updatePassword, EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
+import { FirebaseAuth } from "../../firebase/config";
 
 export default function ChangePassword() {
+  const [currentPassword, setCurrentPassword] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [success, setSuccess] = useState(false);
@@ -16,22 +19,34 @@ export default function ChangePassword() {
       return;
     }
 
-    const user = JSON.parse(localStorage.getItem("user"));
+    if (password.length < 6) {
+      setError("La contraseña debe tener al menos 6 caracteres");
+      return;
+    }
 
     try {
-      const res = await fetch("http://localhost:3000/user/update-password", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId: user.id, newPassword: password }),
-      });
+      const user = FirebaseAuth.currentUser;
 
-      if (!res.ok) throw new Error("Error al actualizar la contraseña");
+      if (!user || !user.email) {
+        setError("No hay usuario autenticado");
+        return;
+      }
+
+      // Creamos las credenciales para re-autenticar
+      const credential = EmailAuthProvider.credential(user.email, currentPassword);
+
+      // Re-autenticamos al usuario
+      await reauthenticateWithCredential(user, credential);
+
+      // Si la re-autenticación fue exitosa, actualizamos la contraseña
+      await updatePassword(user, password);
 
       setSuccess(true);
+      setCurrentPassword("");
       setPassword("");
       setConfirmPassword("");
     } catch (err) {
-      setError("Hubo un problema al actualizar la contraseña");
+      setError(`Error: ${err.message}`);
     }
   };
 
@@ -40,26 +55,38 @@ export default function ChangePassword() {
       <h2 className="text-2xl font-semibold text-green-700 mb-6">Cambiar Contraseña</h2>
       <form onSubmit={handleSubmit} className="space-y-4 max-w-md">
         <div>
-          <label className="block font-semibold mb-1" htmlFor="password">Nueva Contraseña:</label>
+          <label htmlFor="currentPassword" className="block font-semibold mb-1">Contraseña Actual:</label>
           <input
-            id="password"
+            id="currentPassword"
             type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full border border-green-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+            value={currentPassword}
+            onChange={e => setCurrentPassword(e.target.value)}
             required
+            className="w-full border border-green-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
         </div>
 
         <div>
-          <label className="block font-semibold mb-1" htmlFor="confirmPassword">Confirmar Contraseña:</label>
+          <label htmlFor="password" className="block font-semibold mb-1">Nueva Contraseña:</label>
+          <input
+            id="password"
+            type="password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            required
+            className="w-full border border-green-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="confirmPassword" className="block font-semibold mb-1">Confirmar Nueva Contraseña:</label>
           <input
             id="confirmPassword"
             type="password"
             value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            className="w-full border border-green-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+            onChange={e => setConfirmPassword(e.target.value)}
             required
+            className="w-full border border-green-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
         </div>
 
