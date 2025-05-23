@@ -50,14 +50,27 @@ class UserRepository {
     }
   }
 
-  async update(id, userData) {
-    try {
-      const user = await this.findById(id);
-      return await user.update(userData);
-    } catch (error) {
-      throw new Error(`Error al actualizar el usuario: ${error.message}`);
+async update(id, userData) {
+  try {
+    const user = await this.findById(id);
+    if (!user) throw new Error('Usuario no encontrado');
+
+    // Campos que quieres actualizar
+    const allowedFields = ['nombre', 'apellido', 'telefono_usuario'];
+
+    // Asignar solo los campos permitidos si están en userData
+    for (const field of allowedFields) {
+      if (userData[field] !== undefined) {
+        user[field] = userData[field];
+      }
     }
+
+    await user.save();
+    return user;
+  } catch (error) {
+    throw new Error(`Error al actualizar el usuario: ${error.message}`);
   }
+}
 
   async delete(id) {
     try {

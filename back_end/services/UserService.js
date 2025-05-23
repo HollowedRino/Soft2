@@ -34,20 +34,36 @@ class UserService {
     }
   }
 
-  async updateUser(id, userData) {
-    try {
-      this.validateUserData(userData);
+async updateUser(id, userData) {
+  try {
+    // Campos permitidos para actualizar
+    const allowedFields = ['nombre', 'apellido', 'telefono_usuario'];
+    const dataToUpdate = {};
 
-      if (userData.contrasena) {
-        const hashedPassword = await bcrypt.hash(userData.contrasena, 10);
-        userData.contrasena = hashedPassword;
+    for (const field of allowedFields) {
+      if (userData[field] !== undefined) {
+        dataToUpdate[field] = userData[field];
       }
-
-      return await UserRepository.update(id, userData);
-    } catch (error) {
-      throw new Error(`Error en el servicio al actualizar usuario: ${error.message}`);
     }
+
+    if (Object.keys(dataToUpdate).length === 0) {
+      throw new Error('No se proporcionaron campos válidos para actualizar');
+    }
+
+    // Validación básica para teléfono: debe ser un número de 9 dígitos exactos
+    if (dataToUpdate.telefono_usuario !== undefined && !/^\d{9}$/.test(dataToUpdate.telefono_usuario.toString())) {
+      throw new Error('El teléfono debe tener 9 dígitos');
+    }
+
+    // Llamar a repository con los campos filtrados
+    return await UserRepository.update(id, dataToUpdate);
+  } catch (error) {
+    throw new Error(`Error en el servicio al actualizar usuario: ${error.message}`);
   }
+}
+
+
+
 
   async deleteUser(id) {
     try {
