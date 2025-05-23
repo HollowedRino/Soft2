@@ -24,9 +24,9 @@ export const MedifastPage = () => {
 
   const { user } = useContext(UserContext);
   const { cart, cartItems } = useContext(CartContext);
-  console.log(user);
-  console.log(cart);
-  console.log(cartItems);
+  // console.log(user);
+  // console.log(cart);
+  // console.log(cartItems);
 
   return (
     <motion.div

@@ -3,63 +3,63 @@ import { createContext, useState } from 'react';
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  // Estado para carrito completo
   const [cart, setCart] = useState(null);
-  // Estado solo para items (lista de productos con cantidad)
   const [cartItems, setCartItems] = useState([]);
 
-  // Añadir producto al carrito (incrementa cantidad si existe)
-  const addToCart = (product) => {
+  // Añadir producto al carrito (en formato deseado)
+  const addToCart = (medicamento) => {
     setCartItems(prevItems => {
-      const existingItem = prevItems.find(item => item.id === product.id);
+      const existingItem = prevItems.find(item => item.medicamento.id === medicamento.id);
+
       if (existingItem) {
         return prevItems.map(item =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
+          item.medicamento.id === medicamento.id
+            ? { ...item, cantidad: item.cantidad + 1 }
             : item
         );
       } else {
-        return [...prevItems, { ...product, quantity: 1 }];
+        const newItem = {
+          cantidad: 1,
+          medicamento_id: medicamento.id,
+          medicamento: medicamento
+        };
+        return [...prevItems, newItem];
       }
     });
   };
 
-  // Remover producto completo del carrito
-  const removeFromCart = (productId) => {
+  // Remover una unidad de producto del carrito
+  const removeFromCart = (producto) => {
     setCartItems(prevItems =>
-      prevItems.filter(item => item.id !== productId)
+      prevItems.flatMap(item => {
+        if (item.medicamento_id === producto.id) {
+          if (item.cantidad > 1) {
+            return { ...item, cantidad: item.cantidad - 1 };
+          } else {
+            return [];
+          }
+        }
+        return item;
+      })
     );
   };
 
-  // Vaciar carrito
+
   const clearCart = () => {
     setCartItems([]);
     setCart(null);
   };
 
-  // Cargar carrito completo desde backend al loguear
   const loadCartFromServer = (dataFromApi) => {
     const { id, fecha_actualizacion, items } = dataFromApi;
-
-    // Guardamos solo los datos necesarios del carrito
     setCart({ id, fecha_actualizacion });
 
-    // Transformamos los items para el estado cartItems
-    setCartItems(
-      items.map((item) => ({
-        item_carrito_id: item.id,
-        id: item.medicamento.id,
-        nombre: item.medicamento.nombre,
-        descripcion: item.medicamento.descripcion,
-        fabricante: item.medicamento.fabricante,
-        categoria: item.medicamento.categoria,
-        precio: item.medicamento.precio,
-        requiere_receta: item.medicamento.requiere_receta,
-        estado_medicamento: item.medicamento.estado_medicamento,
-        imagen_url: item.medicamento.imagen_url,
-        quantity: item.cantidad,
-      }))
-    );
+    setCartItems(items.map((item) => ({
+      id: item.id,
+      cantidad: item.cantidad,
+      medicamento_id: item.medicamento.id,
+      medicamento: item.medicamento
+    })));
   };
 
   return (
