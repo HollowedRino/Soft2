@@ -13,7 +13,7 @@ export const Footer = () => {
                 <div className="footer-item col-span-1">
                     <h3 className="font-bold text-lg">Medifast</h3>
                     <p>© 2025</p>
-                    <p className="my-2"><p className="no-underline text-black">Todos los derechos reservados</p></p>
+                    <p className="my-2 no-underline text-black">Todos los derechos reservados</p>
                 </div>
                 <div className="col-span-1"></div>
                 <div className="col-span-1 items-center">
