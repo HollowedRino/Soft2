@@ -22,6 +22,18 @@ class CarritoController {
             }
         }
     }
+    async findCarritoCompletoByUsuarioId(req, res) {
+        try {
+            const carrito = await CarritoService.findCarritoCompletoByUsuarioId(req.params.usuarioId);
+            res.status(200).json(carrito);
+        } catch (error) {
+            if (error.message === 'Carrito no encontrado para este usuario') {
+                res.status(404).json({ error: error.message });
+            } else {
+                res.status(500).json({ error: error.message });
+            }
+        }
+    }
 
     async create(req, res) {
         try {

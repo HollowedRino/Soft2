@@ -14,7 +14,9 @@ import RepartidorRoutes from './routes/RepartidorRoutes.js';
 import InventarioBoticaRoutes from './routes/InventarioBoticaRoutes.js';
 import PagoRoutes from './routes/PagoRoutes.js';
 import UserRoutes from './routes/UserRoutes.js';
-
+import ItemCarritoRoutes from './routes/ItemCarritoRoutes.js';
+import StripeRoutes from './routes/StripeRoutes.js';
+ 
 const app = express();
 const port = 3000;
 
@@ -54,6 +56,10 @@ app.use('/inventarioBotica', InventarioBoticaRoutes);
 app.use('/pago', PagoRoutes);
 // Usar las rutas de usuario
 app.use('/user', UserRoutes);
+// Usar las rutas de item carrito
+app.use('/itemcarrito',ItemCarritoRoutes);
+// Usar las rutas de Stripe
+app.use('/stripe', StripeRoutes);
 
 // Ruta principal
 app.get('/', (req, res) => {

@@ -22,14 +22,22 @@ class UserRepository {
     }
   }
 
-async findByEmail(email) {
-  try {
-    const user = await Usuario.findOne({ where: { email } });
-    return user; // Si no lo encuentra, devuelve null, no error
-  } catch (error) {
-    throw new Error(`Error al buscar usuario por email: ${error.message}`);
+  async findByEmail(email) {
+    try {
+      const user = await Usuario.findOne({ where: { email } });
+      return user; // Si no lo encuentra, devuelve null, no error
+    } catch (error) {
+      throw new Error(`Error al buscar usuario por email: ${error.message}`);
+    }
   }
-}
+  async login(email) {
+    try {
+      const user = await Usuario.findOne({ where: { email } });
+      return user; // Si no lo encuentra, devuelve null, no error
+    } catch (error) {
+      throw new Error(`Error al buscar usuario por email: ${error.message}`);
+    }
+  }
 
 
   

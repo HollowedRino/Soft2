@@ -17,6 +17,14 @@ class CarritoService {
         }
     }
 
+    async findCarritoCompletoByUsuarioId(usuarioId) {
+        try {
+            return await CarritoRepository.findCarritoCompletoByUsuarioId(usuarioId);
+        } catch (error) {
+            throw new Error(`Error al obtener el carrito completo por usuario: ${error.message}`);
+        }
+    }
+
     async create(carritoData) {
         try {
             // Validaciones
