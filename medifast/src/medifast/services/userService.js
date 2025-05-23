@@ -1,4 +1,4 @@
-import { post } from "./api";
+import { getWithPathParam, post } from "./api";
 
 const BASE_PATH = "/user";
 
@@ -41,6 +41,22 @@ export const registerGoogleUser = async (userData) => {
     };
   }
 };
+
+export const getUserByEmail = async (email) => {
+  try {
+    const resp = await getWithPathParam(`${BASE_PATH}/login`, email);
+    return {
+      ok: true,
+      resp,
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      errorMessage: error.message || "Error al obtener el usuario",
+    };
+    
+  }
+}
 
 
 
