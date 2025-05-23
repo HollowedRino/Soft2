@@ -22,7 +22,7 @@ export const registerUserInBackend = async (userData) => {
 
 export const registerGoogleUser = async (userData) => {
   try {
-    const user = await post("/user/google", userData);
+    const user = await post(`${BASE_PATH}/google`, userData);
     return {
       ok: true,
       user,

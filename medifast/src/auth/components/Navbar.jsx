@@ -1,6 +1,5 @@
 import {
   ChevronDownIcon,
-  MagnifyingGlassIcon,
   UserIcon,
 } from '@heroicons/react/16/solid';
 import { ShoppingCartIcon } from '@heroicons/react/24/outline';
