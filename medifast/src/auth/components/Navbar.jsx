@@ -8,7 +8,6 @@ import { Link } from 'react-router-dom';
 import { useContext } from 'react';
 import { UserContext } from '../../contexts/UserProvider';
 import { motion } from 'framer-motion';
-import { SearchBar } from './SearchBar';
 
 const fadeDown = {
   hidden: { opacity: 0, y: -20 },
@@ -43,12 +42,21 @@ export const Navbar = ({ cartCount = 0 }) => {
             <img
               src="https://res.cloudinary.com/dgxakgsuo/image/upload/v1745558934/b70d2277bb620e474ae830f58c44ad6b8583dfc6_fvmncj.png"
               alt="Medifast Logo"
-              className="h-10 w-10"
+              className="h-10 w-10 hover:img-[#41b541]" 
             />
-            <span className="text-xl font-bold text-black-600">Medifast</span>
+            <span className="text-xl font-bold text-black-600 hover:text-[#41b541]">Medifast</span>
           </Link>
 
-          <SearchBar />
+          <div className="flex w-full lg:w-auto flex-grow items-center space-x-2 mx-4">
+            <input
+              type="text"
+              placeholder="Buscar una marca o un producto"
+              className="w-full border border-gray-300 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+            />
+            <button className="bg-[#41b541] text-white p-2 rounded-full hover:bg-gray-700 transition-all duration-300">
+              <MagnifyingGlassIcon className="h-5 w-5" />
+            </button>
+          </div>
         </motion.div>
 
         <motion.div
@@ -79,18 +87,12 @@ export const Navbar = ({ cartCount = 0 }) => {
           )}
 
           <div className="flex flex-col items-center">
-            <Link
-              to="/contactUs"
-              className="text-sm text-black-500 hover:underline"
-            >
-              Contáctenos
-            </Link>
             <div className="relative">
               <Link
                 to="/mycart"
                 className="text-sm text-black-500 hover:underline"
               >
-                <ShoppingCartIcon className="h-6 w-6 text-gray-700 cursor-pointer" />
+                <ShoppingCartIcon className="h-6 w-6 text-gray-700 cursor-pointer hover:text-[#41b541]"/>
                 {cartCount > 0 && (
                   <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1.5">
                     {cartCount}
