@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+
+import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { loginWithEmailPassword, signInWithGoogle } from '../../firebase/providers';
+import { getUserByEmail, registerGoogleUser } from '../../medifast/services/userService';
+import { UserContext } from '../../contexts/UserProvider';
 
 const firebaseErrorMessages = {
   'auth/invalid-email': 'El correo ingresado no es válido.',
@@ -14,11 +17,14 @@ export const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  
+  const { login, user } = useContext(UserContext);
 
   const navigate = useNavigate();
-
+  
   const handleLogin = async () => {
     const result = await loginWithEmailPassword({ email, password });
+    
 
     if (!result.ok) {
       const customMessage = firebaseErrorMessages[result.errorCode] || 'Error al iniciar sesión.';
@@ -26,20 +32,50 @@ export const LoginPage = () => {
       return;
     }
 
-    navigate('/dashboard');
-  };
-
-  const handleGoogleSignIn = async () => {
-    const result = await signInWithGoogle();
-
-    if (!result.ok) {
-      const customMessage = firebaseErrorMessages[result.errorCode] || 'Error con Google Sign-In.';
-      setErrorMessage(customMessage);
-      return;
-    }
+    const { resp } = await getUserByEmail(email);
+    login(resp);
+    console.log(resp);
+    console.log(user);
 
     navigate('/dashboard');
   };
+
+const handleGoogleSignIn = async () => {
+  const result = await signInWithGoogle();
+
+  if (!result.ok) {
+    setErrorMessage('Error con Google Sign-In.');
+    return;
+  }
+
+  const email = result.email;
+  const displayName = result.displayName;
+
+  // Separa nombre y apellido
+  const [nombre, ...rest] = displayName.split(" ");
+  const apellido = rest.join(" ");
+
+  const backendResponse = await registerGoogleUser({ email, nombre, apellido });
+
+  if (!backendResponse.ok) {
+    setErrorMessage(backendResponse.errorMessage || 'Error en backend.');
+    return;
+  }
+
+  const { resp } = await getUserByEmail(email);
+  login(resp);
+  console.log(resp);
+  console.log(user);
+
+  // Si llegamos acá, usuario creado o ya existente: vamos al dashboard
+  navigate("/dashboard");
+};
+
+
+
+
+
+
 
   return (
     <div className="flex justify-center items-center bg-gray-100">

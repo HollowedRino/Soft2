@@ -1,4 +1,6 @@
 import express from 'express';
+import cors from 'cors';
+
 import BoticaRoutes from './routes/BoticaRoutes.js';
 import CarritoRoutes from './routes/CarritoRoutes.js';
 import DetallePedidoRoutes from './routes/DetallePedidoRoutes.js';
@@ -11,12 +13,22 @@ import CuponRoutes from './routes/CuponRoutes.js';
 import RepartidorRoutes from './routes/RepartidorRoutes.js';
 import InventarioBoticaRoutes from './routes/InventarioBoticaRoutes.js';
 import PagoRoutes from './routes/PagoRoutes.js';
-
+import UserRoutes from './routes/UserRoutes.js';
+import ItemCarritoRoutes from './routes/ItemCarritoRoutes.js';
+import StripeRoutes from './routes/StripeRoutes.js';
+ 
 const app = express();
 const port = 3000;
 
 // Middleware para procesar JSON
 app.use(express.json());
+// Middleware para procesar datos URL-encoded
+//app.use(express.urlencoded({ extended: true })); 
+
+// Middleware para habilitar CORS y permitir peticiones desde tu frontend
+app.use(cors({
+  origin: 'http://localhost:5173'  // Ajusta esta URL según el puerto donde corre tu frontend
+}));
 
 // Usar las rutas de botica
 app.use('/boticas', BoticaRoutes);
@@ -42,7 +54,12 @@ app.use('/repartidor', RepartidorRoutes);
 app.use('/inventarioBotica', InventarioBoticaRoutes);
 // Usar las rutas de pago
 app.use('/pago', PagoRoutes);
-
+// Usar las rutas de usuario
+app.use('/user', UserRoutes);
+// Usar las rutas de item carrito
+app.use('/itemcarrito',ItemCarritoRoutes);
+// Usar las rutas de Stripe
+app.use('/stripe', StripeRoutes);
 
 // Ruta principal
 app.get('/', (req, res) => {

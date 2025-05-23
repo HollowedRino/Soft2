@@ -1,7 +1,7 @@
 import {DataTypes} from "sequelize";
 import { Model } from "sequelize";
 import connection from "../configs/connect_database.js";
-
+//Clase Usuario
 class Usuario extends Model {}
 Usuario.init(
     {
@@ -24,7 +24,7 @@ Usuario.init(
         },
         contrasena: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: true
         },
         telefono_usuario: {
             type: DataTypes.INTEGER,

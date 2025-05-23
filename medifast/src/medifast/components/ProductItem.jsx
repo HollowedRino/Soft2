@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 import { BuildingStorefrontIcon, TruckIcon } from '@heroicons/react/16/solid';
 import { motion } from "framer-motion";
 import { AddToCartButton } from "./AddToCartButton";
-import { useEffect } from "react";
 
 export const ProductItem = ({ producto }) => {
   const navigate = useNavigate();
@@ -21,7 +20,7 @@ export const ProductItem = ({ producto }) => {
         transition={{ duration: 0.5, ease: "easeInOut" }}
     >
       <img
-        src={producto.imagen_url}
+        src={producto.imagen_url ? producto.imagen_url : "https://res.cloudinary.com/dgxakgsuo/image/upload/v1747766681/pngtree-flat-design-medication-bottle-vector-illustration-png-image_7037036_hdhblb.png"}
         alt={`Imagen de ${producto.nombre}`}
         className="w-full h-40 object-contain rounded-t-lg mb-2"
       />

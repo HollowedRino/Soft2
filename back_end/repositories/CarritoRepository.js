@@ -1,4 +1,6 @@
 import Carrito from "../models/Carrito.js";
+import ItemCarrito from "../models/ItemCarrito.js";
+import Medicamento from "../models/Medicamento.js";
 
 class CarritoRepository {
     async findAll() {
@@ -20,6 +22,60 @@ class CarritoRepository {
             throw new Error(`Error al obtener el carrito: ${error.message}`);
         }
     }
+
+
+    async findCarritoCompletoByUsuarioId(usuarioId) {
+    try {
+        const carrito = await Carrito.findOne({
+            where: { usuario_id: usuarioId },
+            include: [
+                {
+                    model: ItemCarrito,
+                    attributes: ["id", "cantidad", "medicamento_id"],
+                    include: [
+                        {
+                            model: Medicamento,
+                            attributes: [
+                                "id",
+                                "nombre",
+                                "descripcion",
+                                "fabricante",
+                                "categoria",
+                                "precio",
+                                "requiere_receta",
+                                "estado_medicamento",
+                                "imagen_url"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        });
+
+        if (!carrito) {
+            throw new Error("Carrito no encontrado para este usuario");
+        }
+
+        const { ItemCarritos, ...carritoData } = carrito.toJSON();
+
+        const itemsConMedicamento = ItemCarritos.map(item => {
+            const { Medicamento: medicamento, ...itemData } = item;
+            return {
+                ...itemData,
+                medicamento
+            };
+        });
+
+        return {
+            ...carritoData,
+            items: itemsConMedicamento
+        };
+
+    } catch (error) {
+        throw new Error(`Error al obtener el carrito: ${error.message}`);
+    }
+}
+
 
     async create(carrito) {
         try {

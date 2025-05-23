@@ -4,7 +4,7 @@ import './styles.css'
 import { MedifastApp } from './MedifastApp'
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+  // <StrictMode>
     <MedifastApp />
-  </StrictMode>,
+  // </StrictMode>
 )
