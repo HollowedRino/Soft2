@@ -40,14 +40,14 @@ export const SearchBar = () => {
         value={query}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
-        placeholder="Buscar una marca o un producto"
+        placeholder="Buscar por nombre de medicamento"
         className="w-full border border-gray-300 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
       />
       <button
-        className="bg-[#41b541] text-white p-2 rounded-full hover:bg-gray-700 transition-all duration-300"
+        className="bg-[#41b541] text-white p-2 rounded-full hover:bg-gray-700 transition-all duration-300 hover:scale-[1.02] cursor-pointer"
         onClick={handleSearch}
       >
-        <MagnifyingGlassIcon className="h-5 w-5" />
+        <MagnifyingGlassIcon className="h-5 w-5 " />
       </button>
     </div>
   );

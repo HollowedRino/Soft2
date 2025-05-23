@@ -62,7 +62,7 @@ export const Navbar = ({ cartCount = 0 }) => {
           {user.authStatus ? (
             <Link
               to="/userProfile"
-              className="flex items-center text-white bg-[#41b541] hover:bg-gray-700 px-4 py-2 rounded-md text-sm"
+              className="flex items-center text-white bg-[#41b541] hover:bg-gray-700 px-4 py-2 rounded-md text-sm transition-all duration-300 hover:scale-[1.02] cursor-pointer"
             >
               <UserIcon className="h-6 w-6 mr-2" />
               {user.name}
@@ -86,7 +86,7 @@ export const Navbar = ({ cartCount = 0 }) => {
                 to="/mycart"
                 className="text-sm text-black-500 hover:underline"
               >
-                <ShoppingCartIcon className="h-6 w-6 text-gray-700 cursor-pointer hover:text-[#41b541]"/>
+                <ShoppingCartIcon className="h-6 w-6 text-gray-700 cursor-pointer hover:text-[#41b541] transition-all duration-300 hover:scale-[1.02] cursor-pointer"/>
                 {cartCount > 0 && (
                   <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1.5">
                     {cartCount}
