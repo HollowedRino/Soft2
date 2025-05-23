@@ -95,6 +95,9 @@ async createGoogleUser(userData) {
 async getUserByEmail(email) {
   return await UserRepository.findByEmail(email);
 }
+async login(email) {
+  return await UserRepository.login(email);
+}
 
 
 

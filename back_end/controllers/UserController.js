@@ -63,27 +63,53 @@ class UserController {
     }
 
 
-async createUserGoogle(req, res) {
-  try {
-    const { nombre, apellido, email } = req.body;
-    if (!nombre || !apellido || !email) {
-      return res.status(400).json({ error: 'Faltan datos obligatorios' });
+    async createUserGoogle(req, res) {
+        try {
+            const { nombre, apellido, email } = req.body;
+            if (!nombre || !apellido || !email) {
+            return res.status(400).json({ error: 'Faltan datos obligatorios' });
+            }
+
+            const existingUser = await UserService.getUserByEmail(email);
+            if (existingUser) {
+
+            return res.status(409).json({ message: 'El usuario ya existe', exists: true });
+
+            }
+
+            const newUser = await UserService.createGoogleUser({ nombre, apellido, email });
+            res.status(201).json(newUser);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
     }
 
-    const existingUser = await UserService.getUserByEmail(email);
-    if (existingUser) {
-
-      return res.status(409).json({ message: 'El usuario ya existe', exists: true });
-
+    async getUserByEmail(req, res) {
+        try {
+            const { email } = req.params;
+            const user = await UserService.getUserByEmail(email);
+            console.log(user)
+            if (!user) {
+                return res.status(404).json({ error: 'Usuario no encontrado' });
+            }
+            res.json(user);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
     }
 
-    const newUser = await UserService.createGoogleUser({ nombre, apellido, email });
-    res.status(201).json(newUser);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-}
-
+    async login(req, res) {
+        try {
+            const { email } = req.params;
+            const user = await UserService.login(email);
+            if (!user) {
+                return res.status(404).json({ error: 'Usuario no encontrado' });
+            }
+            res.json(user);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
 
     
 
