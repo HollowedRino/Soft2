@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { useContext } from 'react';
 import { UserContext } from '../../contexts/UserProvider';
 import { motion } from 'framer-motion';
+import { SearchBar } from './SearchBar';
 
 const fadeDown = {
   hidden: { opacity: 0, y: -20 },
@@ -37,26 +38,19 @@ export const Navbar = ({ cartCount = 0 }) => {
         >
           <Link
             to="/"
-            className="flex items-center space-x-3 transition-all duration-300"
+            className="flex items-center space-x-3 transition-all duration-300 hover:scale-[1.02] cursor-pointer"
           >
             <img
               src="https://res.cloudinary.com/dgxakgsuo/image/upload/v1745558934/b70d2277bb620e474ae830f58c44ad6b8583dfc6_fvmncj.png"
               alt="Medifast Logo"
               className="h-10 w-10 hover:img-[#41b541]" 
             />
-            <span className="text-xl font-bold text-black-600 hover:text-[#41b541]">Medifast</span>
+            <span className="text-xl font-bold text-black-600">Medifast</span>
           </Link>
 
-          <div className="flex w-full lg:w-auto flex-grow items-center space-x-2 mx-4">
-            <input
-              type="text"
-              placeholder="Buscar una marca o un producto"
-              className="w-full border border-gray-300 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
-            />
-            <button className="bg-[#41b541] text-white p-2 rounded-full hover:bg-gray-700 transition-all duration-300">
-              <MagnifyingGlassIcon className="h-5 w-5" />
-            </button>
-          </div>
+
+          <SearchBar />
+          
         </motion.div>
 
         <motion.div

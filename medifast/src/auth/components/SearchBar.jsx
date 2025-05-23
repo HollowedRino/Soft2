@@ -8,6 +8,7 @@ export const SearchBar = () => {
   const navigate = useNavigate();
 
   const handleSearch = () => {
+    console.log("aaaa")
     const value = query.trim();
     if (value === "") {
       navigate("/medicamentos/todos");
