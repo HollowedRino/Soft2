@@ -2,30 +2,75 @@ import { TrashIcon } from "@heroicons/react/20/solid";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import { useContext, useState, useEffect } from "react";
 import { CartContext } from "../../contexts/CartProvider";
+import { createItemCarrito, updateItemCarrito, getItemCarritoByCarritoIdMedicamentoId, deleteItemCarrito } from "../services/itemCarritoService";
+import { UserContext } from "../../contexts/UserProvider";
 
 export const AddToCartButton = ({ producto }) => {
   const { cart, cartItems, addToCart, removeFromCart } = useContext(CartContext);
   const [count, setCount] = useState(0);
+  const { user } = useContext(UserContext);
 
 
   useEffect(() => {
-    const itemInCart = cartItems.find(item => item.medicamento.id === producto.id);
-    console.log("itemEncontrado", itemInCart)
-    console.log(cartItems)
-    setCount(itemInCart ? itemInCart.cantidad : 0);
-  }, [cartItems, producto.id]);
+      const itemInCart = cartItems.find(item => item.medicamento.id === producto.id);
+      // console.log("itemEncontrado", itemInCart)
+      // console.log(cartItems)
+      setCount(itemInCart ? itemInCart.cantidad : 0);
+    }, [cartItems, producto.id]);
 
-  const handleAdd = (e) => {
+  const handleAdd = async (e) => {
     e.stopPropagation();
     
     const { boticas, ...productoSinBoticas } = producto;
+    const itemInCart = cartItems.find(item => item.medicamento.id === producto.id);
+    const cantidadActual = itemInCart ? itemInCart.cantidad : 0;
+    const nuevaCantidad = cantidadActual + 1;
+
+    if (user.authStatus) {
+      if (cantidadActual === 0) {
+        await createItemCarrito({
+          carrito_id: cart.id,
+          medicamento_id: producto.id,
+          cantidad: 1,
+        });
+      } else {
+        await updateItemCarrito({
+          carrito_id: cart.id,
+          medicamento_id: producto.id,
+          nuevaCantidad: nuevaCantidad,
+        });
+      }
+    }
     addToCart(productoSinBoticas);
   };
 
-  const handleSubtract = (e) => {
+  const handleSubtract = async (e) => {
     e.stopPropagation();
-    removeFromCart(producto);
-  };
+
+    const itemInCart = cartItems.find(item => item.medicamento.id === producto.id);
+    if (!itemInCart) return; // Seguridad por si se intenta quitar algo que no está
+
+    const cantidadActual = itemInCart.cantidad;
+    const nuevaCantidad = cantidadActual - 1;
+
+    if (user.authStatus) {
+      if (nuevaCantidad === 0) {
+        const resp = await getItemCarritoByCarritoIdMedicamentoId(cart.id, producto.id);
+        const itemCarritoId = resp.resp.id;
+        await deleteItemCarrito(itemCarritoId);
+      } else {
+        await updateItemCarrito({
+          carrito_id: cart.id,
+          medicamento_id: producto.id,
+          nuevaCantidad: nuevaCantidad,
+        });
+      }
+    }
+
+      // Actualizar el contexto (quitar o reducir cantidad)
+      removeFromCart(producto);
+    };
+
 
   const isDisabled =
     producto.boticas.length === 0 ||
