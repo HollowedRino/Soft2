@@ -47,7 +47,6 @@ export const AddToCartButton = ({ producto }) => {
       }
     }
   };
-  console.log(producto)
 
   const handleDisabled = (producto) => {
     return producto.boticas.length === 0 || 

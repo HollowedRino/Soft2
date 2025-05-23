@@ -19,11 +19,9 @@ export const FilterPage = () => {
 
     if (filtro === "todos"){
         resultado = await findAllMedsWithDetail();
-        console.log(resultado);
     }
     else {
         resultado = await findMedsByPartialName(filtro);
-        console.log(resultado);
     }
 
     if (!resultado.ok) {
