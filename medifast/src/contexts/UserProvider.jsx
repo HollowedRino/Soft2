@@ -10,7 +10,7 @@ export const UserProvider = ({ children }) => {
     address: '',
     phoneNumber: '',
     state: '', //Cliente o Admin
-    authStatus: false, //Cambiar cuando se loguea
+    authStatus: true, //Cambiar cuando se loguea
   });
 
   const login = (userData) => {
