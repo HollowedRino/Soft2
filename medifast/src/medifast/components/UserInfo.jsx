@@ -1,40 +1,61 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { updateUser } from "../services/userService";
+import { UserContext } from "../../contexts/UserProvider";
 
 export default function UserInfo() {
   const [name, setName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [address, setAddress] = useState("");
   const [saved, setSaved] = useState(false);
-
+  const { updateName,updateLastName,updatePhoneNumber } = useContext(UserContext);
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("user"));
     if (userData) {
       setName(userData.name || "");
       setLastName(userData.lastName || "");
       setPhoneNumber(userData.phoneNumber || "");
-      setAddress(userData.address || "");
+
     }
   }, []);
 
-  const handleSave = (e) => {
-    e.preventDefault();
+ const handleSave = async (e) => {
+  e.preventDefault();
 
-    const userData = JSON.parse(localStorage.getItem("user")) || {};
-    const updatedUser = {
-      ...userData,
-      name,
-      lastName,
-      phoneNumber,
-      address,
-    };
-
-    localStorage.setItem("user", JSON.stringify(updatedUser));
-
-    setSaved(true);
-    setTimeout(() => setSaved(false), 3000);
+  const userData = JSON.parse(localStorage.getItem("user")) || {};
+  const updatedUser = {
+    ...userData,
+    name,
+    lastName,
+    phoneNumber,
   };
 
+  
+
+  localStorage.setItem("user", JSON.stringify(updatedUser));
+
+  try {
+    if (userData.id) {
+      const response = await updateUser(userData.id, {
+  nombre: name,
+  apellido: lastName,
+  telefono_usuario: phoneNumber,
+});
+
+      if (!response.ok) {
+        console.error("Error actualizando backend:", response.errorMessage);
+      }
+      // Actualizar el contexto
+      updateName(name);
+      updateLastName(lastName);
+      updatePhoneNumber(phoneNumber);
+    }
+  } catch (error) {
+    console.error("Error inesperado al actualizar backend:", error);
+  }
+
+  setSaved(true);
+  setTimeout(() => setSaved(false), 3000);
+};
   return (
     <div>
       <h2 className="text-2xl font-semibold text-green-700 mb-6">Editar Perfil</h2>
@@ -79,18 +100,7 @@ export default function UserInfo() {
           />
         </div>
 
-        {/* Campo: Dirección */}
-        <div>
-          <label className="block font-semibold mb-1" htmlFor="address">Dirección:</label>
-          <input
-            id="address"
-            type="text"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            className="w-full border border-green-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-            required
-          />
-        </div>
+
 
         {/* Botón para guardar cambios */}
         <button
