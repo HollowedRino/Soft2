@@ -1,4 +1,4 @@
-import Grupo2 from '../images/Grupo2.jpg';
+import Grupo2 from '../../../img_src/Grupo2.jpg';
 
 export const ContactUsPage = () => {
   return (
