@@ -1,17 +1,27 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-
+import { sendResetPasswordEmail } from '../../firebase/providers';
 export const ForgotPass = () => {
-  // Estado para manejar el email
   const [email, setEmail] = useState('');
-  const [message, setMessage] = useState(''); // Estado para mostrar el mensaje
+  const [message, setMessage] = useState('');
 
-  // Funcion que se ejecuta al presionar el botón de recuperar contraseña
-  const handleSubmit = () => {
-    // aqui es donde se busca el email en la base de datos y enviara la contraseña 
+  const handleSubmit = async () => {
+    if (!email) {
+      setMessage('Por favor ingresa un correo válido.');
+      return;
+    }
 
-    // Simulamos que la contraseña se ha enviado al correo
-    setMessage('La contraseña ha sido enviada a tu correo.');
+    const result = await sendResetPasswordEmail(email);
+
+    if (result.ok) {
+      setMessage('Se ha enviado un correo para restablecer tu contraseña.');
+    } else {
+      if (result.errorCode === 'auth/user-not-found') {
+        setMessage('El correo no está registrado.');
+      } else {
+        setMessage(`Error: ${result.errorMessage}`);
+      }
+    }
   };
 
   return (
@@ -27,25 +37,25 @@ export const ForgotPass = () => {
             placeholder="Email"
             className="w-full p-3 border border-gray-300 rounded-md mb-4"
             value={email}
-            onChange={(e) => setEmail(e.target.value)} // Guardar el email
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
 
         <button
-          onClick={handleSubmit} // aqui llamamos a la funcion para enviar el correo
+          onClick={handleSubmit}
           className="w-full bg-black text-white py-3 rounded-md hover:bg-gray-800 transition mt-5"
         >
           Recuperar Contraseña
         </button>
 
-        
-        {message && ( //Mostrar mensaje despues de hacer clic en el boton
-          <p className="mt-4 text-green-500">{message}</p>
+        {message && (
+          <p className={`mt-4 ${message.includes('Error') ? 'text-red-500' : 'text-green-500'}`}>
+            {message}
+          </p>
         )}
 
         <div className="mt-5">
           <Link
-            type="button"
             to="/login"
             className="text-black underline hover:text-gray-600 transition"
           >
