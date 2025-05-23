@@ -1,3 +1,4 @@
+import Carrito from "../models/Carrito.js";
 import Usuario from "../models/Usuario.js";
 
 
@@ -44,7 +45,16 @@ class UserRepository {
 
   async create(userData) {
     try {
-      return await Usuario.create(userData);
+      // 1. Crear el usuario
+      const nuevoUsuario = await Usuario.create(userData);
+
+      // 2. Crear el carrito asociado al usuario
+      await Carrito.create({
+        usuario_id: nuevoUsuario.id,
+        fecha_actualizacion: new Date(), // Puedes ajustar formato si deseas
+      });
+
+      return nuevoUsuario;
     } catch (error) {
       throw new Error(`Error al crear el usuario: ${error.message}`);
     }
