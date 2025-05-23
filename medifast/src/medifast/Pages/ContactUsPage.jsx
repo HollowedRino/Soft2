@@ -1,3 +1,4 @@
+import Grupo2 from '../images/Grupo2.jpg';
 
 export const ContactUsPage = () => {
   return (
@@ -7,13 +8,22 @@ export const ContactUsPage = () => {
         </h1>
 
         <div className="w-full bg-green-100 min-h-150 rounded-3xl">
-            <div className=" w-full p-6 sm:px-10">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 gap-8">
-                <h1 className="text-1xl font-bold mb-3 text-left">
-                    En desarrollo...
+            <div className=" w-full p-6 sm:px-10 items-center">
+            <div className="text-center">
+                <h1 className="text-1xl font-bold mb-3">
+                    Miembros del Grupo 2
                 </h1>
-
+                <ul class="list-none flex gap-4 p-0 m-0 justify-center">
+                  <li>Joaquin Alfaro</li>
+                  <li>Fantino Camara</li>
+                  <li>Sebastian Garcia</li>
+                  <li>Rober Goñas</li>
+                  <li>Ariel Gutiérrez</li>
+                  <li>Sofia Mejorada</li>
+                  <li>Alessander Mejia</li>
+                </ul>         
             </div>
+              <img src={Grupo2} alt="Imagen del grupo" className="mx-auto" ></img>
             </div>
         </div>
     </div>
