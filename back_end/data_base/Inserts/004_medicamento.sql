@@ -23,29 +23,29 @@ VALUES (10, 'Aspirina', 'Analgésico y anticoagulante', 'medications', 'Bayer', 
 INSERT INTO medicamento(id, nombre, descripcion, categoria, fabricante, precio, requiere_receta, estado_medicamento, imagen_url) 
 VALUES (11, 'Valeriana', 'Sedante natural para la ansiedad y el insomnio', 'natural-medicines', 'Nature’s Way', 5.80, 0, 1, 'https://saludvida.com.pe/cdn/shop/products/suplmgrandescopia_9e9973c2-2238-4c64-a658-b7efed0008c0.jpg?v=1663607588');
 INSERT INTO medicamento(id, nombre, descripcion, categoria, fabricante, precio, requiere_receta, estado_medicamento, imagen_url) 
-VALUES (12, 'Echinacea', 'Refuerza el sistema inmunológico', 'natural-medicines', 'Natural Vitality', 6.50, 0, 1, '');
+VALUES (12, 'Echinacea', 'Refuerza el sistema inmunológico', 'natural-medicines', 'Natural Vitality', 6.50, 0, 1, 'https://cloudinary.images-iherb.com/image/upload/f_auto,q_auto:eco/images/nwy/nwy12408/v/61.jpg');
 
 -- Adulto mayor
 INSERT INTO medicamento(id, nombre, descripcion, categoria, fabricante, precio, requiere_receta, estado_medicamento, imagen_url) 
-VALUES (13, 'Calcio + Vitamina D3', 'Fortalecimiento óseo para adultos mayores', 'older-adult', 'Centrum', 9.20, 0, 1, '');
+VALUES (13, 'Calcio + Vitamina D3', 'Fortalecimiento óseo para adultos mayores', 'older-adult', 'Centrum', 9.20, 0, 1, 'https://cloudinary.images-iherb.com/image/upload/f_auto,q_auto:eco/images/mav/mav13021/v/8.jpg');
 INSERT INTO medicamento(id, nombre, descripcion, categoria, fabricante, precio, requiere_receta, estado_medicamento, imagen_url) 
-VALUES (14, 'Memorax', 'Mejora la memoria y concentración en personas mayores', 'older-adult', 'LabFarma', 11.50, 0, 1, '');
+VALUES (14, 'Memorax', 'Mejora la memoria y concentración en personas mayores', 'older-adult', 'LabFarma', 11.50, 0, 1, 'https://m.media-amazon.com/images/I/51JLVtybD6L._AC_SX569_.jpg');
 
 -- Infantil
 INSERT INTO medicamento(id, nombre, descripcion, categoria, fabricante, precio, requiere_receta, estado_medicamento, imagen_url) 
-VALUES (15, 'Paracetamol Infantil', 'Jarabe para la fiebre y el dolor en niños', 'childish', 'Pfizer', 3.80, 0, 1, '');
+VALUES (15, 'Paracetamol Infantil', 'Jarabe para la fiebre y el dolor en niños', 'childish', 'Pfizer', 3.80, 0, 1, 'https://boticasperu.pe/media/catalog/product/cache/eebfcecb9382e8d5ccf71e8b2c8cbd30/p/a/panadol_nin-_os_jarabe_productdetail_455x455.jpg');
 INSERT INTO medicamento(id, nombre, descripcion, categoria, fabricante, precio, requiere_receta, estado_medicamento, imagen_url) 
-VALUES (16, 'Multivitamínico Infantil', 'Suplemento con vitaminas esenciales para niños', 'childish', 'Pediavit', 4.60, 0, 1, '');
+VALUES (16, 'Multivitamínico Infantil', 'Suplemento con vitaminas esenciales para niños', 'childish', 'Pediavit', 4.60, 0, 1, 'https://realplaza.vtexassets.com/arquivos/ids/35368674-800-auto?v=638496632466970000&width=800&height=auto&aspect=true');
 
 -- Belleza
 INSERT INTO medicamento(id, nombre, descripcion, categoria, fabricante, precio, requiere_receta, estado_medicamento, imagen_url) 
-VALUES (17, 'Colágeno Hidrolizado', 'Mejora la elasticidad de la piel y uñas', 'beauty', 'HydroSkin', 12.00, 0, 1, '');
+VALUES (17, 'Colágeno Hidrolizado', 'Mejora la elasticidad de la piel y uñas', 'beauty', 'HydroSkin', 12.00, 0, 1, 'https://farmaciauniversalpe.vtexassets.com/arquivos/ids/160028-800-auto?v=638591218785230000&width=800&height=auto&aspect=true');
 INSERT INTO medicamento(id, nombre, descripcion, categoria, fabricante, precio, requiere_receta, estado_medicamento, imagen_url) 
-VALUES (18, 'Biotina 10,000 mcg', 'Estimula el crecimiento del cabello y uñas', 'beauty', 'Natrol', 8.75, 0, 1, '');
+VALUES (18, 'Biotina 10,000 mcg', 'Estimula el crecimiento del cabello y uñas', 'beauty', 'Natrol', 8.75, 0, 1, 'https://www.farmaexpress.com.pe/cdn/shop/products/Biotin-10000_1024x1024.png?v=1660345077');
 
 -- Vitaminas y Suplementos
 INSERT INTO medicamento(id, nombre, descripcion, categoria, fabricante, precio, requiere_receta, estado_medicamento, imagen_url) 
-VALUES (19, 'Vitamina C 1000 mg', 'Antioxidante y fortalecimiento inmunológico', 'vitamins', 'Sundown', 6.20, 0, 1, '');
+VALUES (19, 'Vitamina C 1000 mg', 'Antioxidante y fortalecimiento inmunológico', 'vitamins', 'Sundown', 6.20, 0, 1, 'https://boticasperu.pe/media/catalog/product/cache/eebfcecb9382e8d5ccf71e8b2c8cbd30/_/0/_03639.jpg');
 INSERT INTO medicamento(id, nombre, descripcion, categoria, fabricante, precio, requiere_receta, estado_medicamento, imagen_url) 
-VALUES (20, 'Omega 3 EPA/DHA', 'Apoyo cardiovascular y cerebral', 'vitamins', 'Nordic Naturals', 10.90, 0, 1, '');
+VALUES (20, 'Omega 3 EPA/DHA', 'Apoyo cardiovascular y cerebral', 'vitamins', 'Nordic Naturals', 10.90, 0, 1, 'https://cloudinary.images-iherb.com/image/upload/f_auto,q_auto:eco/images/sol/sol02058/l/116.jpg');
 
