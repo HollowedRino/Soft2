@@ -24,7 +24,6 @@ export const CategoryPage = () => {
   const getmeds = async () => {
     setLoading(true);
     const resultado = await findMedsByCategory(categoryName);
-    console.log(resultado);
 
     if (!resultado.ok) {
       console.error(`Error al cargar las medicinas en CategoryPage: ${resultado.errorMessage}`);

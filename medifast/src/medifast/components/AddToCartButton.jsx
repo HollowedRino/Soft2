@@ -2,38 +2,33 @@ import { TrashIcon } from "@heroicons/react/20/solid";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import { useContext, useState, useEffect } from "react";
 import { CartContext } from "../../contexts/CartProvider";
-import { addItemCarrito } from "../services/itemCarritoService";
 
 export const AddToCartButton = ({ producto }) => {
   const { cart, cartItems, addToCart, removeFromCart } = useContext(CartContext);
   const [count, setCount] = useState(0);
 
 
-  // Actualiza el contador cuando cambia el carrito
   useEffect(() => {
-    const itemInCart = cartItems.find(item => item.id === producto.id);
-    setCount(itemInCart ? itemInCart.quantity : 0);
+    const itemInCart = cartItems.find(item => item.medicamento.id === producto.id);
+    console.log("itemEncontrado", itemInCart)
+    console.log(cartItems)
+    setCount(itemInCart ? itemInCart.cantidad : 0);
   }, [cartItems, producto.id]);
 
   const handleAdd = (e) => {
-    // addItemCarrito({
-    //   "carrito_id": cart.id,
-    //   "medicamento_id": producto.id,
-    //   "cantidad": count,
-    // });
     e.stopPropagation();
-    addToCart({
-      id: producto.id,
-      nombre: producto.nombre,
-    });
+    
+    const { boticas, ...productoSinBoticas } = producto;
+    addToCart(productoSinBoticas);
   };
 
   const handleSubtract = (e) => {
     e.stopPropagation();
-    removeFromCart(producto.id);
+    removeFromCart(producto);
   };
 
-  const isDisabled = producto.boticas.length === 0 ||
+  const isDisabled =
+    producto.boticas.length === 0 ||
     producto.boticas.every(botica => botica.inventario.cantidad_disponible === 0);
 
   const preventPropagation = (e) => e.stopPropagation();
