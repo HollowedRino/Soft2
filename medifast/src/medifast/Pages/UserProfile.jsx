@@ -4,11 +4,18 @@ import UserInfo from "../components/UserInfo";
 import Orders from "../components/Orders";
 import Coupons from "../components/Coupons";
 import ChangePassword from "../components/ChangePassword";
+import { CartContext } from "../../contexts/CartProvider";
 
 export default function UserProfile() {
   const [activeSection, setActiveSection] = useState("info");
   const { logout } = useContext(UserContext);
+  const { clearCart } = useContext(CartContext);
   
+  const handleLogout = () => {
+    logout();
+    clearCart();
+  };
+
 const renderSection = () => {
   switch (activeSection) {
     case "info":
@@ -75,7 +82,7 @@ const renderSection = () => {
             </ul>
           </div>
           <button
-            onClick={ logout() }
+            onClick={ handleLogout }
             className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 rounded mt-4"
           >
             Cerrar sesión

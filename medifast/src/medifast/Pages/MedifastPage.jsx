@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useContext } from 'react';
 import { UserContext } from '../../contexts/UserProvider';
+import { CartContext } from '../../contexts/CartProvider';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -22,7 +23,10 @@ const fadeInUp = {
 export const MedifastPage = () => {
 
   const { user } = useContext(UserContext);
-  console.log(user)
+  const { cart, cartItems } = useContext(CartContext);
+  console.log(user);
+  console.log(cart);
+  console.log(cartItems);
 
   return (
     <motion.div

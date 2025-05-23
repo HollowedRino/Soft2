@@ -7,6 +7,8 @@ export const PrivateRoutes = ({ children }) => {
 
   const { user } = useContext(UserContext);
 
+  console.log(user)
+
   return user.authStatus ? children : <Navigate to="/login" replace />;
 };
 
