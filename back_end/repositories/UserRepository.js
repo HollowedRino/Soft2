@@ -1,3 +1,4 @@
+import Carrito from "../models/Carrito.js";
 import Usuario from "../models/Usuario.js";
 
 
@@ -44,20 +45,42 @@ class UserRepository {
 
   async create(userData) {
     try {
-      return await Usuario.create(userData);
+      // 1. Crear el usuario
+      const nuevoUsuario = await Usuario.create(userData);
+
+      // 2. Crear el carrito asociado al usuario
+      await Carrito.create({
+        usuario_id: nuevoUsuario.id,
+        fecha_actualizacion: new Date(), // Puedes ajustar formato si deseas
+      });
+
+      return nuevoUsuario;
     } catch (error) {
       throw new Error(`Error al crear el usuario: ${error.message}`);
     }
   }
 
-  async update(id, userData) {
-    try {
-      const user = await this.findById(id);
-      return await user.update(userData);
-    } catch (error) {
-      throw new Error(`Error al actualizar el usuario: ${error.message}`);
+async update(id, userData) {
+  try {
+    const user = await this.findById(id);
+    if (!user) throw new Error('Usuario no encontrado');
+
+    // Campos que quieres actualizar
+    const allowedFields = ['nombre', 'apellido', 'telefono_usuario'];
+
+    // Asignar solo los campos permitidos si están en userData
+    for (const field of allowedFields) {
+      if (userData[field] !== undefined) {
+        user[field] = userData[field];
+      }
     }
+
+    await user.save();
+    return user;
+  } catch (error) {
+    throw new Error(`Error al actualizar el usuario: ${error.message}`);
   }
+}
 
   async delete(id) {
     try {
