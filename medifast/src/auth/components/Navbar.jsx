@@ -1,14 +1,14 @@
 import {
   ChevronDownIcon,
-  MagnifyingGlassIcon,
   UserIcon,
 } from '@heroicons/react/16/solid';
 import { ShoppingCartIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
-import { useContext } from 'react';
+import { useContext, useEffect, useState, useRef } from 'react';
 import { UserContext } from '../../contexts/UserProvider';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { SearchBar } from './SearchBar';
+import { CartContext } from '../../contexts/CartProvider';
 
 const fadeDown = {
   hidden: { opacity: 0, y: -20 },
@@ -19,8 +19,36 @@ const fadeDown = {
   },
 };
 
-export const Navbar = ({ cartCount = 0 }) => {
+export const Navbar = () => {
   const { user } = useContext(UserContext);
+  const { cartItems } = useContext(CartContext);
+  const [total, setTotal] = useState(0);
+  const [animateBadge, setAnimateBadge] = useState(false);
+  const prevTotal = useRef(0);
+
+  const getTotalCantidad = (items) =>
+    items.reduce((total, item) => total + item.cantidad, 0);
+
+  useEffect(() => {
+    const newTotal = getTotalCantidad(cartItems);
+
+    // Animar si cambia (suba o baje)
+    if (newTotal !== prevTotal.current) {
+      setAnimateBadge(true);
+      setTimeout(() => setAnimateBadge(false), 300); // duración animación
+    }
+
+    prevTotal.current = newTotal;
+    setTotal(newTotal);
+  }, [cartItems]);
+
+  const badgeVariants = {
+    initial: { scale: 1 },
+    animate: {
+      scale: [1, 1.4, 1],
+      transition: { duration: 0.4, ease: 'easeInOut' },
+    },
+  };
 
   return (
     <motion.nav
@@ -43,14 +71,12 @@ export const Navbar = ({ cartCount = 0 }) => {
             <img
               src="https://res.cloudinary.com/dgxakgsuo/image/upload/v1745558934/b70d2277bb620e474ae830f58c44ad6b8583dfc6_fvmncj.png"
               alt="Medifast Logo"
-              className="h-10 w-10 hover:img-[#41b541]" 
+              className="h-10 w-10 hover:img-[#41b541]"
             />
             <span className="text-xl font-bold text-black-600">Medifast</span>
           </Link>
 
-
           <SearchBar />
-          
         </motion.div>
 
         <motion.div
@@ -86,12 +112,20 @@ export const Navbar = ({ cartCount = 0 }) => {
                 to="/mycart"
                 className="text-sm text-black-500 hover:underline"
               >
-                <ShoppingCartIcon className="h-6 w-6 text-gray-700 cursor-pointer hover:text-[#41b541] transition-all duration-300 hover:scale-[1.02] cursor-pointer"/>
-                {cartCount > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1.5">
-                    {cartCount}
-                  </span>
-                )}
+                <ShoppingCartIcon className="h-6 w-6 text-gray-700 cursor-pointer hover:text-[#41b541] transition-all duration-300 hover:scale-[1.02]" />
+                <AnimatePresence>
+                  {total > 0 && (
+                    <motion.span
+                      key={total}
+                      className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1.5"
+                      initial="initial"
+                      animate={animateBadge ? 'animate' : 'initial'}
+                      variants={badgeVariants}
+                    >
+                      {total}
+                    </motion.span>
+                  )}
+                </AnimatePresence>
               </Link>
             </div>
           </div>

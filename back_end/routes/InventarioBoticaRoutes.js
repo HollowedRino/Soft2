@@ -2,7 +2,7 @@ import express from "express";
 import InventarioBoticaController from "../controllers/InventarioBoticaController.js";
 
 const router = express.Router();
-
+router.get('/botica/:boticaId', InventarioBoticaController.findByBoticaId);
 router.get("/", InventarioBoticaController.findAll);
 router.get("/:id", InventarioBoticaController.findById);
 router.post("/", InventarioBoticaController.create);

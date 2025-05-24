@@ -3,53 +3,108 @@ import { createContext, useEffect, useState } from 'react';
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
+  const [cart, setCart] = useState(null);
   const [cartItems, setCartItems] = useState([]);
-  const [loaded, setLoaded] = useState(false); // ← control para saber si ya cargó del localStorage
 
-  // ✅ Cargar desde localStorage solo una vez al montar
+  // Leer del localStorage al cargar
   useEffect(() => {
-    const storedCart = localStorage.getItem("cartItems");
-    if (storedCart) {
-      setCartItems(JSON.parse(storedCart));
+    const savedCart = localStorage.getItem('cart');
+    const savedCartItems = localStorage.getItem('cartItems');
+
+    if (savedCart && savedCartItems) {
+      setCart(JSON.parse(savedCart));
+      setCartItems(JSON.parse(savedCartItems));
     }
-    setLoaded(true);
   }, []);
 
-  // ✅ Guardar en localStorage solo después de que se haya cargado
-  useEffect(() => {
-    if (loaded) {
-      localStorage.setItem("cartItems", JSON.stringify(cartItems));
-    }
-  }, [cartItems, loaded]);
+  const syncLocalStorage = (newCartItems, newCart = cart) => {
+    localStorage.setItem('cartItems', JSON.stringify(newCartItems));
+    localStorage.setItem('cart', JSON.stringify(newCart));
+  };
 
-  const addToCart = (product) => {
+  const addToCart = (medicamento) => {
     setCartItems(prevItems => {
-      const existingItem = prevItems.find(item => item.id === product.id);
+      const existingItem = prevItems.find(item => item.medicamento.id === medicamento.id);
+      let updatedItems;
+
       if (existingItem) {
-        return prevItems.map(item =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
+        updatedItems = prevItems.map(item =>
+          item.medicamento.id === medicamento.id
+            ? { ...item, cantidad: item.cantidad + 1 }
             : item
         );
       } else {
-        return [...prevItems, { ...product, quantity: 1 }];
+        const newItem = {
+          cantidad: 1,
+          medicamento_id: medicamento.id,
+          medicamento: medicamento
+        };
+        updatedItems = [...prevItems, newItem];
       }
+
+      syncLocalStorage(updatedItems);
+      return updatedItems;
     });
   };
 
-  const removeFromCart = (productId) => {
-    setCartItems(prevItems =>
-      prevItems.filter(item => item.id !== productId)
-    );
+  const removeFromCart = (producto) => {
+    setCartItems(prevItems => {
+      const updatedItems = prevItems.flatMap(item => {
+        if (item.medicamento_id === producto.id) {
+          if (item.cantidad > 1) {
+            return { ...item, cantidad: item.cantidad - 1 };
+          } else {
+            return [];
+          }
+        }
+        return item;
+      });
+
+      syncLocalStorage(updatedItems);
+      return updatedItems;
+    });
+  };
+
+  const deleteFromCart = (producto) => {
+    setCartItems(prevItems => {
+      const updatedItems = prevItems.filter(item => item.medicamento_id !== producto.id);
+      syncLocalStorage(updatedItems);
+      return updatedItems;
+    });
   };
 
   const clearCart = () => {
     setCartItems([]);
-    localStorage.removeItem("cartItems");
+    setCart(null);
+    syncLocalStorage([], null);
+  };
+
+  const loadCartFromServer = (dataFromApi) => {
+    const { id, fecha_actualizacion, items } = dataFromApi;
+    const newCart = { id, fecha_actualizacion };
+
+    const newCartItems = items.map((item) => ({
+      id: item.id,
+      cantidad: item.cantidad,
+      medicamento_id: item.medicamento.id,
+      medicamento: item.medicamento
+    }));
+
+    setCart(newCart);
+    setCartItems(newCartItems);
+    syncLocalStorage(newCartItems, newCart);
   };
 
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, clearCart }}>
+    <CartContext.Provider value={{
+      cart,
+      cartItems,
+      addToCart,
+      removeFromCart,
+      clearCart,
+      loadCartFromServer,
+      deleteFromCart
+    }}>
       {children}
     </CartContext.Provider>
   );

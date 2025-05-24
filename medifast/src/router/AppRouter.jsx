@@ -1,8 +1,10 @@
 import { Route, Routes} from 'react-router-dom'
-import { AdminProfile, CheckoutPage, OrderPage, PaymentPage, UserProfile } from '../medifast'
+import { AdminProfile, CheckoutPage, OrderPage, PaymentPage } from '../medifast'
 import { PrivateRoutes } from './PrivateRoutes'
+import { AdminRoutes } from './AdminRoutes'
 import { publicRoutes } from './PublicRoutes'
 import { Layout } from '../layout/Layout'
+import UserProfile from '../medifast/Pages/UserProfile' 
 export const AppRouter = () => {
 
 
@@ -15,8 +17,10 @@ export const AppRouter = () => {
           <Route path="/checkout/payment" element={<PrivateRoutes><PaymentPage /></PrivateRoutes>} />
           <Route path="/checkout/order" element={<PrivateRoutes><OrderPage /></PrivateRoutes>} />
           <Route path="/userProfile" element={<PrivateRoutes>< UserProfile/></PrivateRoutes>} />
-          <Route path="/adminProfile" element={<PrivateRoutes><AdminProfile/></PrivateRoutes>} />
+          <Route path="/adminProfile" element={<AdminRoutes><AdminProfile/></AdminRoutes>} />
+          
           {/* Rutas publicas */}
+          
           {publicRoutes}
         </Route>
       </Routes>

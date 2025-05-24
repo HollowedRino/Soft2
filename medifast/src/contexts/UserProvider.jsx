@@ -44,10 +44,31 @@ export const UserProvider = ({ children }) => {
     }));
   };
 
+  const updateName = (name) => {
+    setUser((prevUser) => ({
+      ...prevUser,
+      name: name,
+    }));
+  };
+  const updateLastName = (LastName) => {
+    setUser((prevUser) => ({
+      ...prevUser,
+      lastName: LastName,
+    }));
+  };
+  const updatePhoneNumber = (phone) => {
+    setUser((prevUser) => ({
+      ...prevUser,
+      phoneNumber: phone,
+    }));
+  };
+
+
+
   const logout = () => setUser(initialUser);
 
   return (
-    <UserContext.Provider value={{ user, login, logout, updateAddress }}>
+    <UserContext.Provider value={{ user, login, logout, updateAddress,updateName,updateLastName,updatePhoneNumber }}>
       {children}
     </UserContext.Provider>
   );

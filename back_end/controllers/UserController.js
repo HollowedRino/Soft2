@@ -34,19 +34,21 @@ class UserController {
     }
 
     async updateUser(req, res) {
-        try {
-            const { id } = req.params;
-            const userData = req.body;
-            const updatedUser = await UserService.updateUser(id, userData);
-            res.json(updatedUser);
-        } catch (error) {
-            if (error.message === 'Usuario no encontrado') {
-                res.status(404).json({ error: error.message });
-            } else {
-                res.status(400).json({ error: error.message });
-            }
+    try {
+        const { id } = req.params;
+        const userData = req.body;
+        console.log('Datos recibidos para actualizar:', userData);
+        const updatedUser = await UserService.updateUser(id, userData);
+        res.json(updatedUser);
+    } catch (error) {
+        if (error.message === 'Usuario no encontrado') {
+        res.status(404).json({ error: error.message });
+        } else {
+        res.status(400).json({ error: error.message });
         }
     }
+    }
+
 
     async deleteUser(req, res) {
         try {

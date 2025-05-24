@@ -58,4 +58,4 @@ export const PharmacyManagement = ({ pharmacies, setPharmacies }) => {
       </ul>
     </div>
   );
-}; 
+};
