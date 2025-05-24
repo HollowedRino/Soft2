@@ -58,6 +58,21 @@ class InventarioBoticaController {
             }
         }
     }
+
+
+
+    async findByBoticaId(req, res) {
+    try {
+        const { boticaId } = req.params;
+        const inventario = await InventarioBoticaService.findByBoticaId(boticaId);
+        res.json(inventario);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
+
+    
+
 }
 
 export default new InventarioBoticaController();
