@@ -4,10 +4,11 @@ import {
 } from '@heroicons/react/16/solid';
 import { ShoppingCartIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../contexts/UserProvider';
 import { motion } from 'framer-motion';
 import { SearchBar } from './SearchBar';
+import { CartContext } from '../../contexts/CartProvider';
 
 const fadeDown = {
   hidden: { opacity: 0, y: -20 },
@@ -18,8 +19,18 @@ const fadeDown = {
   },
 };
 
-export const Navbar = ({ cartCount = 0 }) => {
+export const Navbar = () => {
   const { user } = useContext(UserContext);
+  const { cartItems } = useContext(CartContext);
+  const [total, setTotal] = useState(0);
+
+  const getTotalCantidad = (items) => {
+    return items.reduce((total, item) => total + item.cantidad, 0);
+  };
+
+  useEffect(() => {
+    setTotal(getTotalCantidad(cartItems));
+  }, [cartItems]);
 
   return (
     <motion.nav
@@ -42,14 +53,12 @@ export const Navbar = ({ cartCount = 0 }) => {
             <img
               src="https://res.cloudinary.com/dgxakgsuo/image/upload/v1745558934/b70d2277bb620e474ae830f58c44ad6b8583dfc6_fvmncj.png"
               alt="Medifast Logo"
-              className="h-10 w-10 hover:img-[#41b541]" 
+              className="h-10 w-10 hover:img-[#41b541]"
             />
             <span className="text-xl font-bold text-black-600">Medifast</span>
           </Link>
 
-
           <SearchBar />
-          
         </motion.div>
 
         <motion.div
@@ -85,10 +94,10 @@ export const Navbar = ({ cartCount = 0 }) => {
                 to="/mycart"
                 className="text-sm text-black-500 hover:underline"
               >
-                <ShoppingCartIcon className="h-6 w-6 text-gray-700 cursor-pointer hover:text-[#41b541] transition-all duration-300 hover:scale-[1.02] cursor-pointer"/>
-                {cartCount > 0 && (
+                <ShoppingCartIcon className="h-6 w-6 text-gray-700 cursor-pointer hover:text-[#41b541] transition-all duration-300 hover:scale-[1.02]" />
+                {total > 0 && (
                   <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1.5">
-                    {cartCount}
+                    {total}
                   </span>
                 )}
               </Link>
