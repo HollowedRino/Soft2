@@ -23,7 +23,7 @@ const carritoInicial = [
     medicamento: {
       nombre: 'Paracetamol',
       precio: 10,
-      stripePriceId: 'price_1',
+      stripePriceId: 'price_1RRnYyGgeJsfBGzWkGnVLgJE',
     }
   },
   {
@@ -33,7 +33,7 @@ const carritoInicial = [
     medicamento: {
       nombre: 'Ibuprofeno',
       precio: 15,
-      stripePriceId: 'price_2',
+      stripePriceId: 'price_1RRnYyGgeJsfBGzWkGnVLgJE',
     }
   }
 ];
