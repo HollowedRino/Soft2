@@ -44,71 +44,91 @@ const memberVariant = {
 export const ContactUsPage = () => {
   return (
     <>
-        <motion.div
-          className="flex flex-col py-5 px-5 sm:px-10"
-          initial="hidden"
-          animate="visible"
-          variants={pageVariants}
-          >
-          <motion.h1
-            className="text-4xl font-bold mb-6 text-center"
-            variants={titleVariant}
-            >
-            🌟 Conoce a nuestro equipo 🌟
-          </motion.h1>
+      <motion.div
+        className="flex flex-col py-5 px-5 sm:px-10"
+        initial="hidden"
+        animate="visible"
+        variants={pageVariants}
+      >
+        <motion.h1
+          className="text-4xl font-bold mb-6 text-center text-black drop-shadow-lg"
+          variants={titleVariant}
+        >
+          🌟 Conoce a nuestro equipo 🌟
+        </motion.h1>
 
-          <motion.div
-            className="w-full bg-green-100 min-h-150 rounded-3xl shadow-xl"
-            variants={cardVariant}
-            >
-            <FireworksEffect />
-            <div className="w-full p-6 sm:px-10 flex flex-col items-center">
-              <motion.div className="text-center" variants={titleVariant}>
-                <h2 className="text-2xl font-semibold mb-4">
-                  🚀 Miembros del Grupo 2
-                </h2>
-                <ul className="list-none flex flex-wrap justify-center gap-4">
-                  {[
-                    "Joaquin Alfaro",
-                    "Fantino Camara",
-                    "Sebastian Garcia",
-                    "Rober Goñas",
-                    "Ariel Gutiérrez",
-                    "Sofia Mejorada",
-                    "Alessander Mejia"
-                  ].map((nombre, index) => (
-                    <motion.li
+        <motion.div
+          className="relative w-full min-h-[350px] rounded-3xl shadow-xl overflow-hidden"
+          variants={cardVariant}
+          style={{
+            backgroundImage:
+              'url("https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExZzB0NHhmYjExejVmcGZ6MTIydHNxcWpvczF4aGR3OGF5ZzJrdGRpNSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ka5i65sFAlM9pbZ2OM/giphy.gif")',
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            filter: "brightness(1.2)"
+          }}
+        >
+          {/* Overlay blanco semitransparente para aclarar el fondo */}
+          <div
+            style={{
+              content: '""',
+              position: "absolute",
+              inset: 0,
+              backgroundColor: "rgba(217, 119, 230, 0.7)",
+              pointerEvents: "none",
+              zIndex: 0,
+            }}
+          />
+
+          <FireworksEffect />
+
+          <div className="relative z-10 w-full p-6 sm:px-10 flex flex-col items-center">
+            <motion.div className="text-center" variants={titleVariant}>
+              <h2 className="text-2xl font-semibold mb-4 text-gray-900 drop-shadow-md">
+                🚀 Miembros del Grupo 2
+              </h2>
+              <ul className="list-none flex flex-wrap justify-center gap-4">
+                {[
+                  "Joaquin Alfaro",
+                  "Fantino Camara",
+                  "Sebastian Garcia",
+                  "Rober Goñas",
+                  "Ariel Gutiérrez",
+                  "Sofia Mejorada",
+                  "Alessander Mejia"
+                ].map((nombre, index) => (
+                  <motion.li
                     key={index}
-                    className="bg-white px-5 py-2 rounded-full text-sm font-medium shadow-md cursor-pointer"
+                    className="bg-white px-5 py-2 rounded-full text-sm font-medium shadow-md cursor-pointer text-gray-900"
                     variants={memberVariant}
                     whileHover="hover"
-                    >
-                      {nombre}
-                    </motion.li>
-                  ))}
-                </ul>
-              </motion.div>
+                  >
+                    {nombre}
+                  </motion.li>
+                ))}
+              </ul>
+            </motion.div>
 
-              <motion.img
-                src={Grupo2}
-                alt="Imagen del grupo"
-                className="mx-auto mt-8 rounded-2xl shadow-lg"
-                initial={{ rotate: -15, scale: 0.5, opacity: 0 }}
-                animate={{
-                  rotate: 0,
-                  scale: 1,
-                  opacity: 1,
-                  transition: { duration: 1, type: "spring", stiffness: 60 }
-                }}
-                whileHover={{
-                  rotate: 2,
-                  scale: 1.05,
-                  transition: { duration: 0.4 }
-                }}
-                />
-            </div>
-          </motion.div>
+            <motion.img
+              src={Grupo2}
+              alt="Imagen del grupo"
+              className="mx-auto mt-8 rounded-2xl shadow-lg"
+              initial={{ rotate: -15, scale: 0.5, opacity: 0 }}
+              animate={{
+                rotate: 0,
+                scale: 1,
+                opacity: 1,
+                transition: { duration: 1, type: "spring", stiffness: 60 }
+              }}
+              whileHover={{
+                rotate: 2,
+                scale: 1.05,
+                transition: { duration: 0.4 }
+              }}
+            />
+          </div>
         </motion.div>
-      </>
+      </motion.div>
+    </>
   );
 };
