@@ -1,8 +1,9 @@
-import { getSimple, getWithPathParam } from "./api";
+import { post } from "./api";
 
 const BASE_PATH = "/detallepedido";
 
 export const createDetallePedido = async (data) => {
+    console.log(data);
     try {
       const resp = await post(`${BASE_PATH}`, data);
       return {

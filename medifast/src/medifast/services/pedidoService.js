@@ -1,4 +1,4 @@
-import { getSimple, getWithPathParam } from "./api";
+import { post } from "./api";
 
 const BASE_PATH = "/pedido";
 
@@ -12,9 +12,10 @@ export const createPedido = async (data) => {
         resp,
       };
     } catch (error) {
+      console.log(error)
       return {
         ok: false,
-        errorMessage: error.message || `Error al crear el pedido`,
+        errorMessage: error ,
       };
     }
   };
