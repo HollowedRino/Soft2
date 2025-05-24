@@ -61,6 +61,19 @@ class InventarioBoticaService {
             throw new Error('La fecha debe tener el formato DD-MM-YYYY');
         }
     }
+
+
+
+    async findByBoticaId(boticaId) {
+    try {
+        return await InventarioBoticaRepository.findByBoticaId(boticaId);
+    } catch (error) {
+        throw new Error(`Error al obtener el inventario de la botica: ${error.message}`);
+    }
+    }
+
+    
+
 }
 
 export default new InventarioBoticaService(); 
