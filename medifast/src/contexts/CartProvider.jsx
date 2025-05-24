@@ -22,6 +22,10 @@ export const CartProvider = ({ children }) => {
     localStorage.setItem('cart', JSON.stringify(newCart));
   };
 
+  const syncCartItemsLocalStorage = (newCartItems) => {
+    localStorage.setItem('cartItems', JSON.stringify(newCartItems));
+  };
+
   const addToCart = (medicamento) => {
     setCartItems(prevItems => {
       const existingItem = prevItems.find(item => item.medicamento.id === medicamento.id);
@@ -73,6 +77,11 @@ export const CartProvider = ({ children }) => {
     });
   };
 
+  const deleteOnlyItemsCart = () => {
+    setCartItems([]);
+    syncCartItemsLocalStorage([]);
+  }
+
   const clearCart = () => {
     setCartItems([]);
     setCart(null);
@@ -103,7 +112,8 @@ export const CartProvider = ({ children }) => {
       removeFromCart,
       clearCart,
       loadCartFromServer,
-      deleteFromCart
+      deleteFromCart,
+      deleteOnlyItemsCart
     }}>
       {children}
     </CartContext.Provider>
