@@ -1,9 +1,14 @@
-export const InventoryManagement = ({ pharmacy }) => {
+import React from "react";
+
+export const InventoryManagement = ({
+  pharmacy,
+}) => {
   return (
     <div>
       <h2 className="text-2xl font-semibold text-green-700 mb-4">
         Inventario de {pharmacy.name}
       </h2>
+
       {pharmacy.inventory.length === 0 ? (
         <p>No hay productos en inventario.</p>
       ) : (

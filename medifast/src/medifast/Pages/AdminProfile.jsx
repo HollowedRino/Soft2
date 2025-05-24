@@ -1,15 +1,25 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { UserContext } from "../../contexts/UserProvider";
+import { CartContext } from "../../contexts/CartProvider";
 import { CouponManagement } from "../components/CouponManagement";
 import { InventoryManagement } from "../components/InventoryManagement";
 import { PharmacyManagement } from "../components/PharmacyManagement";
-import { getAllBoticas, getInventarioByBoticaId } from "../services/boticaService";
+import { getAllBoticas, getInventarioByBoticaId, getAllMedicamentos } from "../services/boticaService";
 
 export const AdminProfile = () => {
   const [activeSection, setActiveSection] = useState("coupons");
   const [pharmacies, setPharmacies] = useState([]);
   const [activePharmacyId, setActivePharmacyId] = useState(null);
   const [pharmacyInventory, setPharmacyInventory] = useState([]);
+  const { logout } = useContext(UserContext);
+  const { clearCart } = useContext(CartContext);
 
+  const handleLogout = () => {
+    logout();
+    clearCart();
+  };
+
+  // Cargar boticas
   useEffect(() => {
     getAllBoticas()
       .then((data) => {
@@ -18,7 +28,6 @@ export const AdminProfile = () => {
           name: b.nombre,
           direccion: b.direccion,
         }));
-
         setPharmacies(mapped);
         if (mapped.length > 0) setActivePharmacyId(mapped[0].id);
       })
@@ -27,13 +36,12 @@ export const AdminProfile = () => {
       });
   }, []);
 
-  useEffect(() => {
+  // Función para recargar inventario
+  const fetchInventory = () => {
     if (activePharmacyId !== null) {
       getInventarioByBoticaId(activePharmacyId)
         .then((data) => {
-          // Aseguramos que data siempre sea un array
           const inventarioArray = Array.isArray(data) ? data : [data];
-          
           const mappedInventory = inventarioArray.map((item) => ({
             id: item.Medicamento.id,
             name: item.Medicamento.nombre,
@@ -47,6 +55,12 @@ export const AdminProfile = () => {
           setPharmacyInventory([]);
         });
     }
+  };
+
+  // Recargar inventario cuando cambia la botica activa
+  useEffect(() => {
+    fetchInventory();
+    // eslint-disable-next-line
   }, [activePharmacyId]);
 
   const renderSection = () => {
@@ -73,7 +87,9 @@ export const AdminProfile = () => {
                 ))}
               </select>
             </div>
-            <InventoryManagement pharmacy={{ ...currentPharmacy, inventory: pharmacyInventory }} />
+            <InventoryManagement
+              pharmacy={{ ...currentPharmacy, inventory: pharmacyInventory }}
+            />
           </div>
         ) : (
           <div>No hay boticas disponibles.</div>
@@ -130,9 +146,7 @@ export const AdminProfile = () => {
             </ul>
           </div>
           <button
-            onClick={() => {
-              // Acción para cerrar sesión, si aplica
-            }}
+            onClick={handleLogout}
             className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 rounded mt-4"
           >
             Cerrar sesión
