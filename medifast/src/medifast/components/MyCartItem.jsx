@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { CartContext } from "../../contexts/CartProvider";
 import { UserContext } from "../../contexts/UserProvider";
 import {
@@ -6,6 +6,8 @@ import {
   deleteItemCarrito,
   getItemCarritoByCarritoIdMedicamentoId,
 } from "../services/itemCarritoService";
+import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { motion } from "framer-motion";
 
 const traducciones = {
   medications: "Medicamentos",
@@ -66,36 +68,34 @@ export const MyCartItem = ({ item }) => {
   };
 
   return (
-    <tr className="text-center">
+    <motion.tr
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      layout
+      className="text-center"
+    >
       <td className="px-4 py-2">
         <img
           src={item.medicamento.imagen_url}
-          alt={item.medicamento.nombre}
-          className="w-20 h-20 rounded-full bg-green-100"
+          alt={`Imagen de ${item.medicamento.nombre}`}
+          className="w-20 h-20 rounded-full bg-green-100 object-cover"
         />
       </td>
       <td className="px-4 py-2">
-        <p
-          className="text-lg font-semibold mb-2 break-words"
-        >{item.medicamento.nombre}</p>
-        <p className="text-gray-500">{item.medicamento.descripcion}</p>
+        <div className="text-lg font-semibold mb-2 break-words">
+          {item.medicamento.nombre}
+        </div>
+        <div className="text-gray-500">{item.medicamento.descripcion}</div>
       </td>
+      <td className="px-4 py-2">{categoriaTraducida}</td>
       <td className="px-4 py-2">
-        <p>{categoriaTraducida}</p>
-      </td>
-      <td className="px-4 py-2">
-        <button
-          onClick={handleDecrease}
-          className="px-2 py-1 bg-gray-200 rounded-lg"
-        >
-          -
+        <button onClick={handleDecrease} className="px-2 py-1 bg-gray-200 hover:bg-gray-400 rounded-lg transition-all duration-200">
+          <MinusIcon className="h-4 w-4" />
         </button>
-        <span className="mx-2">{quantity}</span>
-        <button
-          onClick={handleIncrease}
-          className="px-2 py-1 bg-gray-200 rounded-lg"
-        >
-          +
+        <span className="mx-2 font-semibold">{quantity}</span>
+        <button onClick={handleIncrease} className="px-2 py-1 bg-gray-200 rounded-lg hover:bg-gray-400 transition-all duration-200">
+          <PlusIcon className="h-4 w-4" />
         </button>
       </td>
       <td className="px-4 py-2 font-semibold">
@@ -114,15 +114,11 @@ export const MyCartItem = ({ item }) => {
             stroke="currentColor"
             strokeWidth={2}
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M6 18L18 6M6 6l12 12"
-            />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
           Eliminar
         </button>
       </td>
-    </tr>
+    </motion.tr>
   );
 };

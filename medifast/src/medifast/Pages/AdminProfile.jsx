@@ -4,7 +4,7 @@ import { CartContext } from "../../contexts/CartProvider";
 import { CouponManagement } from "../components/CouponManagement";
 import { InventoryManagement } from "../components/InventoryManagement";
 import { PharmacyManagement } from "../components/PharmacyManagement";
-import { getAllBoticas, getInventarioByBoticaId, getAllMedicamentos } from "../services/boticaService";
+import { getAllBoticas, getInventarioByBoticaId } from "../services/boticaService";
 
 export const AdminProfile = () => {
   const [activeSection, setActiveSection] = useState("coupons");
