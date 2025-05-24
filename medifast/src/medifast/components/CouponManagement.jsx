@@ -75,4 +75,4 @@ export const CouponManagement = () => {
       </ul>
     </div>
   );
-}; 
+};

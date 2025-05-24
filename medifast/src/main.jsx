@@ -6,5 +6,5 @@ import { MedifastApp } from './MedifastApp'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <MedifastApp />
-  </StrictMode>,
+  </StrictMode>
 )

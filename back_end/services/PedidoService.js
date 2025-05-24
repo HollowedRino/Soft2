@@ -47,7 +47,7 @@ class PedidoService {
 
     // Método privado para validaciones
     validatePedidoData(pedidoData) {
-        const requiredFields = ['fecha_pedido', 'estado_pedido', 'usuario_id', 'botica_id', 'metodo_pago_id', 'direccion_usuario_id','repartidor_id'];
+        const requiredFields = ['fecha_pedido', 'estado_pedido', 'usuario_id', 'botica_id', 'metodo_pago_id','repartidor_id'];
         
         for (const field of requiredFields) {
             if (!pedidoData[field]) {
