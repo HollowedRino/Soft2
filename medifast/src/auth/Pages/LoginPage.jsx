@@ -1,8 +1,11 @@
 
-import React, { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { loginWithEmailPassword, signInWithGoogle } from '../../firebase/providers';
-import { registerGoogleUser } from '../../medifast/services/userService';
+import { getUserByEmail, registerGoogleUser } from '../../medifast/services/userService';
+import { UserContext } from '../../contexts/UserProvider';
+import { loadUserCart } from '../../medifast/services/carritoService';
+import { CartContext } from '../../contexts/CartProvider';
 
 const firebaseErrorMessages = {
   'auth/invalid-email': 'El correo ingresado no es válido.',
@@ -16,20 +19,36 @@ export const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  
+  const { login, user } = useContext(UserContext);
+  const { loadCartFromServer } = useContext(CartContext);
 
   const navigate = useNavigate();
+  
+  
+  const cargarCarrito = async (id) => {
+    const { resp } = await loadUserCart(id);
+    console.log(resp)
+    loadCartFromServer(resp);
+  }
 
-  const handleLogin = async () => {
-    const result = await loginWithEmailPassword({ email, password });
+const handleLogin = async () => {
 
-    if (!result.ok) {
-      const customMessage = firebaseErrorMessages[result.errorCode] || 'Error al iniciar sesión.';
-      setErrorMessage(customMessage);
-      return;
-    }
 
-    navigate('/dashboard');
-  };
+  // Login con Firebase
+  const result = await loginWithEmailPassword({ email, password });
+
+  if (!result.ok) {
+    const customMessage = firebaseErrorMessages[result.errorCode] || 'Error al iniciar sesión.';
+    setErrorMessage(customMessage);
+    return;
+  }
+  const { resp } = await getUserByEmail(email);
+  login(resp);
+  cargarCarrito(resp.id);
+  navigate('/');
+};
+
 
 const handleGoogleSignIn = async () => {
   const result = await signInWithGoogle();
@@ -52,6 +71,11 @@ const handleGoogleSignIn = async () => {
     setErrorMessage(backendResponse.errorMessage || 'Error en backend.');
     return;
   }
+
+  const { resp } = await getUserByEmail(email);
+  login(resp);
+  console.log(resp);
+  console.log(user);
 
   // Si llegamos acá, usuario creado o ya existente: vamos al dashboard
   navigate("/dashboard");
@@ -112,9 +136,6 @@ const handleGoogleSignIn = async () => {
             No tengo cuenta, deseo registrarme
           </Link>
           <br />
-          <Link className="text-gray-800 text-sm hover:underline" to="/Admin">
-            Admin
-          </Link>
 
         </div>
       </div>

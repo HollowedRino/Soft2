@@ -1,55 +1,75 @@
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 
 export const UserContext = createContext();
 
+const initialUser = {
+  id: null,
+  name: '',
+  lastName: '',
+  email: '',
+  address: '',
+  phoneNumber: '',
+  state: '',
+  authStatus: false,
+};
+
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState({
-    name: 'AlesW', //Esto
-    lastName: '', //Esto
-    email: '', //Esto
-    address: '',
-    phoneNumber: '',
-    state: '', //Cliente o Admin
-    authStatus: false, //Cambiar cuando se loguea
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem('user');
+    return storedUser ? JSON.parse(storedUser) : initialUser;
   });
 
+  useEffect(() => {
+    localStorage.setItem('user', JSON.stringify(user));
+  }, [user]);
+
   const login = (userData) => {
-    // Adaptar y transformar solo los campos necesarios
     const adaptedUser = {
-      name: userData.nombre || '',             // <- Transformación
+      id: userData.id,
+      name: userData.nombre || '',
       lastName: userData.apellido || '',
       email: userData.email || '',
       address: '',
       phoneNumber: userData.telefono_usuario || '',
-      state: userData.estado || 'Cliente',        // <- valor por defecto
-      authStatus: true,                        // <- marcado como logueado
+      state: userData.estado || 'Cliente',
+      authStatus: true,
     };
-
     setUser(adaptedUser);
   };
 
   const updateAddress = (direccion) => {
     setUser((prevUser) => ({
       ...prevUser,
-      addres: direccion,
+      address: direccion,
     }));
   };
-  
-  const logout = () => setUser({
-    name: '',
-    lastName: '',
-    email: '',
-    password: '',
-    addres: '',
-    phoneNumber: '',
-    state: '',
-    authStatus: false,
-  });
+
+  const updateName = (name) => {
+    setUser((prevUser) => ({
+      ...prevUser,
+      name: name,
+    }));
+  };
+  const updateLastName = (LastName) => {
+    setUser((prevUser) => ({
+      ...prevUser,
+      lastName: LastName,
+    }));
+  };
+  const updatePhoneNumber = (phone) => {
+    setUser((prevUser) => ({
+      ...prevUser,
+      phoneNumber: phone,
+    }));
+  };
+
+
+
+  const logout = () => setUser(initialUser);
 
   return (
-    <UserContext.Provider value={{ user, login, logout, updateAddress }}>
+    <UserContext.Provider value={{ user, login, logout, updateAddress,updateName,updateLastName,updatePhoneNumber }}>
       {children}
     </UserContext.Provider>
   );
 };
-

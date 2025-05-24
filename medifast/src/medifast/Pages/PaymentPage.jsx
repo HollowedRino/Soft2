@@ -5,6 +5,19 @@ import { CheckoutSteps } from '../components/CheckoutSteps';
 import { PaymentOption } from '../components/PaymentOption';
 import { PAYMENT_OPTIONS } from '../constants/PAYMENT_OPTIONS';
 import { CardForm } from '../components/CardForm';
+import { loadStripe } from '@stripe/stripe-js';
+import StripeCheckoutButton from '../components/StripeCheckoutButton';
+
+// Simulación de carrito (en producción, obtén esto del contexto global o de props)
+const initialCart = [
+  {
+    name: "Panadol Antigripal NF Tableta",
+    price: 19.99,
+    quantity: 2,
+    stripePriceId: "price_1RRnYyGgeJsfBGzWkGnVLgJE"
+  },
+  // ...otros productos
+];
 
 export const PaymentPage = () => {
   const navigate = useNavigate();
@@ -16,6 +29,7 @@ export const PaymentPage = () => {
     expiry: '',
     cvv: '',
   });
+  const [cart] = useState(initialCart);
 
   const handleCardChange = (e) => {
     setCardDetails({ ...cardDetails, [e.target.name]: e.target.value });
@@ -39,6 +53,12 @@ export const PaymentPage = () => {
 
     navigate('/checkout/order');
   };
+
+  // Prepara los items para Stripe
+  const stripeItems = cart.map(item => ({
+    priceId: item.stripePriceId,
+    quantity: item.quantity,
+  }));
 
   return (
     <motion.section
@@ -64,7 +84,13 @@ export const PaymentPage = () => {
         </div>
 
         {paymentMethod === 'Tarjeta de Débito o Crédito' && (
-          <CardForm cardDetails={cardDetails} onChange={handleCardChange} />
+          <>
+          
+            <StripeCheckoutButton
+              items={stripeItems}
+              className="mt-4 w-full bg-blue-600 text-white py-3 rounded-md font-semibold hover:bg-blue-700 transition"
+            />
+        </>
         )}
 
         <motion.button
