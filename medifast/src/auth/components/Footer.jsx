@@ -23,6 +23,7 @@ export const Footer = () => {
                 <div className="col-span-1"></div>
                 <div className="col-span-1 items-center">
                     <h3 className="block my-2 font-bold text-black">Ayuda</h3>
+                    <Link to="/contactUs" className="block my-2 text-black hover:text-[#41b541]">Acerca de Nosotros</Link>
                     {
                         user.state === "admin" ? (
                             <Link to="/adminProfile" className="block my-2 text-black hover:text-[#41b541]">

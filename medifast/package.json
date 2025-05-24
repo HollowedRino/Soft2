@@ -19,6 +19,7 @@
     "@stripe/stripe-js": "^7.3.0",
     "@tailwindcss/vite": "^4.1.4",
     "firebase": "^11.6.1",
+    "fireworks-js": "^2.10.8",
     "framer-motion": "^12.9.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
