@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import Grupo2 from "../../../img_src/Grupo2.jpg";
-import { FireworksBackground } from "../components/FireworksBackground";
+import { FireworksEffect } from "../components/FireworksEffect";
 
 const pageVariants = {
   hidden: { opacity: 0 },
@@ -44,7 +44,6 @@ const memberVariant = {
 export const ContactUsPage = () => {
   return (
     <>
-        <FireworksBackground />
         <motion.div
           className="flex flex-col py-5 px-5 sm:px-10"
           initial="hidden"
@@ -62,6 +61,7 @@ export const ContactUsPage = () => {
             className="w-full bg-green-100 min-h-150 rounded-3xl shadow-xl"
             variants={cardVariant}
             >
+            <FireworksEffect />
             <div className="w-full p-6 sm:px-10 flex flex-col items-center">
               <motion.div className="text-center" variants={titleVariant}>
                 <h2 className="text-2xl font-semibold mb-4">
