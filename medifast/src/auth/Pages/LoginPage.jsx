@@ -46,7 +46,7 @@ const handleLogin = async () => {
   const { resp } = await getUserByEmail(email);
   login(resp);
   cargarCarrito(resp.id);
-  navigate('/dashboard');
+  navigate('/');
 };
 
 
