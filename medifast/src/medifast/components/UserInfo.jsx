@@ -1,133 +1,120 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState, useContext } from "react";
+import { updateUser } from "../services/userService";
+import { UserContext } from "../../contexts/UserProvider";
 
-
-
-function UserInfo() {
-  const [userData, setUserData] = useState({
-    name: "",
-    email: "",
-  });
-  const [password, setPassword] = useState("");
+export default function UserInfo() {
+  const [name, setName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [saved, setSaved] = useState(false);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  // Cargar datos del usuario al montar el componente
+  const { updateName,updateLastName,updatePhoneNumber } = useContext(UserContext);
   useEffect(() => {
-    loadUserData();
+    const userData = JSON.parse(localStorage.getItem("user"));
+    if (userData) {
+      setName(userData.name || "");
+      setLastName(userData.lastName || "");
+      setPhoneNumber(userData.phoneNumber || "");
+
+    }
   }, []);
 
-  const loadUserData = async () => {
-    try {
-      setLoading(true);
-      const data = await userService.getCurrentUser();
-      setUserData({
-        name: data.name,
-        email: data.email,
-      });
-    } catch (error) {
-      setError("Error al cargar los datos del usuario");
-      console.error("Error loading user data:", error);
-    } finally {
-      setLoading(false);
-    }
+ const handleSave = async (e) => {
+  e.preventDefault();
+
+  const userData = JSON.parse(localStorage.getItem("user")) || {};
+  const updatedUser = {
+    ...userData,
+    name,
+    lastName,
+    phoneNumber,
   };
 
-  const handleSave = async (e) => {
-    e.preventDefault();
-    setError(null);
-    setSaved(false);
+  
 
-    try {
-      // Actualizar información básica
-      await userService.updateUser({
-        name: userData.name,
-        email: userData.email,
-      });
+  localStorage.setItem("user", JSON.stringify(updatedUser));
 
-      // Si hay una nueva contraseña, actualizarla
-      if (password) {
-        await userService.changePassword({ password });
-        setPassword(""); // Limpiar el campo de contraseña
+  try {
+    if (userData.id) {
+      const response = await updateUser(userData.id, {
+  nombre: name,
+  apellido: lastName,
+  telefono_usuario: phoneNumber,
+});
+
+      if (!response.ok) {
+        console.error("Error actualizando backend:", response.errorMessage);
       }
-
-      setSaved(true);
-      setTimeout(() => setSaved(false), 3000);
-    } catch (error) {
-      setError("Error al actualizar el perfil");
-      console.error("Error updating profile:", error);
+      // Actualizar el contexto
+      updateName(name);
+      updateLastName(lastName);
+      updatePhoneNumber(phoneNumber);
     }
-  };
-
-  if (loading) {
-    return <div className="text-center">Cargando...</div>;
+  } catch (error) {
+    console.error("Error inesperado al actualizar backend:", error);
   }
 
+  setSaved(true);
+  setTimeout(() => setSaved(false), 3000);
+};
   return (
     <div>
       <h2 className="text-2xl font-semibold text-green-700 mb-6">Editar Perfil</h2>
       <form onSubmit={handleSave} className="space-y-4 max-w-md">
+        
+        {/* Campo: Nombre */}
         <div>
-          <label className="block font-semibold mb-1" htmlFor="name">
-            Nombre:
-          </label>
+          <label className="block font-semibold mb-1" htmlFor="name">Nombre:</label>
           <input
             id="name"
             type="text"
-            value={userData.name}
-            onChange={(e) => setUserData({ ...userData, name: e.target.value })}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             className="w-full border border-green-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
             required
           />
         </div>
 
+        {/* Campo: Apellido */}
         <div>
-          <label className="block font-semibold mb-1" htmlFor="email">
-            Email:
-          </label>
+          <label className="block font-semibold mb-1" htmlFor="lastName">Apellido:</label>
           <input
-            id="email"
-            type="email"
-            value={userData.email}
-            onChange={(e) => setUserData({ ...userData, email: e.target.value })}
+            id="lastName"
+            type="text"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
             className="w-full border border-green-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
             required
           />
         </div>
 
+        {/* Campo: Teléfono */}
         <div>
-          <label className="block font-semibold mb-1" htmlFor="password">
-            Contraseña:
-          </label>
+          <label className="block font-semibold mb-1" htmlFor="phoneNumber">Teléfono:</label>
           <input
-            id="password"
-            type="password"
-            value={password}
-            placeholder="Nueva contraseña"
-            onChange={(e) => setPassword(e.target.value)}
+            id="phoneNumber"
+            type="tel"
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
             className="w-full border border-green-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+            required
           />
         </div>
 
+
+
+        {/* Botón para guardar cambios */}
         <button
           type="submit"
           className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded"
         >
-          Guardar cambios
+          Enviar
         </button>
 
+        {/* Mensaje de éxito */}
         {saved && (
-          <p className="mt-2 text-green-700 font-semibold">
-            ¡Perfil actualizado con éxito!
-          </p>
-        )}
-
-        {error && (
-          <p className="mt-2 text-red-600 font-semibold">{error}</p>
+          <p className="mt-2 text-green-700 font-semibold">¡Perfil actualizado con éxito!</p>
         )}
       </form>
     </div>
   );
 }
-
-export default UserInfo;

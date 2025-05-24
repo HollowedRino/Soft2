@@ -6,6 +6,8 @@ import {
     signInWithEmailAndPassword, 
     signOut 
   } from 'firebase/auth';
+  import { sendPasswordResetEmail } from 'firebase/auth';
+
   import { FirebaseAuth } from './config';
 
   
@@ -82,3 +84,18 @@ import {
   export const logoutFirebase = async () => {
     return await signOut(FirebaseAuth);
   };
+
+
+// Enviar correo de recuperación de contraseña
+export const sendResetPasswordEmail = async (email) => {
+  try {
+    await sendPasswordResetEmail(FirebaseAuth, email);
+    return { ok: true };
+  } catch (error) {
+    return {
+      ok: false,
+      errorMessage: error.message,
+      errorCode: error.code,
+    };
+  }
+};

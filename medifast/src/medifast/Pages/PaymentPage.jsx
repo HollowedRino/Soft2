@@ -14,7 +14,7 @@ const initialCart = [
     name: "Panadol Antigripal NF Tableta",
     price: 19.99,
     quantity: 2,
-    stripePriceId: "price_1RRk6IGgeJsfBGzWSEeT5ISP"
+    stripePriceId: "price_1RRnYyGgeJsfBGzWkGnVLgJE"
   },
   // ...otros productos
 ];
