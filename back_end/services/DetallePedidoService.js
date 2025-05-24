@@ -20,7 +20,7 @@ class DetallePedidoService {
     async createDetallePedido(detallePedidoData) {
         try {
             // Validaciones de negocio
-            this.validateBoticaData(detallePedidoData);
+            this.validateDetallePedidoData(detallePedidoData);
             return await DetallePedidoRepository.create(detallePedidoData);
         } catch (error) {
             throw new Error(`Error en el servicio al crear el detalle del pedido: ${error.message}`);
