@@ -26,9 +26,7 @@ export const createItemCarrito = async (data) => {
 
   export const updateItemCarrito = async (data) => {
   try {
-    console.log(data)
     const resp = await put(`${BASE_PATH}/item`, data);
-    console.log(resp)
     return {
       ok: true,
       resp,
