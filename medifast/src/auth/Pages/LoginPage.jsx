@@ -32,22 +32,23 @@ export const LoginPage = () => {
     loadCartFromServer(resp);
   }
 
-  const handleLogin = async () => {
-    const result = await loginWithEmailPassword({ email, password });
-    
+const handleLogin = async () => {
 
-    if (!result.ok) {
-      const customMessage = firebaseErrorMessages[result.errorCode] || 'Error al iniciar sesión.';
-      setErrorMessage(customMessage);
-      return;
-    }
 
-    const { resp } = await getUserByEmail(email);
-    login(resp);
-    cargarCarrito(resp.id);
+  // Login con Firebase
+  const result = await loginWithEmailPassword({ email, password });
 
-    navigate('/dashboard');
-  };
+  if (!result.ok) {
+    const customMessage = firebaseErrorMessages[result.errorCode] || 'Error al iniciar sesión.';
+    setErrorMessage(customMessage);
+    return;
+  }
+  const { resp } = await getUserByEmail(email);
+  login(resp);
+  cargarCarrito(resp.id);
+  navigate('/dashboard');
+};
+
 
 const handleGoogleSignIn = async () => {
   const result = await signInWithGoogle();
@@ -135,9 +136,6 @@ const handleGoogleSignIn = async () => {
             No tengo cuenta, deseo registrarme
           </Link>
           <br />
-          <Link className="text-gray-800 text-sm hover:underline" to="/Admin">
-            Admin
-          </Link>
 
         </div>
       </div>
