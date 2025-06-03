@@ -1,5 +1,7 @@
 import express from 'express';
 import cors from 'cors';
+import http from 'http';
+import {Server as SocketIO} from 'socket.io';
 
 import BoticaRoutes from './routes/BoticaRoutes.js';
 import CarritoRoutes from './routes/CarritoRoutes.js';
@@ -16,11 +18,21 @@ import PagoRoutes from './routes/PagoRoutes.js';
 import UserRoutes from './routes/UserRoutes.js';
 import ItemCarritoRoutes from './routes/ItemCarritoRoutes.js';
 import StripeRoutes from './routes/StripeRoutes.js';
- 
+import configChatSocket from './chat/chatSocket.js';
+
 const app = express();
+const server = http.createServer(app);
 const port = 3000;
 
-// Middleware para procesar JSON
+const io = new SocketIO(server, {
+  cors: {
+    origin: 'http://localhost:5173',
+    methods: ['GET','POST']
+  }
+});
+
+configChatSocket(io);
+
 app.use(express.json());
 // Middleware para procesar datos URL-encoded
 //app.use(express.urlencoded({ extended: true })); 
@@ -67,6 +79,6 @@ app.get('/', (req, res) => {
 });
 
 // Iniciar el servidor
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Servidor escuchando en http://localhost:${port}`);
 });
