@@ -21,6 +21,20 @@ class ChatRepository {
         }
     }
 
+    async findByPedidoId(pedidoId) {
+        try {
+            const chat = await chat.findByAll({
+              where: { pedido_id: pedidoId }
+            });
+            if (!chat) {
+                throw new Error('Chat asignado al pedido no encontrado');
+            }
+            return chat;
+        } catch (error) {
+            throw new Error(`Error al obtener los chats del pedido solicitado: ${error.message}`);
+        }
+    }
+  
     async create(chatData) {
         try {
             return await Chat.create(chatData);
