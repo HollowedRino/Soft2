@@ -1,4 +1,6 @@
 import Chat from '../models/Chat.js';
+import Pedido from "../models/Pedido.js";
+import Usuario from "../models/Usuario.js";
 
 class ChatRepository {
   async findAll() {
@@ -11,7 +13,24 @@ class ChatRepository {
 
     async findById(id) {
         try {
-            const chat = await chat.findByPk(id);
+            const chat = await Chat.findByPk(id, {
+                include: {
+                    model: Pedido,
+                    as: "pedido",
+                    include: [
+                        {
+                            model: Usuario,
+                            as: "cliente",
+                            attributes: ["id", "nombre", "estado"]
+                        },
+                        {
+                            model: Usuario,
+                            as: "repartidor",
+                            attributes: ["id", "nombre", "estado"]
+                        }
+                    ]
+                }
+            });
             if (!chat) {
                 throw new Error('Chat no encontrado');
             }
@@ -23,8 +42,24 @@ class ChatRepository {
 
     async findByPedidoId(pedidoId) {
         try {
-            const chat = await chat.findByAll({
-              where: { pedido_id: pedidoId }
+            const chat = await chat.findAll({
+                where: { pedido_id: pedidoId },
+                include: {
+                    model: Pedido,
+                    as: "pedido",
+                    include: [
+                        {
+                            model: Usuario,
+                            as: "cliente",
+                            attributes: ["id", "nombre", "estado"]
+                        },
+                        {
+                            model: Usuario,
+                            as: "repartidor",
+                            attributes: ["id", "nombre", "estado"]
+                        }
+                    ]
+                }
             });
             if (!chat) {
                 throw new Error('Chat asignado al pedido no encontrado');
