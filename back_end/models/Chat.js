@@ -16,7 +16,7 @@ Chat.init(
       allowNull: false
     },
     estado: {
-      type: DataTypes.ENUM("activo", "cerrado"),
+      type: DataTypes.STRING,
       allowNull: false,
       defaultValue: "activo"
     }

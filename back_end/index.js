@@ -17,6 +17,8 @@ import InventarioBoticaRoutes from './routes/InventarioBoticaRoutes.js';
 import PagoRoutes from './routes/PagoRoutes.js';
 import UserRoutes from './routes/UserRoutes.js';
 import ItemCarritoRoutes from './routes/ItemCarritoRoutes.js';
+import ChatRoutes from './routes/ChatRoutes.js';
+import MensajeRoutes from './routes/MensajeRoutes.js';
 import StripeRoutes from './routes/StripeRoutes.js';
 
 const app = express();
@@ -57,6 +59,10 @@ app.use('/pago', PagoRoutes);
 app.use('/user', UserRoutes);
 // Usar las rutas de item carrito
 app.use('/itemcarrito',ItemCarritoRoutes);
+// Usar las rutas de chat
+app.use('/chat',ChatRoutes);
+// Usar las rutas de mensaje
+app.use('/mensaje',MensajeRoutes);
 // Usar las rutas de Stripe
 app.use('/stripe', StripeRoutes);
 
@@ -79,12 +85,23 @@ io.on("connection", (socket) => {
 
   socket.on("join_room", (data) => {
     socket.join(data);
+    console.log(`Usuario ${socket.id} se unió a la sala ${roomId}`);
   })
 
+  socket.on("leavechat", (roomId) => {
+    socket.leave(roomId);
+    console.log(`Usuario ${socket.id} salió de la sala ${roomId}`);
+  });
+
   socket.on("send_message", (data) => {
-    console.log(data);
-    socket.broadcast.emit("receive_message", data);
+    const { roomId, message } = data;
+    console.log(`Mensaje recibido en sala ${roomId}:`, message);
+    socket.to(roomId).emit("receive_message", data);
   })
+
+  socket.on("disconnect", () => {
+    console.log(`Usuario desconectado: ${socket.id}`);
+  });
 });
 
 // Iniciar el servidor
