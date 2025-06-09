@@ -1,5 +1,6 @@
 import { Outlet } from 'react-router-dom';
 import { AdditionalNavbar, Footer, Navbar } from '../auth';
+import { FloatingChat } from '../medifast/components/FloatingChat';
 
 export const Layout = () => {
   return (
@@ -9,6 +10,7 @@ export const Layout = () => {
       <main className="flex-grow">
         <Outlet />
       </main>
+      <FloatingChat />
       <Footer />
     </div>
   );
