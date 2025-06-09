@@ -51,6 +51,22 @@ class InventarioBoticaRepository {
             throw new Error(`Error al eliminar el inventario de la botica: ${error.message}`);
         }
     }
+
+
+
+    async findByBoticaId(boticaId) {
+    try {
+        return await InventarioBotica.findAll({
+            where: { botica_id: boticaId },
+            include: ['Botica', 'Medicamento']
+        });
+    } catch (error) {
+        throw new Error(`Error al obtener el inventario de la botica: ${error.message}`);
+    }
+    }
+
+
+    
 }
 
 export default new InventarioBoticaRepository();

@@ -21,7 +21,7 @@ Carrito.init(
             onDelete: "CASCADE"
         },
         fecha_actualizacion: {
-            type: DataTypes.TIME,
+            type: DataTypes.DATE,
             allowNull: false
         }
     },

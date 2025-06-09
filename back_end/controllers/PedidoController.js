@@ -27,7 +27,7 @@ class PedidoController {
     async createPedido(req, res) {
         try {
             const pedidoData = req.body;
-            const newPedido = await PedidoService.createBotica(pedidoData);
+            const newPedido = await PedidoService.createPedido(pedidoData);
             res.status(201).json(newPedido);
         } catch (error) {
             res.status(400).json({ error: error.message });

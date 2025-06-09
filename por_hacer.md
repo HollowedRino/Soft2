@@ -12,9 +12,9 @@
 1. Recordar uso y creación de backend (Todos)
 1. Generar ramas de trabajo (Sebastian) - rama backend creado - rama frontend creado
 
-# Observaciones
+# Observaciones.
 
-- Segundo merge de frontend y backend
+- Tercer merge de frontend y backend
 
 - fixear login card.
 - USar schemas y react hook forms para formularios de checkout
