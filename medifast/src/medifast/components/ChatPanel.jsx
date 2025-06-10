@@ -9,7 +9,7 @@ export const ChatPanel = ({ onClose }) => {
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: 50, scale: 0.9 }}
       transition={{ duration: 0.3 }}
-      className="fixed bottom-[200px] right-6 w-80 max-h-[70vh] bg-white rounded-2xl shadow-2xl z-50 flex flex-col overflow-hidden"
+      className="fixed bottom-[200px] right-8 w-80 max-h-[70vh] bg-white rounded-2xl shadow-2xl z-50 flex flex-col overflow-hidden"
     >
       {/* Header */}
       <div className="bg-[#41b541] text-white px-4 py-3 font-semibold text-sm flex justify-between items-center">
