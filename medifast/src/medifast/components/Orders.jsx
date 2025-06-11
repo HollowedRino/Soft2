@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import { ChatRoom } from './ChatRoom';
 import { ReciboPedido } from './ReciboPedido';
+import { Link } from 'react-router-dom';
+import { ShoppingCartIcon } from '@heroicons/react/24/outline';
 
 export default function Orders() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -333,6 +335,18 @@ export default function Orders() {
                       ))}
                     </ul>
                   </div>
+                  {order.estado === "Entregado" && (
+                    <div className="mt-4 flex justify-end">
+                      <Link
+                        to="/mycart"
+                        className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <ShoppingCartIcon className="h-5 w-5" />
+                        <span>Volver a comprar</span>
+                      </Link>
+                    </div>
+                  )}
                 </div>
               );
             })}
@@ -347,7 +361,7 @@ export default function Orders() {
             <ChatRoom
               pedidoId={pedidoSeleccionado.id}
               currentUserId={currentUserId} 
-              repartidorNombre={pedidoSeleccionado.repartidor.nombre} // pasa el nombre aquí
+              repartidorNombre={pedidoSeleccionado.repartidor.nombre}
             />
           ) : (
             <ReciboPedido pedido={pedidoSeleccionado} />
