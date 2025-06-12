@@ -2,10 +2,12 @@ import React, { useState, useEffect, useContext } from 'react';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import { ChatRoom } from './ChatRoom';
 import { ReciboPedido } from './ReciboPedido';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingCartIcon } from '@heroicons/react/24/outline';
 import { getPedidosByUsuario } from '../services/pedidoService';
+import { createItemCarrito } from '../services/itemCarritoService';
 import { UserContext } from '../../contexts/UserProvider';
+import { CartContext } from '../../contexts/CartProvider';
 
 export default function Orders() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -14,6 +16,8 @@ export default function Orders() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { user } = useContext(UserContext);
+  const { cart, addToCart } = useContext(CartContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPedidos = async () => {
@@ -45,6 +49,47 @@ export default function Orders() {
       case 'En camino': return 'text-blue-600';
       case 'Cancelado': return 'text-red-600';
       default: return 'text-gray-600';
+    }
+  };
+
+  const handleVolverAComprar = async (e, pedido) => {
+    e.stopPropagation();
+    
+    try {
+      console.log('Pedido seleccionado:', pedido);
+      console.log('Detalles del pedido:', pedido.DetallePedidos);
+      console.log('ID del carrito:', cart.id);
+
+      for (const detalle of pedido.DetallePedidos) {
+        const { boticas, ...medicamento } = detalle.Medicamento;
+        
+        for (let i = 0; i < detalle.cantidad; i++) {
+          addToCart(medicamento);
+        }
+
+        if (user.authStatus) {
+          const itemData = {
+            carrito_id: cart.id,
+            medicamento_id: medicamento.id,
+            cantidad: detalle.cantidad
+          };
+          
+          console.log('Intentando crear item en carrito con datos:', itemData);
+          
+          const { ok, errorMessage, resp } = await createItemCarrito(itemData);
+          if (!ok) {
+            console.error('Error al agregar item al carrito:', errorMessage);
+            console.error('Respuesta del servidor:', resp);
+          } else {
+            console.log('Item agregado exitosamente:', resp);
+          }
+        }
+      }
+      
+      navigate('/mycart');
+    } catch (error) {
+      console.error('Error al procesar el pedido:', error);
+      console.error('Detalles del error:', error.response?.data);
     }
   };
 
@@ -99,14 +144,13 @@ export default function Orders() {
                     </div>
                   </div>
                   <div className="mt-4 flex justify-end">
-                    <Link
-                      to="/mycart"
+                    <button
+                      onClick={(e) => handleVolverAComprar(e, order)}
                       className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
-                      onClick={(e) => e.stopPropagation()}
                     >
                       <ShoppingCartIcon className="h-5 w-5" />
                       <span>Volver a comprar</span>
-                    </Link>
+                    </button>
                   </div>
                 </div>
               );
@@ -115,7 +159,6 @@ export default function Orders() {
         )}
       </div>
 
-      {/* DERECHA: Chat o Recibo */}
       <div className="w-1/2 overflow-y-auto order-l border-green-300 pl-4">
         {pedidoSeleccionado ? (
           pedidoSeleccionado.estado_pedido === "En camino" ? (
