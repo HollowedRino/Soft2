@@ -1,23 +1,32 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { CheckoutSteps } from '../components/CheckoutSteps';
 import { ShoppingCartIcon } from '@heroicons/react/24/outline';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export const OrderPage = () => {
-    const navigate = useNavigate();
-  const [orderDetails, setOrderDetails] = useState({
-    orderId: '123456',
-    items: [
-      { name: 'Producto 1', quantity: 2, price: 20 },
-      { name: 'Producto 2', quantity: 1, price: 15 },
-    ],
-    total: 55,
-  });
+  const navigate = useNavigate();
+  const location = useLocation();
 
-    const handleBackToHome = () => {
-        navigate('/');
-    }
+  const { pedido, pedidoDetalles } = location.state || {};
+
+  if (!pedido || !pedidoDetalles) {
+    // Si alguien entra directo sin pasar por la compra
+    return (
+      <div className="text-center py-10 text-red-500">
+        No hay información del pedido disponible.
+      </div>
+    );
+  }
+
+  const handleBackToHome = () => {
+    navigate('/');
+  };
+
+  const total = pedidoDetalles.reduce(
+    (sum, item) => sum + item.precio_unitario * item.cantidad,
+    0
+  );
 
   return (
     <motion.section
@@ -26,10 +35,10 @@ export const OrderPage = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <CheckoutSteps activeStep={2} /> 
+      <CheckoutSteps activeStep={2} />
 
       <div className="space-y-6">
-        <h2 className="text-2xl font-semibold mb-4">Pedido realizado correctamente!</h2>
+        <h2 className="text-2xl font-semibold mb-4">¡Pedido realizado correctamente!</h2>
 
         <motion.div
           className="flex items-center justify-center text-green-500"
@@ -38,24 +47,24 @@ export const OrderPage = () => {
           transition={{ duration: 0.3 }}
         >
           <ShoppingCartIcon className="h-12 w-12 mr-3" />
-          <p className="text-lg font-medium">Tu pedido ha sido realizado con éxito.</p>
+          <p className="text-lg font-medium">Tu pedido ha sido registrado con éxito.</p>
         </motion.div>
 
         <div className="mt-8 space-y-4">
           <h3 className="text-xl font-semibold">Detalles del pedido</h3>
           <div className="space-y-2">
-            <p><strong>Fecha del pedido: </strong> FECHAAAAA</p>
-            <p><strong>ID del pedido:</strong> {orderDetails.orderId}</p>
+            <p><strong>Fecha del pedido:</strong> {new Date(pedido.fecha_pedido).toLocaleDateString()}</p>
+            <p><strong>ID del pedido:</strong> {pedido.id}</p>
             <ul className="space-y-1">
-              {orderDetails.items.map((item, index) => (
+              {pedidoDetalles.map((item, index) => (
                 <li key={index} className="flex justify-between">
-                  <span>{item.name} (x{item.quantity})</span>
-                  <span>${item.price * item.quantity}</span>
+                  <span>{item.medicamento?.nombre || `Medicamento ID ${item.medicamento_id}`} (x{item.cantidad})</span>
+                  <span>${(item.precio_unitario * item.cantidad).toFixed(2)}</span>
                 </li>
               ))}
             </ul>
             <p className="font-semibold text-xl mt-2">
-              <strong>Total:</strong> ${orderDetails.total}
+              <strong>Total:</strong> ${total.toFixed(2)}
             </p>
           </div>
         </div>

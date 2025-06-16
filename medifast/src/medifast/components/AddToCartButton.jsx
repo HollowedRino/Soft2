@@ -28,6 +28,7 @@ export const AddToCartButton = ({ producto }) => {
 
     if (user.authStatus) {
       if (cantidadActual === 0) {
+        console.log(("carrito: ", cart));
         await createItemCarrito({
           carrito_id: cart.id,
           medicamento_id: producto.id,

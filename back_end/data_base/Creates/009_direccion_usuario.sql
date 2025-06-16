@@ -1,5 +1,5 @@
 CREATE TABLE direccion_usuario (
-  id INTEGER PRIMARY KEY NOT NULL,
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
   direccion VARCHAR(100) NOT NULL,
   alias VARCHAR(30),
   usuario_id INTEGER,

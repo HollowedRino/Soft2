@@ -1,5 +1,5 @@
 CREATE TABLE inventario_botica (
-  id INTEGER PRIMARY KEY NOT NULL,
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
   cantidad_disponible INTEGER,
   fecha_actualizacion DATE NOT NULL,
   botica_id INTEGER,

@@ -74,6 +74,7 @@ const handleGoogleSignIn = async () => {
 
   const { resp } = await getUserByEmail(email);
   login(resp);
+  cargarCarrito(resp.id);
   console.log(resp);
   console.log(user);
 

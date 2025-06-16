@@ -2,16 +2,21 @@ import { useState } from "react";
 
 export const CouponManagement = () => {
   const [coupons, setCoupons] = useState([
-    { id: 1, code: "DESCUENTO10", description: "10% de descuento", active: true },
+    { id: 1, code: "DESCUENTO10", description: "10% de descuento", discount: 10, active: true },
   ]);
   const [code, setCode] = useState("");
   const [description, setDescription] = useState("");
+  const [discount, setDiscount] = useState("");
 
   const addCoupon = () => {
-    if (code.trim() && description.trim()) {
-      setCoupons([...coupons, { id: Date.now(), code, description, active: true }]);
+    if (code.trim() && description.trim() && discount.trim() && !isNaN(discount) && Number(discount) > 0) {
+      setCoupons([
+        ...coupons,
+        { id: Date.now(), code, description, discount: Number(discount), active: true },
+      ]);
       setCode("");
       setDescription("");
+      setDiscount("");
     }
   };
 
@@ -41,6 +46,15 @@ export const CouponManagement = () => {
           onChange={(e) => setDescription(e.target.value)}
           className="border border-green-400 rounded px-3 py-2 mr-2"
         />
+        <input
+          type="number"
+          placeholder="Descuento (%)"
+          value={discount}
+          min="1"
+          max="100"
+          onChange={(e) => setDiscount(e.target.value)}
+          className="border border-green-400 rounded px-3 py-2 mr-2 w-44" // Cambiado de w-32 a w-44
+        />
         <button onClick={addCoupon} className="bg-green-600 text-white px-4 py-2 rounded">
           Añadir
         </button>
@@ -49,7 +63,10 @@ export const CouponManagement = () => {
         {coupons.map((coupon) => (
           <li key={coupon.id} className="flex justify-between items-center border p-2 rounded">
             <div>
-              <strong>{coupon.code}</strong> - {coupon.description}
+              <strong>{coupon.code}</strong> - {coupon.description}{" "}
+              <span className="ml-2 text-blue-700 font-semibold">
+                ({coupon.discount}%)
+              </span>
               <span className={`ml-2 text-sm ${coupon.active ? "text-green-600" : "text-red-600"}`}>
                 ({coupon.active ? "Activo" : "Inactivo"})
               </span>
