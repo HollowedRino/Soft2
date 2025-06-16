@@ -65,6 +65,16 @@ class BoticaService {
         if (!timeRegex.test(boticaData.horario_apertura) || !timeRegex.test(boticaData.horario_cierre)) {
             throw new Error('Los horarios deben tener el formato HH:MM');
         }
+
+        // Validar formato de dirección
+        if (boticaData.direccion.length < 5) {
+            throw new Error('La dirección debe tener al menos 5 caracteres');
+        }
+
+        // Validar que la dirección incluya calle y número
+        if (!boticaData.direccion.match(/^[A-Za-z\s]+\.?\s+\d+/)) {
+            throw new Error('La dirección debe incluir calle y número');
+        }
     }
 }
 
