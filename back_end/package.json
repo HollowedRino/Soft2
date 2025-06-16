@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "test": "jest",
     "dev": "nodemon index.js"
   },
   "dependencies": {
@@ -15,5 +16,10 @@
     "sequelize": "^6.37.1",
     "sqlite3": "^5.1.7",
     "stripe": "^18.1.1"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.27.2",
+    "babel-jest": "^30.0.0",
+    "jest": "^30.0.0"
   }
 }
