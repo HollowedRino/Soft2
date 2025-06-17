@@ -1,4 +1,6 @@
+import { Op } from 'sequelize';
 import Botica from '../models/Botica.js';
+import Distrito from '../models/Distrito.js';
 
 class BoticaRepository {
     async findAll() {
@@ -22,6 +24,47 @@ class BoticaRepository {
             return botica;
         } catch (error) {
             throw new Error(`Error al obtener la botica: ${error.message}`);
+        }
+    }
+
+    // Para el chatbot
+    async findByNombre(nombreParcial) {
+        try {
+            const botica = await Botica.findOne({
+            where: {
+                nombre: {
+                [Op.like]: `%${nombreParcial}%`
+                }
+            },
+            include: ['Distrito']
+            });
+
+            return botica ? botica : null; // Devuelve null si no encuentra
+        } catch (error) {
+            throw new Error(`Error al buscar la botica por nombre: ${error.message}`);
+        }
+    }
+
+    // Para el chatbot
+    async findByDistrito(nombreDistrito) {
+        try {
+            const boticas = await Botica.findAll({
+            include: [
+                {
+                model: Distrito,
+                where: {
+                    nombre_distrito: {
+                    [Op.like]: `%${nombreDistrito}%`
+                    }
+                },
+                attributes: ['id', 'nombre_distrito']
+                }
+            ]
+            });
+
+            return boticas; // Devuelve [] si no encuentra nada
+        } catch (error) {
+            throw new Error(`Error al buscar boticas por distrito: ${error.message}`);
         }
     }
 

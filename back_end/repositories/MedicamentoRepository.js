@@ -321,7 +321,84 @@ class MedicamentoRepository {
         }
     }
 
+    // Para el chatbot
+    async findByNombre(nombreParcial) {
+        try {
+            const medicamento = await Medicamento.findOne({
+            where: {
+                nombre: {
+                [Op.like]: `%${nombreParcial}%`
+                }
+            },
+            attributes: [
+                "id",
+                "nombre",
+                "descripcion",
+                "fabricante",
+                "categoria",
+                "precio",
+                "requiere_receta",
+                "estado_medicamento",
+                "imagen_url"
+            ],
+            include: [
+                {
+                model: InventarioBotica,
+                attributes: ["cantidad_disponible", "fecha_actualizacion"],
+                include: [
+                    {
+                    model: Botica,
+                    attributes: [
+                        "id",
+                        "nombre",
+                        "direccion",
+                        "telefono_botica",
+                        "horario_apertura",
+                        "horario_cierre"
+                    ],
+                    include: [
+                        {
+                        model: Distrito,
+                        attributes: ["id", "nombre_distrito"]
+                        }
+                    ]
+                    }
+                ]
+                }
+            ]
+            });
 
+            if (!medicamento) {
+            return null; // o lanzar un error si prefieres
+            }
+
+            const { InventarioBoticas, ...medicamentoData } = medicamento.toJSON();
+
+            const boticas = InventarioBoticas.map(inv => {
+            const botica = inv.Botica;
+            return {
+                id: botica.id,
+                nombre: botica.nombre,
+                direccion: botica.direccion,
+                telefono_botica: botica.telefono_botica,
+                horario_apertura: botica.horario_apertura,
+                horario_cierre: botica.horario_cierre,
+                distrito: botica.Distrito,
+                inventario: {
+                cantidad_disponible: inv.cantidad_disponible,
+                fecha_actualizacion: inv.fecha_actualizacion
+                }
+            };
+            });
+
+            return {
+            ...medicamentoData,
+            boticas
+            };
+        } catch (error) {
+            throw new Error(`Error al buscar medicamento por nombre: ${error.message}`);
+        }
+    }
 
     async create(medicamento) {
         try {

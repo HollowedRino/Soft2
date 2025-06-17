@@ -16,6 +16,20 @@ class BoticaService {
             throw new Error(`Error en el servicio al obtener botica: ${error.message}`);
         }
     }
+    async getBoticaByNombre(nombre) {
+        try {
+            return await BoticaRepository.findByNombre(nombre);
+        } catch (error) {
+            throw new Error(`Error en el servicio al obtener botica llamada ${nombre}: ${error.message}`);
+        }
+    }
+    async getBoticaByDistrito(distrito) {
+        try {
+            return await BoticaRepository.findByDistrito(distrito);
+        } catch (error) {
+            throw new Error(`Error en el servicio al obtener boticas por distrito ${distrito}: ${error.message}`);
+        }
+    }
 
     async createBotica(boticaData) {
         try {
