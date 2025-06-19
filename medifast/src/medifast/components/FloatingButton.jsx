@@ -14,9 +14,9 @@ export const FloatingButton = ({ onClick }) => {
         className="rounded-full bg-[#41b541] shadow-lg hover:scale-105 transition-transform duration-200"
       >
         <img
-          src="https://res.cloudinary.com/dgo6yjmut/image/upload/v1748984887/97e9cc3be4316d17c887ad825eb7e884d0f838a2_jd0gmi.png"
+          src="https://res.cloudinary.com/dgxakgsuo/image/upload/v1750309466/Sebasbot_2_t8vbsq.png"
           alt="Chat"
-          className="w-20 h-20"
+          className="w-25 h-25"
         />
       </button>
     </motion.div>

@@ -22,6 +22,7 @@
     "canvas-confetti": "^1.9.3",
     "firebase": "^11.6.1",
     "framer-motion": "^12.9.4",
+    "lucide-react": "^0.517.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^6.30.0",
