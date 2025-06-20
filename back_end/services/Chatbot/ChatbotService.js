@@ -32,7 +32,7 @@ export const procesarMensaje = async (mensajeUsuario) => {
     const resultadosTexto = formatearResultados(resultados);
     console.log(resultadosTexto)
     // Generar prompt para respuesta final
-    const prompt = generarPromptRespuesta(data.INTENCION, data.VALOR, resultadosTexto);
+    const prompt = generarPromptRespuesta(data.INTENCION, data.VALOR, resultadosTexto, mensajeUsuario);
 
     // Obtener respuesta redactada por Gemini
     const mensaje = await obtenerRespuestaRedactada(prompt);

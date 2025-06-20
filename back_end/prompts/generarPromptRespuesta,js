@@ -1,8 +1,8 @@
-export const generarPromptRespuesta = (intencion, valor, resultadosTexto) => {
+export const generarPromptRespuesta = (intencion, valor, resultadosTexto, lastMessage) => {
   return `Eres un asistente que puede ayudar a los usuarios con lo siguiente:
 - Buscar medicamentos por nombre.
 - Buscar boticas por nombre o distrito.
-
+Mensaje anterior: ${lastMessage}
 Intención: ${intencion}
 Valor: ${valor}
 Resultados:
