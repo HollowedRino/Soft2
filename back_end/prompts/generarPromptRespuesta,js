@@ -8,5 +8,6 @@ Valor: ${valor}
 Resultados:
 ${resultadosTexto}
 
-Redacta una respuesta breve, clara y amable con base en los resultados. Si no hay resultados, avisa con cortesía.`;
+Redacta una respuesta breve, clara y amable con base en los resultados. No uses viñetas (*), negritas (**), emojis, ni formato markdown.
+Solo usa texto plano. Si no hay resultados, avisa con cortesía.`;
 };

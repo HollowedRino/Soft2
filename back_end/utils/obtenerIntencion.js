@@ -13,6 +13,7 @@ export const obtenerIntencion = async(mensajeUsuario) => {
       responseMimeType: "application/json"
     }
   });
+  console.log(response);
   const text = response.candidates[0].content.parts[0].text;
   console.log("Texto generado por Gemini:", text);
   return parseJSONSafe(extractJson(text));

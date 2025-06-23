@@ -16,6 +16,9 @@ export const procesarMensaje = async (mensajeUsuario) => {
     let resultados = null;
 
     switch (data.INTENCION) {
+      case "consultar_funcionalidades":
+        resultados = { mensaje: "Por ahora solo puedo ayudarte a consultar productos disponibles, buscar boticas por nombre o encontrar boticas según distritos disponibles en Lima." };
+        break;
       case "buscar_medicamento":
         resultados = await MedicamentoService.findByNombre(data.VALOR);
         break;
@@ -29,7 +32,9 @@ export const procesarMensaje = async (mensajeUsuario) => {
       default:
         resultados = { mensaje: "No entendí tu solicitud. ¿Podrías reformularla?" } ;
     }
-    const resultadosTexto = formatearResultados(resultados);
+    console.log("RESULTADOS ANTES DE FORMATEAR:")
+    console.log(resultados);
+    const resultadosTexto = formatearResultados(resultados, data.INTENCION);
     console.log(resultadosTexto)
     // Generar prompt para respuesta final
     const prompt = generarPromptRespuesta(data.INTENCION, data.VALOR, resultadosTexto, mensajeUsuario);

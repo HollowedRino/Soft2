@@ -375,21 +375,23 @@ class MedicamentoRepository {
             const { InventarioBoticas, ...medicamentoData } = medicamento.toJSON();
 
             const boticas = InventarioBoticas.map(inv => {
-            const botica = inv.Botica;
-            return {
-                id: botica.id,
-                nombre: botica.nombre,
-                direccion: botica.direccion,
-                telefono_botica: botica.telefono_botica,
-                horario_apertura: botica.horario_apertura,
-                horario_cierre: botica.horario_cierre,
-                distrito: botica.Distrito,
-                inventario: {
-                cantidad_disponible: inv.cantidad_disponible,
-                fecha_actualizacion: inv.fecha_actualizacion
-                }
-            };
+                const botica = inv.Botica;
+                return {
+                    id: botica.id,
+                    nombre: botica.nombre,
+                    direccion: botica.direccion,
+                    telefono_botica: botica.telefono_botica,
+                    horario_apertura: botica.horario_apertura,
+                    horario_cierre: botica.horario_cierre,
+                    distrito: botica.Distrito,
+                    inventario: {
+                    cantidad_disponible: inv.cantidad_disponible,
+                    fecha_actualizacion: inv.fecha_actualizacion
+                    }
+                };
             });
+
+            // boticasJson = boticas.map(botica => botica.toJSON())
 
             return {
             ...medicamentoData,

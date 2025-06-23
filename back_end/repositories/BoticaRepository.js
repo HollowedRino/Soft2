@@ -39,7 +39,7 @@ class BoticaRepository {
             include: ['Distrito']
             });
 
-            return botica ? botica : null; // Devuelve null si no encuentra
+            return botica ? botica.toJSON() : null; // Devuelve null si no encuentra
         } catch (error) {
             throw new Error(`Error al buscar la botica por nombre: ${error.message}`);
         }
@@ -62,7 +62,7 @@ class BoticaRepository {
             ]
             });
 
-            return boticas; // Devuelve [] si no encuentra nada
+            return boticas.map(botica => botica.toJSON());
         } catch (error) {
             throw new Error(`Error al buscar boticas por distrito: ${error.message}`);
         }
