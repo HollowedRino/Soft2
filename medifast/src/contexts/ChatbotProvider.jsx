@@ -10,7 +10,7 @@ export const ChatbotProvider = ({ children }) => {
     const stored = sessionStorage.getItem(STORAGE_KEY);
     return stored
       ? JSON.parse(stored)
-      : [{ from: 'bot', text: 'Hola, ¿en qué puedo ayudarte hoy?' }];
+      : [{ from: 'bot', text: 'Hola, soy tu asistente Medifast. ¿Quieres consultar un medicamento o encontrar una botica?' }];
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -25,7 +25,7 @@ export const ChatbotProvider = ({ children }) => {
   };
 
   const clearChat = () => {
-    setMessages([{ from: 'bot', text: 'Hola, ¿en qué puedo ayudarte hoy?' }]);
+    setMessages([{ from: 'bot', text: 'Hola, soy tu asistente Medifast. ¿Quieres consultar un medicamento o encontrar una botica?' }]);
     sessionStorage.removeItem(STORAGE_KEY);
   };
 
