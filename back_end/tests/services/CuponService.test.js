@@ -1,4 +1,4 @@
-import CuponService from '../services/CuponService.js';
+import CuponService from '../../services/CuponService.js';
 
 
 describe('CuponService', () => {

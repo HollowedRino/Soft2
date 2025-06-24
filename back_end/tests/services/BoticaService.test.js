@@ -1,8 +1,8 @@
-import BoticaService from '../services/BoticaService.js';
-import BoticaRepository from '../repositories/BoticaRepository.js';
+import BoticaService from '../../services/BoticaService.js';
+import BoticaRepository from '../../repositories/BoticaRepository.js';
 
 // Mock del repositorio
-jest.mock('../repositories/BoticaRepository.js');
+jest.mock('../../repositories/BoticaRepository.js');
 
 describe('BoticaService', () => {
     beforeEach(() => {
