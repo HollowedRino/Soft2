@@ -49,7 +49,7 @@ describe('BoticaService', () => {
             // PREPARAR
             const validBotica = {
                 nombre: 'Botica Test',
-                direccion: 'Av. Principal 123, Lima',
+                direccion: 'Av. Principal 123',
                 telefono_botica: '987654321',
                 horario_apertura: '08:00',
                 horario_cierre: '20:00',
@@ -61,7 +61,7 @@ describe('BoticaService', () => {
 
             // VALIDAR
             expect(result).toBeDefined();
-            expect(result.direccion).toBe('Av. Principal 123, Lima');
+            expect(result.direccion).toBe('Av. Principal 123');
         });
 
         test('should throw error when address is incomplete', async () => {

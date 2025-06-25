@@ -86,7 +86,7 @@ class BoticaService {
         }
 
         // Validar que la dirección incluya calle y número
-        if (!boticaData.direccion.match(/^[A-Za-z\s]+\.?\s+\d+/)) {
+        if (!boticaData.direccion.match(/^[\w\s.]+?\s+\d+/)) {
             throw new Error('La dirección debe incluir calle y número');
         }
     }
