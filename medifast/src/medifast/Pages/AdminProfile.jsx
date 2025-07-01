@@ -27,6 +27,10 @@ export const AdminProfile = () => {
           id: b.id,
           name: b.nombre,
           direccion: b.direccion,
+          telefono: b.telefono_botica,
+          horarioApertura: b.horario_apertura,
+          horarioCierre: b.horario_cierre,
+          distrito: b.Distrito.nombre,
         }));
         setPharmacies(mapped);
         if (mapped.length > 0) setActivePharmacyId(mapped[0].id);
