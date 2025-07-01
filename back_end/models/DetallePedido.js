@@ -22,7 +22,7 @@ DetallePedido.init(
         },
         subtotal: {
             type: DataTypes.REAL,
-            allowNull: false
+            allowNull: true
             //generado automaticamente en la bd
         },
         pedido_id: {

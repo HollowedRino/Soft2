@@ -3,6 +3,8 @@ import { ForgotPass, LoginPage, RegisterUser } from '../auth'
 import { AttendancePage, CategoryPage, ContactUsPage, FilterPage, MapPage, MedifastPage, MyCartPage, ProductPage } from '../medifast'
 import { AdminProfile, CheckoutPage, OrderPage, PaymentPage } from '../medifast'
 import UserProfile from '../medifast/Pages/UserProfile'
+import { ChatTest } from '../medifast/Pages/ChatTest'
+
 export const publicRoutes = [
   <Route key="mycart" path="/mycart" element={<MyCartPage />} />,
   <Route key="login" path="/login" element={<LoginPage />} />,
@@ -16,6 +18,7 @@ export const publicRoutes = [
   <Route key="contactUs" path="/contactUs" element={<ContactUsPage />} />,
   <Route key="product" path="/product/:id" element={<ProductPage />} />,
   <Route key="filtro" path="/medicamentos/:filtro" element={<FilterPage />} />,
+  <Route key="chat" path="/chat" element={<ChatTest />} />,
   
   
 ]

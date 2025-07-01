@@ -53,7 +53,7 @@ Pedido.init(
         },
         direccion_usuario_id: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: true,
             references: {
                 model: DireccionUsuario,
                 key: "id"
@@ -64,7 +64,7 @@ Pedido.init(
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: Repartidor,
+                model: Usuario,
                 key: "id"
             },
             onDelete: "CASCADE"
@@ -77,16 +77,17 @@ Pedido.init(
     }
 );
 
-Usuario.hasMany(Pedido, {foreignKey: "usuario_id"});
-Pedido.belongsTo(Usuario, {foreignKey: "usuario_id"});
+// Relación con el cliente
+Pedido.belongsTo(Usuario, {foreignKey: "usuario_id", as: "cliente"});
+Usuario.hasMany(Pedido, {foreignKey: "usuario_id", as: "pedidosCliente"});
+// Relación con el repartidor
+Pedido.belongsTo(Usuario, {foreignKey: "repartidor_id", as: "repartidor"});
+Usuario.hasMany(Pedido, { foreignKey: "repartidor_id", as: "pedidosRepartidor"});
 Botica.hasMany(Pedido, {foreignKey: "botica_id"});
 Pedido.belongsTo(Botica, {foreignKey: "botica_id"});
 MetodoPago.hasMany(Pedido, {foreignKey: "metodo_pago_id"});
 Pedido.belongsTo(MetodoPago, {foreignKey: "metodo_pago_id"});
 DireccionUsuario.hasMany(Pedido, {foreignKey: "direccion_usuario_id"});
 Pedido.belongsTo(DireccionUsuario, {foreignKey: "direccion_usuario_id"});
-Repartidor.hasMany(Pedido, {foreignKey: "repartidor_id"});
-Pedido.belongsTo(Repartidor, {foreignKey: "repartidor_id"});
-
 
 export default Pedido;

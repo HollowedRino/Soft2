@@ -5,15 +5,17 @@ import Orders from "../components/Orders";
 import Coupons from "../components/Coupons";
 import ChangePassword from "../components/ChangePassword";
 import { CartContext } from "../../contexts/CartProvider";
+import { ChatbotContext } from "../../contexts/ChatbotProvider";
 
 export default function UserProfile() {
   const [activeSection, setActiveSection] = useState("info");
   const { logout } = useContext(UserContext);
   const { clearCart } = useContext(CartContext);
-  
+  const { clearChat } = useContext(ChatbotContext)
   const handleLogout = () => {
     logout();
     clearCart();
+    clearChat();
   };
 
 const renderSection = () => {

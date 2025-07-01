@@ -16,14 +16,17 @@
     "@heroicons/react": "^2.2.0",
     "@mui/icons-material": "^7.0.2",
     "@mui/material": "^7.0.2",
+    "@react-google-maps/api": "^2.20.6",
     "@stripe/stripe-js": "^7.3.0",
     "@tailwindcss/vite": "^4.1.4",
     "canvas-confetti": "^1.9.3",
     "firebase": "^11.6.1",
     "framer-motion": "^12.9.4",
+    "lucide-react": "^0.517.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^6.30.0",
+    "socket.io-client": "^4.8.1",
     "tailwindcss": "^4.1.4"
   },
   "devDependencies": {

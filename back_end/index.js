@@ -1,4 +1,8 @@
 import express from 'express';
+import cors from 'cors';
+import http from 'http';
+import {Server} from 'socket.io';
+
 import BoticaRoutes from './routes/BoticaRoutes.js';
 import CarritoRoutes from './routes/CarritoRoutes.js';
 import DetallePedidoRoutes from './routes/DetallePedidoRoutes.js';
@@ -11,12 +15,21 @@ import CuponRoutes from './routes/CuponRoutes.js';
 import RepartidorRoutes from './routes/RepartidorRoutes.js';
 import InventarioBoticaRoutes from './routes/InventarioBoticaRoutes.js';
 import PagoRoutes from './routes/PagoRoutes.js';
+import UserRoutes from './routes/UserRoutes.js';
+import ItemCarritoRoutes from './routes/ItemCarritoRoutes.js';
+import ChatRoutes from './routes/ChatRoutes.js';
+import MensajeRoutes from './routes/MensajeRoutes.js';
+import StripeRoutes from './routes/StripeRoutes.js';
 
 const app = express();
-const port = 3000;
-
-// Middleware para procesar JSON
 app.use(express.json());
+// Middleware para procesar datos URL-encoded
+//app.use(express.urlencoded({ extended: true })); 
+
+// Middleware para habilitar CORS y permitir peticiones desde tu frontend
+app.use(cors({
+  origin: 'http://localhost:5173'  // Ajusta esta URL según el puerto donde corre tu frontend
+}));
 
 // Usar las rutas de botica
 app.use('/boticas', BoticaRoutes);
@@ -42,14 +55,56 @@ app.use('/repartidor', RepartidorRoutes);
 app.use('/inventarioBotica', InventarioBoticaRoutes);
 // Usar las rutas de pago
 app.use('/pago', PagoRoutes);
-
+// Usar las rutas de usuario
+app.use('/user', UserRoutes);
+// Usar las rutas de item carrito
+app.use('/itemcarrito',ItemCarritoRoutes);
+// Usar las rutas de chat
+app.use('/chat',ChatRoutes);
+// Usar las rutas de mensaje
+app.use('/mensaje',MensajeRoutes);
+// Usar las rutas de Stripe
+app.use('/stripe', StripeRoutes);
 
 // Ruta principal
 app.get('/', (req, res) => {
   res.send('¡Hola mundo desde Express!');
 });
 
+const server = http.createServer(app);
+const port = 3000;
+const io = new Server(server, {
+  cors: {
+    origin: 'http://localhost:5173',
+    methods: ['GET','POST'] 
+  }
+});
+
+io.on("connection", (socket) => {
+  console.log(`Se conectó el usuario ${socket.id}`);
+
+  socket.on("join_room", (data) => {
+    socket.join(data);
+    console.log(`Usuario ${socket.id} se unió a la sala ${roomId}`);
+  })
+
+  socket.on("leavechat", (roomId) => {
+    socket.leave(roomId);
+    console.log(`Usuario ${socket.id} salió de la sala ${roomId}`);
+  });
+
+  socket.on("send_message", (data) => {
+    const { roomId, message } = data;
+    console.log(`Mensaje recibido en sala ${roomId}:`, message);
+    socket.to(roomId).emit("receive_message", data);
+  })
+
+  socket.on("disconnect", () => {
+    console.log(`Usuario desconectado: ${socket.id}`);
+  });
+});
+
 // Iniciar el servidor
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Servidor escuchando en http://localhost:${port}`);
 });

@@ -37,6 +37,7 @@ ItemCarrito.init(
     }, {
         sequelize: connection,
         modelName: "ItemCarrito",
+        tableName: "item_carrito",
         freezeTableName: true,
         timestamps: false
     }
@@ -46,3 +47,6 @@ Carrito.hasMany(ItemCarrito, {foreignKey: "carrito_id"});
 ItemCarrito.belongsTo(Carrito, {foreignKey: "carrito_id"});
 Medicamento.hasMany(ItemCarrito, {foreignKey: "medicamento_id"});
 ItemCarrito.belongsTo(Medicamento, {foreignKey: "medicamento_id"});
+
+
+export default ItemCarrito;

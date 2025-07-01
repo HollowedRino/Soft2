@@ -18,6 +18,10 @@ Medicamento.init(
             type: DataTypes.STRING,
             allowNull: false
         },
+        categoria: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
         fabricante: {
             type: DataTypes.STRING,
             allowNull: false

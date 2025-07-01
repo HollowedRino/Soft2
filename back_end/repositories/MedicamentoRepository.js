@@ -2,6 +2,7 @@ import Medicamento from '../models/Medicamento.js';
 import InventarioBotica from '../models/InventarioBotica.js';
 import Botica from '../models/Botica.js';
 import Distrito from '../models/Distrito.js';
+import { Op } from 'sequelize';
 class MedicamentoRepository {
     async findAll() {
         try {
@@ -27,6 +28,7 @@ class MedicamentoRepository {
                     "nombre",
                     "descripcion",
                     "fabricante",
+                    "categoria",
                     "precio",
                     "requiere_receta",
                     "estado_medicamento",
@@ -84,6 +86,242 @@ class MedicamentoRepository {
             throw new Error(`Error al obtener detalles del medicamentoF: ${error.message}`);
         }
     }
+
+    async findByCategoriaPlus(categoria) {
+        try {
+            
+            const medicamentos = await Medicamento.findAll({
+                where: { categoria: categoria },
+                attributes: [
+                    "id",
+                    "nombre",
+                    "descripcion",
+                    "fabricante",
+                    "categoria",
+                    "precio",
+                    "requiere_receta",
+                    "estado_medicamento",
+                    "imagen_url"
+                ],
+                include: [
+                    {
+                        model: InventarioBotica,
+                        attributes: ["cantidad_disponible", "fecha_actualizacion"],
+                        include: [
+                            {
+                                model: Botica,
+                                attributes: [
+                                    "id",
+                                    "nombre",
+                                    "direccion",
+                                    "telefono_botica",
+                                    "horario_apertura",
+                                    "horario_cierre"
+                                ],
+                                include: [
+                                    {
+                                        model: Distrito,
+                                        attributes: ["id", "nombre_distrito"]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            });
+
+            // Mapear todos los medicamentos con su estructura enriquecida
+            return medicamentos.map(medicamento => {
+                const { InventarioBoticas, ...medicamentoData } = medicamento.toJSON();
+
+                const boticas = InventarioBoticas.map(inv => {
+                    const botica = inv.Botica;
+                    return {
+                        id: botica.id,
+                        nombre: botica.nombre,
+                        direccion: botica.direccion,
+                        telefono_botica: botica.telefono_botica,
+                        horario_apertura: botica.horario_apertura,
+                        horario_cierre: botica.horario_cierre,
+                        distrito: botica.Distrito,
+                        inventario: {
+                            cantidad_disponible: inv.cantidad_disponible,
+                            fecha_actualizacion: inv.fecha_actualizacion
+                        }
+                    };
+                });
+
+                return {
+                    ...medicamentoData,
+                    boticas
+                };
+            });
+        } catch (error) {
+            throw new Error(`Error al obtener medicamentos por categoría: ${error.message}`);
+        }
+    }
+
+
+    async findByNombreParcial(nombre) {
+        try {
+            const whereClause = nombre
+                ? { nombre: { [Op.like]: `%${nombre}%` } }
+                : undefined;
+
+            const medicamentos = await Medicamento.findAll({
+                where: whereClause,
+                attributes: [
+                    "id",
+                    "nombre",
+                    "descripcion",
+                    "fabricante",
+                    "categoria",
+                    "precio",
+                    "requiere_receta",
+                    "estado_medicamento",
+                    "imagen_url"
+                ],
+                include: [
+                    {
+                        model: InventarioBotica,
+                        attributes: ["cantidad_disponible", "fecha_actualizacion"],
+                        include: [
+                            {
+                                model: Botica,
+                                attributes: [
+                                    "id",
+                                    "nombre",
+                                    "direccion",
+                                    "telefono_botica",
+                                    "horario_apertura",
+                                    "horario_cierre"
+                                ],
+                                include: [
+                                    {
+                                        model: Distrito,
+                                        attributes: ["id", "nombre_distrito"]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            });
+
+            if (!medicamentos || medicamentos.length === 0) {
+                throw new Error("Medicamento no encontrado");
+            }
+
+            // Estructura estandarizada
+            return medicamentos.map(medicamento => {
+                const { InventarioBoticas, ...medicamentoData } = medicamento.toJSON();
+
+                const boticas = InventarioBoticas.map(inv => {
+                    const botica = inv.Botica;
+                    return {
+                        id: botica.id,
+                        nombre: botica.nombre,
+                        direccion: botica.direccion,
+                        telefono_botica: botica.telefono_botica,
+                        horario_apertura: botica.horario_apertura,
+                        horario_cierre: botica.horario_cierre,
+                        distrito: botica.Distrito,
+                        inventario: {
+                            cantidad_disponible: inv.cantidad_disponible,
+                            fecha_actualizacion: inv.fecha_actualizacion
+                        }
+                    };
+                });
+
+                return {
+                    ...medicamentoData,
+                    boticas
+                };
+            });
+
+        } catch (error) {
+            throw new Error(`Error al buscar medicamentos por nombre: ${error.message}`);
+        }
+    }
+
+    async findAllWithDetalle() { 
+        try {
+            const medicamentos = await Medicamento.findAll({
+                attributes: [
+                    "id",
+                    "nombre",
+                    "descripcion",
+                    "fabricante",
+                    "categoria",
+                    "precio",
+                    "requiere_receta",
+                    "estado_medicamento",
+                    "imagen_url"
+                ],
+                include: [
+                    {
+                        model: InventarioBotica,
+                        attributes: ["cantidad_disponible", "fecha_actualizacion"],
+                        include: [
+                            {
+                                model: Botica,
+                                attributes: [
+                                    "id",
+                                    "nombre",
+                                    "direccion",
+                                    "telefono_botica",
+                                    "horario_apertura",
+                                    "horario_cierre"
+                                ],
+                                include: [
+                                    {
+                                        model: Distrito,
+                                        attributes: ["id", "nombre_distrito"]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            });
+
+            if (!medicamentos || medicamentos.length === 0) {
+                throw new Error("No hay medicamentos disponibles");
+            }
+
+            // Mismo formato que findByCategoriaPlus
+            return medicamentos.map(medicamento => {
+                const { InventarioBoticas, ...medicamentoData } = medicamento.toJSON();
+
+                const boticas = InventarioBoticas.map(inv => {
+                    const botica = inv.Botica;
+                    return {
+                        id: botica.id,
+                        nombre: botica.nombre,
+                        direccion: botica.direccion,
+                        telefono_botica: botica.telefono_botica,
+                        horario_apertura: botica.horario_apertura,
+                        horario_cierre: botica.horario_cierre,
+                        distrito: botica.Distrito,
+                        inventario: {
+                            cantidad_disponible: inv.cantidad_disponible,
+                            fecha_actualizacion: inv.fecha_actualizacion
+                        }
+                    };
+                });
+
+                return {
+                    ...medicamentoData,
+                    boticas
+                };
+            });
+
+        } catch (error) {
+            throw new Error(`Error al obtener medicamentos con detalle: ${error.message}`);
+        }
+    }
+
+
 
     async create(medicamento) {
         try {
