@@ -8,13 +8,25 @@ export const PharmacyManagement = ({ pharmacies, setPharmacies }) => {
   const [horarioCierre, setHorarioCierre] = useState("");
   const [distrito, setDistrito] = useState("");
 
+  // Edicion
+  const [editId, setEditId] = useState(null);
+  const [editFields, setEditFields] = useState({
+    name: "",
+    direccion: "",
+    telefono: "",
+    horarioApertura: "",
+    horarioCierre: "",
+    distrito: "",
+  });
+
   const addPharmacy = () => {
-    if (name.trim() &&
+    if (
+      name.trim() &&
       direccion.trim() &&
       telefono.trim() &&
       horarioApertura.trim() &&
       horarioCierre.trim() &&
-      distrito.trim() 
+      distrito.trim()
     ) {
       setPharmacies([
         ...pharmacies,
@@ -31,6 +43,39 @@ export const PharmacyManagement = ({ pharmacies, setPharmacies }) => {
 
   const removePharmacy = (id) => {
     setPharmacies(pharmacies.filter((p) => p.id !== id));
+    if (editId === id) setEditId(null);
+  };
+
+  // Iniciar edición
+  const startEdit = (pharmacy) => {
+    setEditId(pharmacy.id);
+    setEditFields({
+      name: pharmacy.name,
+      direccion: pharmacy.direccion,
+      telefono: pharmacy.telefono,
+      horarioApertura: pharmacy.horarioApertura,
+      horarioCierre: pharmacy.horarioCierre,
+      distrito: pharmacy.distrito,
+    });
+  };
+
+  const handleEditChange = (e) => {
+    setEditFields({ ...editFields, [e.target.name]: e.target.value });
+  };
+
+  const saveEdit = (id) => {
+    setPharmacies(
+      pharmacies.map((p) =>
+        p.id === id
+          ? { ...p, ...editFields }
+          : p
+      )
+    );
+    setEditId(null);
+  };
+
+  const cancelEdit = () => {
+    setEditId(null);
   };
 
   return (
@@ -51,7 +96,7 @@ export const PharmacyManagement = ({ pharmacies, setPharmacies }) => {
           onChange={(e) => setDireccion(e.target.value)}
           className="border border-green-400 rounded px-3 py-2 mr-2"
         />
-        < input
+        <input
           type="text"
           placeholder="Teléfono de la botica"
           value={telefono}
@@ -66,7 +111,7 @@ export const PharmacyManagement = ({ pharmacies, setPharmacies }) => {
           className="border border-green-400 rounded px-3 py-2 mr-2"
         />
         <input
-          type="text"   
+          type="text"
           placeholder="Horario de cierre"
           value={horarioCierre}
           onChange={(e) => setHorarioCierre(e.target.value)}
@@ -86,23 +131,90 @@ export const PharmacyManagement = ({ pharmacies, setPharmacies }) => {
       <ul className="space-y-2">
         {pharmacies.map((pharmacy) => (
           <li key={pharmacy.id} className="flex justify-between items-center border p-2 rounded">
-            <span>
-              <strong>{pharmacy.name}</strong> - Dirección: {pharmacy.direccion} - Telefono: {pharmacy.telefono} - Horario: {pharmacy.horarioApertura} - {pharmacy.horarioCierre}
-            </span>
-            <div className="flex gap-2 ml-6">
-        <button
-          onClick={() => {}}
-          className="bg-blue-500 text-white px-3 py-1 rounded"
-        >
-          Editar
-        </button>
-            <button
-              onClick={() => removePharmacy(pharmacy.id)}
-              className="bg-red-500 text-white px-3 py-1 rounded"
-            >
-              Eliminar
-            </button>
-          </div>
+            {editId === pharmacy.id ? (
+              <div className="flex flex-wrap gap-2 w-full">
+                <input
+                  type="text"
+                  name="name"
+                  value={editFields.name}
+                  onChange={handleEditChange}
+                  placeholder="Nombre"
+                  className="border border-green-400 rounded px-2 py-1"
+                />
+                <input
+                  type="text"
+                  name="direccion"
+                  value={editFields.direccion}
+                  onChange={handleEditChange}
+                  placeholder="Dirección"
+                  className="border border-green-400 rounded px-2 py-1"
+                />
+                <input
+                  type="text"
+                  name="telefono"
+                  value={editFields.telefono}
+                  onChange={handleEditChange}
+                  placeholder="Teléfono"
+                  className="border border-green-400 rounded px-2 py-1"
+                />
+                <input
+                  type="text"
+                  name="horarioApertura"
+                  value={editFields.horarioApertura}
+                  onChange={handleEditChange}
+                  placeholder="Horario Apertura"
+                  className="border border-green-400 rounded px-2 py-1"
+                />
+                <input
+                  type="text"
+                  name="horarioCierre"
+                  value={editFields.horarioCierre}
+                  onChange={handleEditChange}
+                  placeholder="Horario Cierre"
+                  className="border border-green-400 rounded px-2 py-1"
+                />
+                <input
+                  type="text"
+                  name="distrito"
+                  value={editFields.distrito}
+                  onChange={handleEditChange}
+                  placeholder="Distrito"
+                  className="border border-green-400 rounded px-2 py-1"
+                />
+                <button
+                  onClick={() => saveEdit(pharmacy.id)}
+                  className="bg-blue-600 text-white px-3 py-1 rounded"
+                >
+                  Guardar
+                </button>
+                <button
+                  onClick={cancelEdit}
+                  className="bg-gray-400 text-white px-3 py-1 rounded"
+                >
+                  Cancelar
+                </button>
+              </div>
+            ) : (
+              <>
+                <span>
+                  <strong>{pharmacy.name}</strong> - Dirección: {pharmacy.direccion} - Telefono: {pharmacy.telefono} - Horario: {pharmacy.horarioApertura} - {pharmacy.horarioCierre} - Distrito: {pharmacy.distrito}
+                </span>
+                <div className="flex gap-2 ml-12">
+                  <button
+                    onClick={() => startEdit(pharmacy)}
+                    className="bg-blue-500 text-white px-3 py-1 rounded"
+                  >
+                    Editar
+                  </button>
+                  <button
+                    onClick={() => removePharmacy(pharmacy.id)}
+                    className="bg-red-500 text-white px-3 py-1 rounded"
+                  >
+                    Eliminar
+                  </button>
+                </div>
+              </>
+            )}
           </li>
         ))}
       </ul>
