@@ -21,6 +21,7 @@
   "devDependencies": {
     "@babel/preset-env": "^7.27.2",
     "babel-jest": "^30.0.0",
-    "jest": "^30.0.0"
+    "jest": "^30.0.0",
+    "nodemon": "^3.1.10"
   }
 }
