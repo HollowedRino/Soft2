@@ -34,3 +34,26 @@ export const getAllDistritos = async () => {
   if (!res.ok) throw new Error("Error al obtener distritos");
   return res.json();
 };
+
+export const createBotica = async (boticaData) => {
+  const res = await fetch(`${API_URL}/boticas`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(boticaData),
+  });
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.error || "Error al crear botica");
+  }
+  return res.json();
+};
+
+export const addMedicamentoToBotica = async (boticaId, medicamentoData) => {
+  const res = await fetch(`${API_URL}/boticas/${boticaId}/inventario`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(medicamentoData),
+  });
+  if (!res.ok) throw new Error("Error al agregar medicamento al inventario");
+  return res.json();
+};

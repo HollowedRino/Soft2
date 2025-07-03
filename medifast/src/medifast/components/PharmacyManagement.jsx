@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { updateBotica } from "../services/boticaService";
-import { getAllDistritos } from "../services/boticaService";
+import { createBotica, getAllDistritos } from "../services/boticaService";
 
 export const PharmacyManagement = ({ pharmacies, setPharmacies, reloadPharmacies }) => {
   const [name, setName] = useState("");
@@ -22,27 +22,55 @@ export const PharmacyManagement = ({ pharmacies, setPharmacies, reloadPharmacies
     distrito: "",
   });
 
-  const addPharmacy = () => {
-    if (
-      name.trim() &&
-      direccion.trim() &&
-      telefono.trim() &&
-      horarioApertura.trim() &&
-      horarioCierre.trim() &&
-      distrito.trim()
-    ) {
-      setPharmacies([
-        ...pharmacies,
-        { id: Date.now(), name, direccion, telefono, horarioApertura, horarioCierre, distrito, inventory: [] },
-      ]);
+  const addPharmacy = async () => {
+  if (
+    name.trim() &&
+    direccion.trim() &&
+    telefono.trim() &&
+    horarioApertura.trim() &&
+    horarioCierre.trim() &&
+    distrito.trim()
+  ) {
+    try {
+      // Buscar el ID del distrito por nombre o usar el ID si ya es número
+      let distritoId = distrito;
+      if (isNaN(Number(distrito))) {
+        const distritosList = await getAllDistritos();
+        const distritoObj = distritosList.find(
+          (d) => d.nombre_distrito.toLowerCase() === distrito.trim().toLowerCase()
+        );
+        if (!distritoObj) {
+          alert("El distrito ingresado no existe.");
+          return;
+        }
+        distritoId = distritoObj.id;
+      }
+
+      await createBotica({
+        nombre: name,
+        direccion,
+        telefono_botica: telefono,
+        horario_apertura: horarioApertura,
+        horario_cierre: horarioCierre,
+        distrito_id: distritoId,
+      });
+
       setName("");
       setDireccion("");
       setTelefono("");
       setHorarioApertura("");
       setHorarioCierre("");
       setDistrito("");
+      if (typeof reloadPharmacies === "function") {
+        reloadPharmacies();
+      }
+    } catch (error) {
+      alert(error.message || "Error al crear la botica");
     }
-  };
+  } else {
+    alert("Por favor, completa todos los campos antes de guardar.");
+  }
+};
 
   const removePharmacy = (id) => {
     setPharmacies(pharmacies.filter((p) => p.id !== id));
