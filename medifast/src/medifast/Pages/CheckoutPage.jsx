@@ -1,14 +1,19 @@
-import React from "react";
+import React, { useContext } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { CheckoutSteps } from "../components/CheckoutSteps";
-/*
-TODO: Add validations with yup schema: https://www.npmjs.com/package/yup
-TODO: Review if it would be useful to use react hoook form https://react-hook-form.com/
-
-*/
+import { CartContext } from '../../contexts/CartProvider';
 
 export const CheckoutPage = () => {
+  const { cartItems, getDiscount } = useContext(CartContext);
+
+  const total = cartItems && cartItems.length > 0
+    ? cartItems.reduce((sum, item) => sum + item.medicamento.precio * item.cantidad, 0)
+    : 0;
+
+  const discount = getDiscount(total);
+  const totalFinal = Math.max(0, total - discount);
+
   return (
     <motion.div
       className="flex flex-col py-10 px-5 sm:px-10"
@@ -73,6 +78,38 @@ export const CheckoutPage = () => {
           >
             Continuar
           </Link>
+        </div>
+        {/* Resumen de compra */}
+        <div className="mt-8 p-4 bg-gray-50 rounded shadow">
+          <div className="flex justify-between mb-2">
+            <span>Subtotal:</span>
+            <span>
+              {new Intl.NumberFormat('es-PE', {
+                style: 'currency',
+                currency: 'PEN',
+              }).format(isNaN(total) ? 0 : total)}
+            </span>
+          </div>
+          {discount > 0 && (
+            <div className="flex justify-between mb-2 text-green-600">
+              <span>Descuento:</span>
+              <span>
+                -{new Intl.NumberFormat('es-PE', {
+                  style: 'currency',
+                  currency: 'PEN',
+                }).format(isNaN(discount) ? 0 : discount)}
+              </span>
+            </div>
+          )}
+          <div className="flex justify-between font-bold text-lg">
+            <span>Total a pagar:</span>
+            <span>
+              {new Intl.NumberFormat('es-PE', {
+                style: 'currency',
+                currency: 'PEN',
+              }).format(isNaN(totalFinal) ? 0 : totalFinal)}
+            </span>
+          </div>
         </div>
       </motion.div>
     </motion.div>

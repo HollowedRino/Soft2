@@ -1,35 +1,34 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { CartContext } from '../../contexts/CartProvider';
 import { MyCartItem } from '../components/MyCartItem';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const MyCartPage = () => {
-  const { cartItems } = useContext(CartContext);
+  const { cartItems, coupon, applyCoupon, getDiscount } = useContext(CartContext);
 
-  // Estado para el cupón
-  const [coupon, setCoupon] = useState('');
-  const [couponApplied, setCouponApplied] = useState(false);
-  const [discount, setDiscount] = useState(0);
-  const [couponError, setCouponError] = useState('');
+  const [couponInput, setCouponInput] = useState('');
+  const [showCouponError, setShowCouponError] = useState(false);
 
-  const total = cartItems.reduce(
-    (sum, item) => sum + item.medicamento.precio * item.cantidad,
-    0
-  );
+  const total = cartItems && cartItems.length > 0
+    ? cartItems.reduce((sum, item) => sum + item.medicamento.precio * item.cantidad, 0)
+    : 0;
 
-  // Ejemplo simple de validación de cupón
+  const discount = getDiscount(total);
+  const totalFinal = Math.max(0, total - discount);
+
   const handleApplyCoupon = () => {
-    if (coupon.trim().toLowerCase() === 'descuento10') {
-      setDiscount(total * 0.1);
-      setCouponApplied(true);
-      setCouponError('');
-    } else {
-      setDiscount(0);
-      setCouponApplied(false);
-      setCouponError('Cupón inválido');
-    }
+    const success = applyCoupon(couponInput);
+    setShowCouponError(!success);
   };
+
+  // Limpiar mensajes si el carrito queda vacío
+  useEffect(() => {
+    if (cartItems.length === 0) {
+      setCouponInput('');
+      setShowCouponError(false);
+    }
+  }, [cartItems]);
 
   return (
     <motion.div
@@ -96,24 +95,24 @@ export const MyCartPage = () => {
               <div className="flex">
                 <input
                   type="text"
-                  value={coupon}
-                  onChange={e => setCoupon(e.target.value)}
+                  value={couponInput}
+                  onChange={e => setCouponInput(e.target.value)}
                   placeholder="Código de cupón"
                   className="border border-gray-300 rounded-l px-3 py-2 w-full focus:outline-none"
-                  disabled={couponApplied}
+                  disabled={discount > 0}
                 />
                 <button
                   onClick={handleApplyCoupon}
-                  className={`bg-green-600 text-white px-4 py-2 rounded-r transition-all duration-300 hover:bg-green-700 ${couponApplied ? 'opacity-50 cursor-not-allowed' : ''}`}
-                  disabled={couponApplied}
+                  className={`bg-green-600 text-white px-4 py-2 rounded-r transition-all duration-300 hover:bg-green-700 ${discount > 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  disabled={discount > 0}
                 >
                   Aplicar
                 </button>
               </div>
-              {couponError && (
-                <p className="text-red-500 text-sm mt-1">{couponError}</p>
+              {showCouponError && (
+                <p className="text-red-500 text-sm mt-1">Cupón inválido</p>
               )}
-              {couponApplied && (
+              {coupon && discount > 0 && (
                 <p className="text-green-600 text-sm mt-1">Cupón aplicado correctamente</p>
               )}
             </div>
@@ -124,7 +123,7 @@ export const MyCartPage = () => {
                 {new Intl.NumberFormat('es-PE', {
                   style: 'currency',
                   currency: 'PEN',
-                }).format(total)}
+                }).format(isNaN(total) ? 0 : total)}
               </span>
             </div>
             {discount > 0 && (
@@ -134,7 +133,7 @@ export const MyCartPage = () => {
                   -{new Intl.NumberFormat('es-PE', {
                     style: 'currency',
                     currency: 'PEN',
-                  }).format(discount)}
+                  }).format(isNaN(discount) ? 0 : discount)}
                 </span>
               </div>
             )}
@@ -144,7 +143,7 @@ export const MyCartPage = () => {
                 {new Intl.NumberFormat('es-PE', {
                   style: 'currency',
                   currency: 'PEN',
-                }).format(total - discount)}
+                }).format(isNaN(totalFinal) ? 0 : totalFinal)}
               </span>
             </div>
             <div className="flex justify-center mt-4">
