@@ -16,7 +16,7 @@ export default function Orders() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { user } = useContext(UserContext);
-  const { cart, addToCart } = useContext(CartContext);
+  const { cart, addToCart, deleteOnlyItemsCart } = useContext(CartContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -59,6 +59,9 @@ export default function Orders() {
       console.log('Pedido seleccionado:', pedido);
       console.log('Detalles del pedido:', pedido.DetallePedidos);
       console.log('ID del carrito:', cart.id);
+
+      // Primero limpiamos el carrito actual
+      deleteOnlyItemsCart();
 
       for (const detalle of pedido.DetallePedidos) {
         const { boticas, ...medicamento } = detalle.Medicamento;
