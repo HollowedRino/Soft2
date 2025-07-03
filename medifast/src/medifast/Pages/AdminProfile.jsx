@@ -14,19 +14,17 @@ export const AdminProfile = () => {
   const { logout } = useContext(UserContext);
   const { clearCart } = useContext(CartContext);
 
-  const handleLogout = () => {
-    logout();
-    clearCart();
-  };
-
-  // Cargar boticas
-  useEffect(() => {
+  const reloadPharmacies = () => {
     getAllBoticas()
       .then((data) => {
         const mapped = data.map((b) => ({
           id: b.id,
           name: b.nombre,
           direccion: b.direccion,
+          telefono: b.telefono_botica,
+          horarioApertura: b.horario_apertura,
+          horarioCierre: b.horario_cierre,
+          distrito: b.Distrito.nombre_distrito,
         }));
         setPharmacies(mapped);
         if (mapped.length > 0) setActivePharmacyId(mapped[0].id);
@@ -34,6 +32,16 @@ export const AdminProfile = () => {
       .catch((err) => {
         console.error("Error al cargar boticas:", err);
       });
+  };
+
+  const handleLogout = () => {
+    logout();
+    clearCart();
+  };
+  
+  // Cargar boticas
+  useEffect(() => {
+    reloadPharmacies();
   }, []);
 
   // Función para recargar inventario
@@ -60,7 +68,6 @@ export const AdminProfile = () => {
   // Recargar inventario cuando cambia la botica activa
   useEffect(() => {
     fetchInventory();
-    // eslint-disable-next-line
   }, [activePharmacyId]);
 
   const renderSection = () => {
@@ -95,7 +102,13 @@ export const AdminProfile = () => {
           <div>No hay boticas disponibles.</div>
         );
       case "pharmacies":
-        return <PharmacyManagement pharmacies={pharmacies} setPharmacies={setPharmacies} />;
+        return (
+          <PharmacyManagement
+            pharmacies={pharmacies}
+            setPharmacies={setPharmacies}
+            reloadPharmacies={reloadPharmacies}
+          />
+        );
       default:
         return <div>Selecciona una opción</div>;
     }
