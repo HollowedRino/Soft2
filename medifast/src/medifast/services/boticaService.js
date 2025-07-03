@@ -6,7 +6,6 @@ export const getAllBoticas = async () => {
   return res.json();
 };
 
-
 export const getInventarioByBoticaId = async (boticaId) => {
   const res = await fetch(`${API_URL}/inventarioBotica/botica/${boticaId}`); // <-- ruta correcta
   if (!res.ok) throw new Error("Error al traer inventario");
@@ -14,11 +13,24 @@ export const getInventarioByBoticaId = async (boticaId) => {
   return Array.isArray(data) ? data : [data];
 };
 
-
-
+export const updateBotica = async (id, boticaData) => {
+  const res = await fetch(`${API_URL}/boticas/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(boticaData),
+  });
+  if (!res.ok) throw new Error("Error al actualizar botica");
+  return res.json();
+};
 
 export const getAllMedicamentos = async () => {
   const res = await fetch(`${API_URL}/medicamento`);
   if (!res.ok) throw new Error("Error al obtener medicamentos");
+  return res.json();
+};
+
+export const getAllDistritos = async () => {
+  const res = await fetch(`${API_URL}/distrito`);
+  if (!res.ok) throw new Error("Error al obtener distritos");
   return res.json();
 };

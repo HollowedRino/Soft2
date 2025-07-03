@@ -1,12 +1,15 @@
 import { useState } from "react";
+import { updateBotica } from "../services/boticaService";
+import { getAllDistritos } from "../services/boticaService";
 
-export const PharmacyManagement = ({ pharmacies, setPharmacies }) => {
+export const PharmacyManagement = ({ pharmacies, setPharmacies, reloadPharmacies }) => {
   const [name, setName] = useState("");
   const [direccion, setDireccion] = useState("");
   const [telefono, setTelefono] = useState("");
   const [horarioApertura, setHorarioApertura] = useState("");
   const [horarioCierre, setHorarioCierre] = useState("");
   const [distrito, setDistrito] = useState("");
+  const [distritos, setDistritos] = useState([]);
 
   // Edicion
   const [editId, setEditId] = useState(null);
@@ -63,16 +66,50 @@ export const PharmacyManagement = ({ pharmacies, setPharmacies }) => {
     setEditFields({ ...editFields, [e.target.name]: e.target.value });
   };
 
-  const saveEdit = (id) => {
-    setPharmacies(
-      pharmacies.map((p) =>
-        p.id === id
-          ? { ...p, ...editFields }
-          : p
-      )
-    );
-    setEditId(null);
-  };
+    const saveEdit = async (id) => {
+  const { name, direccion, telefono, horarioApertura, horarioCierre, distrito } = editFields;
+  if (
+    name.trim() &&
+    direccion.trim() &&
+    telefono.trim() &&
+    horarioApertura.trim() &&
+    horarioCierre.trim() &&
+    distrito.trim()
+  ) {
+    // Buscar el ID del distrito por nombre
+    let distritoId = distrito;
+    if (isNaN(Number(distrito))) {
+      // Si el usuario escribió el nombre, busca el ID
+      const distritosList = await getAllDistritos();
+      const distritoObj = distritosList.find(
+        (d) => d.nombre_distrito.toLowerCase() === distrito.trim().toLowerCase()
+      );
+      if (!distritoObj) {
+        alert("El distrito ingresado no existe.");
+        return;
+      }
+      distritoId = distritoObj.id;
+    }
+    try {
+      await updateBotica(id, {
+        nombre: name,
+        direccion,
+        telefono_botica: telefono,
+        horario_apertura: horarioApertura,
+        horario_cierre: horarioCierre,
+        distrito_id: distritoId,
+      });
+      setEditId(null);
+      if (typeof reloadPharmacies === "function") {
+        reloadPharmacies();
+      }
+    } catch (error) {
+      alert("Error al guardar los cambios");
+    }
+  } else {
+    alert("Por favor, completa todos los campos antes de guardar.");
+  }
+};
 
   const cancelEdit = () => {
     setEditId(null);
@@ -131,7 +168,7 @@ export const PharmacyManagement = ({ pharmacies, setPharmacies }) => {
       <ul className="space-y-2">
         {pharmacies.map((pharmacy) => (
           <li key={pharmacy.id} className="flex justify-between items-center border p-2 rounded">
-            {editId === pharmacy.id ? (
+            {Number(editId) === Number(pharmacy.id) ? (
               <div className="flex flex-wrap gap-2 w-full">
                 <input
                   type="text"
