@@ -30,6 +30,14 @@ export default function Orders() {
       if (ok) {
         console.log('Estructura de pedidos:', JSON.stringify(resp, null, 2));
         console.log('Estados de los pedidos:', resp.map(p => ({ id: p.id, estado: p.estado_pedido })));
+        // Debug: Ver qué relaciones llegan
+        if (resp.length > 0) {
+          console.log('Primer pedido completo:', resp[0]);
+          console.log('Keys del primer pedido:', Object.keys(resp[0]));
+          console.log('Botica:', resp[0].Botica);
+          console.log('MetodoPago:', resp[0].MetodoPago);
+          console.log('Repartidor:', resp[0].repartidor);
+        }
         setOrders(resp);
         setError(null);
       } else {
@@ -60,17 +68,12 @@ export default function Orders() {
       console.log('Detalles del pedido:', pedido.DetallePedidos);
       console.log('ID del carrito:', cart.id);
 
-      // Primero limpiamos el carrito actual
       deleteOnlyItemsCart();
 
       for (const detalle of pedido.DetallePedidos) {
         const { boticas, ...medicamento } = detalle.Medicamento;
         
-        for (let i = 0; i < detalle.cantidad; i++) {
-          addToCart(medicamento);
-        }
-
-        if (user.authStatus) {
+        if (user.authStatus && cart?.id) {
           const itemData = {
             carrito_id: cart.id,
             medicamento_id: medicamento.id,
@@ -85,6 +88,11 @@ export default function Orders() {
             console.error('Respuesta del servidor:', resp);
           } else {
             console.log('Item agregado exitosamente:', resp);
+          }
+        } else {
+          // Si no está logueado, agregar al carrito local
+          for (let i = 0; i < detalle.cantidad; i++) {
+            addToCart(medicamento);
           }
         }
       }
@@ -142,8 +150,8 @@ export default function Orders() {
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm text-gray-600">Botica: {order.botica?.nombre}</p>
-                      <p className="text-sm text-gray-600">Método de pago: {order.metodo_pago?.nombre}</p>
+                      <p className="text-sm text-gray-600">Botica: {order.Botica?.nombre || 'No especificada'}</p>
+                      <p className="text-sm text-gray-600">Método de pago: {order.MetodoPago?.nombre_metodo_pago || 'No especificado'}</p>
                     </div>
                   </div>
                   <div className="mt-4 flex justify-end">

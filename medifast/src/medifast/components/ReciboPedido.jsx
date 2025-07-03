@@ -30,22 +30,22 @@ export const ReciboPedido = ({ pedido }) => {
 
       <div className="mb-2">
         <p className="text-sm text-gray-600">Repartidor:</p>
-        <p className="font-medium">{pedido.repartidor?.nombre || "Desconocido"}</p>
+        <p className="font-medium">{pedido.repartidor?.nombre || "Desconocido"} {pedido.repartidor?.apellido || ""}</p>
       </div>
 
       <div className="mb-2">
         <p className="text-sm text-gray-600">Botica:</p>
-        <p className="font-medium">{pedido.botica?.nombre || "Desconocida"}</p>
+        <p className="font-medium">{pedido.Botica?.nombre || "Desconocida"}</p>
       </div>
 
       <div className="mb-2">
         <p className="text-sm text-gray-600">Método de pago:</p>
-        <p className="font-medium">{pedido.metodo_pago?.nombre || "Desconocido"}</p>
+        <p className="font-medium">{pedido.MetodoPago?.nombre_metodo_pago || "Desconocido"}</p>
       </div>
 
       <div className="mb-4">
         <p className="text-sm text-gray-600">Dirección:</p>
-        <p className="font-medium">{pedido.direccion_usuario?.direccion || "Desconocida"}</p>
+        <p className="font-medium">{pedido.DireccionUsuario?.direccion || "No especificada"}</p>
       </div>
 
       {pedido.DetallePedidos && pedido.DetallePedidos.length > 0 && (
