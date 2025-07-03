@@ -68,11 +68,18 @@ export default function Orders() {
       console.log('Detalles del pedido:', pedido.DetallePedidos);
       console.log('ID del carrito:', cart.id);
 
+      // Primero limpiamos el carrito actual
       deleteOnlyItemsCart();
 
       for (const detalle of pedido.DetallePedidos) {
         const { boticas, ...medicamento } = detalle.Medicamento;
         
+        // Agregar al carrito local (para UI inmediata)
+        for (let i = 0; i < detalle.cantidad; i++) {
+          addToCart(medicamento);
+        }
+
+        // Si está logueado, también sincronizar con el servidor
         if (user.authStatus && cart?.id) {
           const itemData = {
             carrito_id: cart.id,
@@ -88,11 +95,6 @@ export default function Orders() {
             console.error('Respuesta del servidor:', resp);
           } else {
             console.log('Item agregado exitosamente:', resp);
-          }
-        } else {
-          // Si no está logueado, agregar al carrito local
-          for (let i = 0; i < detalle.cantidad; i++) {
-            addToCart(medicamento);
           }
         }
       }
