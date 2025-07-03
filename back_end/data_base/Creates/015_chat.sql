@@ -1,0 +1,6 @@
+CREATE TABLE chat (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  estado VARCHAR(255) NOT NULL,
+  pedido_id INTEGER,
+  FOREIGN KEY (pedido_id) REFERENCES pedido(id)
+);

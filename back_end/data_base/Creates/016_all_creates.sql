@@ -1,28 +1,28 @@
 CREATE TABLE distrito (
-  id INTEGER PRIMARY KEY NOT NULL,
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
   nombre_distrito VARCHAR(20) NOT NULL
 );
 
 CREATE TABLE metodo_pago (
-  id INTEGER PRIMARY KEY NOT NULL,
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
   nombre_metodo_pago VARCHAR(40) NOT NULL
 );
 
 CREATE TABLE cupon (
-  id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
   codigo VARCHAR(20),
   descripcion VARCHAR(20),
   descuento REAL
 );
 
 CREATE TABLE repartidor (
-  id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
   nombre VARCHAR(100) NOT NULL,
   numero INTEGER NOT NULL
 );
 
 CREATE TABLE medicamento (
-  id INTEGER PRIMARY KEY NOT NULL,
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
   nombre VARCHAR(50) NOT NULL,
   descripcion VARCHAR(100) NOT NULL,
   categoria VARCHAR(100) NOT NULL,
@@ -35,7 +35,7 @@ CREATE TABLE medicamento (
 
 
 CREATE TABLE usuario (
-  id INTEGER PRIMARY KEY NOT NULL,
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
   nombre VARCHAR(20) NOT NULL,
   apellido VARCHAR(30) NOT NULL,
   email VARCHAR(50) NOT NULL,
@@ -45,7 +45,7 @@ CREATE TABLE usuario (
 );
 
 CREATE TABLE direccion_usuario (
-  id INTEGER PRIMARY KEY NOT NULL,
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
   direccion VARCHAR(100) NOT NULL,
   alias VARCHAR(30),
   usuario_id INTEGER,
@@ -55,7 +55,7 @@ CREATE TABLE direccion_usuario (
 );
 
 CREATE TABLE botica (
-  id INTEGER PRIMARY KEY NOT NULL,
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
   nombre VARCHAR(20) NOT NULL,
   direccion VARCHAR(40) NOT NULL,
   telefono_botica INTEGER,
@@ -66,7 +66,7 @@ CREATE TABLE botica (
 );
 
 CREATE TABLE inventario_botica (
-  id INTEGER PRIMARY KEY NOT NULL,
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
   cantidad_disponible INTEGER,
   fecha_actualizacion DATE NOT NULL,
   botica_id INTEGER,
@@ -77,7 +77,7 @@ CREATE TABLE inventario_botica (
 );
 
 CREATE TABLE pedido (
-  id INTEGER PRIMARY KEY NOT NULL,
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
   fecha_pedido DATE NOT NULL,
   estado_pedido VARCHAR(100) NOT NULL,
   usuario_id INTEGER,
@@ -93,7 +93,7 @@ CREATE TABLE pedido (
 );
 
 CREATE TABLE detalle_pedido (
-  id INTEGER PRIMARY KEY NOT NULL,
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
   cantidad INTEGER,
   precio_unitario REAL NOT NULL,
   subtotal REAL GENERATED ALWAYS AS (cantidad * precio_unitario) STORED,  
@@ -104,14 +104,14 @@ CREATE TABLE detalle_pedido (
 );
 
 CREATE TABLE pago (
-  id INTEGER PRIMARY KEY NOT NULL,
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
   monto_total REAL,
   fecha_pago DATE NOT NULL,
   estado_pago VARCHAR(100) NOT NULL,
   usuario_id INTEGER,
   detalle_pedido_id INTEGER,
   metodo_pago_id INTEGER,
-  id_cupon INTEGER NOT NULL DEFAULT 1,
+  cupon_id INTEGER NOT NULL DEFAULT 1,
   FOREIGN KEY (usuario_id) REFERENCES usuario(id),
   FOREIGN KEY (detalle_pedido_id) REFERENCES detalle_pedido(id),
   FOREIGN KEY (metodo_pago_id) REFERENCES metodo_pago(id),
@@ -119,14 +119,14 @@ CREATE TABLE pago (
 );
 
 CREATE TABLE carrito (
-  id INTEGER PRIMARY KEY NOT NULL,
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
   usuario_id INTEGER,
   fecha_actualizacion TIMESTAMP,
   FOREIGN KEY (usuario_id) REFERENCES usuario(id)
 );
 
 CREATE TABLE item_carrito (
-  id INTEGER PRIMARY KEY NOT NULL,
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
   carrito_id INTEGER,
   medicamento_id INTEGER,
   cantidad INTEGER NOT NULL,
@@ -134,4 +134,9 @@ CREATE TABLE item_carrito (
   FOREIGN KEY (medicamento_id) REFERENCES medicamento(id)
 );
 
-
+CREATE TABLE chat (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  estado VARCHAR(255) NOT NULL,
+  pedido_id INTEGER,
+  FOREIGN KEY (pedido_id) REFERENCES pedido(id)
+);

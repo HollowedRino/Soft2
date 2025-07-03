@@ -41,7 +41,10 @@ class CuponRepository {
     async delete(id) {
         try {
             const cupon = await this.findById(id);
-            await Cupon.destroy();
+            if (!cupon) {
+                throw new Error('Cupon no encontrado');
+            }
+            await Cupon.destroy({ where: { id } });
             return true;
         } catch (error) {
             throw new Error(`Error al eliminar el cupon: ${error.message}`);
