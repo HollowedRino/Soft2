@@ -45,6 +45,17 @@ class PedidoService {
         }
     }
 
+    async getPedidosByUsuario(usuarioId) {
+        try {
+            if (!usuarioId) {
+                throw new Error('El ID del usuario es requerido');
+            }
+            return await PedidoRepository.findByUsuarioId(usuarioId);
+        } catch (error) {
+            throw new Error(`Error en el servicio al obtener pedidos del usuario: ${error.message}`);
+        }
+    }
+
     // Método privado para validaciones
     validatePedidoData(pedidoData) {
         const requiredFields = ['fecha_pedido', 'estado_pedido', 'usuario_id', 'botica_id', 'metodo_pago_id','repartidor_id'];

@@ -16,6 +16,20 @@ class BoticaService {
             throw new Error(`Error en el servicio al obtener botica: ${error.message}`);
         }
     }
+    async getBoticaByNombre(nombre) {
+        try {
+            return await BoticaRepository.findByNombre(nombre);
+        } catch (error) {
+            throw new Error(`Error en el servicio al obtener botica llamada ${nombre}: ${error.message}`);
+        }
+    }
+    async getBoticaByDistrito(distrito) {
+        try {
+            return await BoticaRepository.findByDistrito(distrito);
+        } catch (error) {
+            throw new Error(`Error en el servicio al obtener boticas por distrito ${distrito}: ${error.message}`);
+        }
+    }
 
     async createBotica(boticaData) {
         try {
@@ -64,6 +78,16 @@ class BoticaService {
         const timeRegex = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/;
         if (!timeRegex.test(boticaData.horario_apertura) || !timeRegex.test(boticaData.horario_cierre)) {
             throw new Error('Los horarios deben tener el formato HH:MM');
+        }
+
+        // Validar formato de dirección
+        if (boticaData.direccion.length < 5) {
+            throw new Error('La dirección debe tener al menos 5 caracteres');
+        }
+
+        // Validar que la dirección incluya calle y número
+        if (!boticaData.direccion.match(/^[\w\s.]+?\s+\d+/)) {
+            throw new Error('La dirección debe incluir calle y número');
         }
     }
 }

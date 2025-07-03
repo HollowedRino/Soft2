@@ -1,4 +1,11 @@
 import Pedido from '../models/Pedido.js';
+import Usuario from '../models/Usuario.js';
+import Botica from '../models/Botica.js';
+import MetodoPago from '../models/MetodoPago.js';
+import DireccionUsuario from '../models/DireccionUsuario.js';
+import Repartidor from '../models/Repartidor.js';
+import DetallePedido from '../models/DetallePedido.js';
+import Medicamento from '../models/Medicamento.js';
 
 class PedidoRepository {
     async findAll() {
@@ -49,6 +56,43 @@ class PedidoRepository {
             return true;
         } catch (error) {
             throw new Error(`Error al eliminar el pedido: ${error.message}`);
+        }
+    }
+
+    async findByUsuarioId(usuarioId) {
+        try {
+            return await Pedido.findAll({
+                where: { usuario_id: usuarioId },
+                include: [
+                    {
+                        model: Usuario,
+                        as: 'cliente'
+                    },
+                    {
+                        model: Botica
+                    },
+                    {
+                        model: MetodoPago
+                    },
+                    {
+                        model: DireccionUsuario
+                    },
+                    {
+                        model: Usuario,
+                        as: 'repartidor'
+                    },
+                    {
+                        model: DetallePedido,
+                        include: [{
+                            model: Medicamento
+                        }]
+                    }
+                ],
+                order: [['fecha_pedido', 'DESC']]
+            });
+        } catch (error) {
+            console.error('Error en findByUsuarioId:', error);
+            throw new Error(`Error al obtener los pedidos del usuario: ${error.message}`);
         }
     }
 }

@@ -48,7 +48,8 @@ class CuponController {
     async delete(req, res) {
         try {
             await CuponService.delete(req.params.id);
-            res.status(204).send();
+            res.status(200).json({ message: "Cupón eliminado correctamente" });
+
         } catch (error) {
             if (error.message === 'Cupon no encontrado') {
                 res.status(404).json({ error: error.message });

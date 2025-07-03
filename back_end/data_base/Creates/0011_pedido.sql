@@ -1,5 +1,5 @@
 CREATE TABLE pedido (
-  id INTEGER PRIMARY KEY NOT NULL,
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
   fecha_pedido DATE NOT NULL,
   estado_pedido VARCHAR(100) NOT NULL,
   usuario_id INTEGER,
