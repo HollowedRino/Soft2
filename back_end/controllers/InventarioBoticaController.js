@@ -1,4 +1,5 @@
 import InventarioBoticaService from '../services/InventarioBoticaService.js';
+import Medicamento from '../models/Medicamento.js';
 
 class InventarioBoticaController {
     async findAll(req, res) {
@@ -25,9 +26,33 @@ class InventarioBoticaController {
     }
 
     async create(req, res) {
-        try {
-            const inventarioBotica = await InventarioBoticaService.create(req.body);
-            res.status(201).json(inventarioBotica);
+    try {
+        let medicamentoId = req.body.medicamento_id;
+
+        if (!medicamentoId && req.body.nombre) {
+            let medicamento = await Medicamento.findOne({ where: { nombre: req.body.nombre } });
+            if (!medicamento) {
+                medicamento = await Medicamento.create({
+                    nombre: req.body.nombre,
+                    descripcion: req.body.descripcion,
+                    categoria: req.body.categoria,
+                    fabricante: req.body.fabricante,
+                    precio: req.body.precio,
+                    requiere_receta: req.body.requiere_receta,
+                    estado_medicamento: req.body.estado_medicamento,
+                    imagen_url: req.body.imagen_url,
+                });
+            }
+            medicamentoId = medicamento.id; 
+        }
+
+        const inventarioBotica = await InventarioBoticaService.create({
+            botica_id: req.body.botica_id,
+            medicamento_id: medicamentoId,
+            cantidad_disponible: req.body.cantidad_disponible,
+        });
+
+        res.status(201).json(inventarioBotica);
         } catch (error) {
             res.status(400).json({ error: error.message });
         }

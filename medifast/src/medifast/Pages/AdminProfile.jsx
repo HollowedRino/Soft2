@@ -38,7 +38,7 @@ export const AdminProfile = () => {
     logout();
     clearCart();
   };
-  
+
   // Cargar boticas
   useEffect(() => {
     reloadPharmacies();
@@ -53,8 +53,14 @@ export const AdminProfile = () => {
           const mappedInventory = inventarioArray.map((item) => ({
             id: item.Medicamento.id,
             name: item.Medicamento.nombre,
-            stock: item.cantidad_disponible,
+            descripcion: item.Medicamento.descripcion,
+            categoria: item.Medicamento.categoria,
+            fabricante: item.Medicamento.fabricante,
             price: item.Medicamento.precio,
+            stock: item.cantidad_disponible,
+            requiere_receta: item.Medicamento.requiere_receta,
+            estado_medicamento: item.Medicamento.estado_medicamento,
+            imagen_url: item.Medicamento.imagen_url,
           }));
           setPharmacyInventory(mappedInventory);
         })
@@ -96,6 +102,8 @@ export const AdminProfile = () => {
             </div>
             <InventoryManagement
               pharmacy={{ ...currentPharmacy, inventory: pharmacyInventory }}
+              reloadInventory={fetchInventory}
+              pharmacyId={activePharmacyId}
             />
           </div>
         ) : (

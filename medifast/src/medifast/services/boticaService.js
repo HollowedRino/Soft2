@@ -49,10 +49,17 @@ export const createBotica = async (boticaData) => {
 };
 
 export const addMedicamentoToBotica = async (boticaId, medicamentoData) => {
-  const res = await fetch(`${API_URL}/boticas/${boticaId}/inventario`, {
+  const now = new Date();
+  const fecha_actualizacion = `${String(now.getDate()).padStart(2, "0")}-${String(now.getMonth() + 1).padStart(2, "0")}-${now.getFullYear()}`;
+
+  const res = await fetch(`${API_URL}/inventariobotica`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(medicamentoData),
+    body: JSON.stringify({
+      ...medicamentoData,
+      botica_id: boticaId,
+      fecha_actualizacion, // <-- Agrega la fecha aquí
+    }),
   });
   if (!res.ok) throw new Error("Error al agregar medicamento al inventario");
   return res.json();

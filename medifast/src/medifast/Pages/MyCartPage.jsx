@@ -1,16 +1,34 @@
-import { useContext } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { CartContext } from '../../contexts/CartProvider';
 import { MyCartItem } from '../components/MyCartItem';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const MyCartPage = () => {
-  const { cartItems } = useContext(CartContext);
+  const { cartItems, coupon, applyCoupon, getDiscount } = useContext(CartContext);
 
-  const total = cartItems.reduce(
-    (sum, item) => sum + item.medicamento.precio * item.cantidad,
-    0
-  );
+  const [couponInput, setCouponInput] = useState('');
+  const [showCouponError, setShowCouponError] = useState(false);
+
+  const total = cartItems && cartItems.length > 0
+    ? cartItems.reduce((sum, item) => sum + item.medicamento.precio * item.cantidad, 0)
+    : 0;
+
+  const discount = getDiscount(total);
+  const totalFinal = Math.max(0, total - discount);
+
+  const handleApplyCoupon = () => {
+    const success = applyCoupon(couponInput);
+    setShowCouponError(!success);
+  };
+
+  // Limpiar mensajes si el carrito queda vacío
+  useEffect(() => {
+    if (cartItems.length === 0) {
+      setCouponInput('');
+      setShowCouponError(false);
+    }
+  }, [cartItems]);
 
   return (
     <motion.div
@@ -71,13 +89,61 @@ export const MyCartPage = () => {
             <h2 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6">
               Resumen de compra
             </h2>
-            <div className="flex justify-between text-gray-600 mb-3">
+
+            {/* Campo para aplicar cupón */}
+            <div className="mb-4">
+              <div className="flex">
+                <input
+                  type="text"
+                  value={couponInput}
+                  onChange={e => setCouponInput(e.target.value)}
+                  placeholder="Código de cupón"
+                  className="border border-gray-300 rounded-l px-3 py-2 w-full focus:outline-none"
+                  disabled={discount > 0}
+                />
+                <button
+                  onClick={handleApplyCoupon}
+                  className={`bg-green-600 text-white px-4 py-2 rounded-r transition-all duration-300 hover:bg-green-700 ${discount > 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  disabled={discount > 0}
+                >
+                  Aplicar
+                </button>
+              </div>
+              {showCouponError && (
+                <p className="text-red-500 text-sm mt-1">Cupón inválido</p>
+              )}
+              {coupon && discount > 0 && (
+                <p className="text-green-600 text-sm mt-1">Cupón aplicado correctamente</p>
+              )}
+            </div>
+
+            <div className="flex justify-between text-gray-600 mb-1">
+              <span>Subtotal:</span>
+              <span>
+                {new Intl.NumberFormat('es-PE', {
+                  style: 'currency',
+                  currency: 'PEN',
+                }).format(isNaN(total) ? 0 : total)}
+              </span>
+            </div>
+            {discount > 0 && (
+              <div className="flex justify-between text-green-600 mb-1">
+                <span>Descuento:</span>
+                <span>
+                  -{new Intl.NumberFormat('es-PE', {
+                    style: 'currency',
+                    currency: 'PEN',
+                  }).format(isNaN(discount) ? 0 : discount)}
+                </span>
+              </div>
+            )}
+            <div className="flex justify-between text-gray-800 font-semibold mb-3">
               <span>Total:</span>
               <span>
                 {new Intl.NumberFormat('es-PE', {
                   style: 'currency',
                   currency: 'PEN',
-                }).format(total)}
+                }).format(isNaN(totalFinal) ? 0 : totalFinal)}
               </span>
             </div>
             <div className="flex justify-center mt-4">
