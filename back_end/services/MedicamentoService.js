@@ -47,6 +47,14 @@ class MedicamentoService {
             throw new Error(`Error al obtener medicamentos con detalles: ${error.message}`);
         }
     }
+    
+    async findByNombre(nombre) {
+        try {
+            return await MedicamentoRepository.findByNombre(nombre);
+        } catch (error) {
+            throw new Error(`Error al obtener el medicamento ${nombre}: ${error.message}`);
+        }
+    }
 
     async create(medicamento) {
         try {

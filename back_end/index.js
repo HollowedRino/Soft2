@@ -20,6 +20,8 @@ import ItemCarritoRoutes from './routes/ItemCarritoRoutes.js';
 import ChatRoutes from './routes/ChatRoutes.js';
 import MensajeRoutes from './routes/MensajeRoutes.js';
 import StripeRoutes from './routes/StripeRoutes.js';
+import ChatbotRoutes from './routes/Chatbot/ChatbotRoutes.js'
+import { checkGeminiAPI } from './configs/gemini.js';
 
 const app = express();
 app.use(express.json());
@@ -65,6 +67,8 @@ app.use('/chat',ChatRoutes);
 app.use('/mensaje',MensajeRoutes);
 // Usar las rutas de Stripe
 app.use('/stripe', StripeRoutes);
+// Usar las rutas del Chatbot
+app.use('/api', ChatbotRoutes);
 
 // Ruta principal
 app.get('/', (req, res) => {
@@ -103,6 +107,9 @@ io.on("connection", (socket) => {
     console.log(`Usuario desconectado: ${socket.id}`);
   });
 });
+
+// Funcion q valida si existe la api key para el chatbot en el archivo .env, si no existe consulten en el grupo xd
+checkGeminiAPI();
 
 // Iniciar el servidor
 server.listen(port, () => {

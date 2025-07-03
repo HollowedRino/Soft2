@@ -1,4 +1,4 @@
-import { post } from "./api";
+import { post, getSimple } from "./api";
 
 const BASE_PATH = "/pedido";
 
@@ -15,7 +15,37 @@ export const createPedido = async (data) => {
       console.log(error)
       return {
         ok: false,
-        errorMessage: error ,
+        errorMessage: error,
       };
     }
-  };
+};
+
+export const getPedidosByUsuario = async (usuarioId) => {
+    try {
+        const resp = await getSimple(`${BASE_PATH}/usuario/${usuarioId}`);
+        return {
+            ok: true,
+            resp,
+        };
+    } catch (error) {
+        return {
+            ok: false,
+            errorMessage: error.message || "Error al obtener los pedidos del usuario",
+        };
+    }
+};
+
+export const getPedidoById = async (pedidoId) => {
+    try {
+        const resp = await getSimple(`${BASE_PATH}/${pedidoId}`);
+        return {
+            ok: true,
+            resp,
+        };
+    } catch (error) {
+        return {
+            ok: false,
+            errorMessage: error.message || "Error al obtener el pedido",
+        };
+    }
+};

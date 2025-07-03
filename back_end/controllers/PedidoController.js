@@ -62,6 +62,18 @@ class PedidoController {
             }
         }
     }
+
+    async getPedidosByUsuario(req, res) {
+        try {
+            const { usuarioId } = req.params;
+            console.log('Buscando pedidos para usuario:', usuarioId);
+            const pedidos = await PedidoService.getPedidosByUsuario(usuarioId);
+            res.json(pedidos);
+        } catch (error) {
+            console.error('Error en getPedidosByUsuario:', error);
+            res.status(500).json({ error: error.message });
+        }
+    }
 }
 
 export default new PedidoController();
