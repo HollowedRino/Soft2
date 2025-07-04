@@ -428,6 +428,20 @@ class MedicamentoRepository {
             throw new Error(`Error al eliminar el medicamento: ${error.message}`);
         }
     }
+
+    async findDisponibles() {
+        try {
+            // Devuelve solo medicamentos que están en inventario de alguna botica
+            return await Medicamento.findAll({
+                include: [{
+                    model: InventarioBotica,
+                    required: true, // Solo los que tienen inventario
+                }]
+            });
+        } catch (error) {
+            throw new Error(`Error al obtener medicamentos disponibles: ${error.message}`);
+        }
+    }
 }
 
 export default new MedicamentoRepository();

@@ -79,3 +79,19 @@ export const updateInventarioBotica = async (inventarioId, data) => {
   if (!res.ok) throw new Error("Error al actualizar inventario de botica");
   return res.json();
 };
+
+export const deleteBotica = async (id) => {
+  const res = await fetch(`${API_URL}/boticas/${id}`, {
+    method: "DELETE",
+  });
+  if (!res.ok) throw new Error("Error al eliminar la botica");
+  return true;
+};
+
+export const deleteInventarioBotica = async (inventarioId) => {
+  const res = await fetch(`${API_URL}/inventarioBotica/${inventarioId}`, {
+    method: "DELETE",
+  });
+  if (!res.ok) throw new Error("Error al eliminar el medicamento del inventario");
+  return true;
+};

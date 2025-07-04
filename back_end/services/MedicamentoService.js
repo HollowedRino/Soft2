@@ -79,6 +79,14 @@ class MedicamentoService {
             throw new Error(`Error al eliminar el medicamento: ${error.message}`);
         }
     }
+
+    async findDisponibles() {
+        try {
+            return await MedicamentoRepository.findDisponibles();
+        } catch (error) {
+            throw new Error(`Error al obtener medicamentos disponibles: ${error.message}`);
+        }
+    }
 }
 
 export default new MedicamentoService();

@@ -45,8 +45,9 @@ class InventarioBoticaRepository {
     async delete(id) {
         try {
             const inventarioBotica = await this.findById(id);
+            const medicamentoId = inventarioBotica.medicamento_id;
             await inventarioBotica.destroy();
-            return true;
+            return medicamentoId;
         } catch (error) {
             throw new Error(`Error al eliminar el inventario de la botica: ${error.message}`);
         }

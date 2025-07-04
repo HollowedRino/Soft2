@@ -61,8 +61,6 @@ class InventarioBoticaService {
         }
     }
 
-
-
     async findByBoticaId(boticaId) {
     try {
         return await InventarioBoticaRepository.findByBoticaId(boticaId);

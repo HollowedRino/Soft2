@@ -1,6 +1,5 @@
-import { useState } from "react";
-import { updateBotica } from "../services/boticaService";
-import { createBotica, getAllDistritos } from "../services/boticaService";
+import { useState, useEffect } from "react";
+import { updateBotica, createBotica, getAllDistritos, deleteBotica, getInventarioByBoticaId, deleteInventarioBotica } from "../services/boticaService";
 
 export const PharmacyManagement = ({ pharmacies, setPharmacies, reloadPharmacies }) => {
   const [name, setName] = useState("");
@@ -22,19 +21,120 @@ export const PharmacyManagement = ({ pharmacies, setPharmacies, reloadPharmacies
     distrito: "",
   });
 
+  useEffect(() => {
+    getAllDistritos().then(setDistritos).catch(() => setDistritos([]));
+  }, []);
+
   const addPharmacy = async () => {
-  if (
-    name.trim() &&
-    direccion.trim() &&
-    telefono.trim() &&
-    horarioApertura.trim() &&
-    horarioCierre.trim() &&
-    distrito.trim()
-  ) {
+    if (
+      name.trim() &&
+      direccion.trim() &&
+      telefono.trim() &&
+      horarioApertura.trim() &&
+      horarioCierre.trim() &&
+      distrito.trim()
+    ) {
+      if (!/^9[0-9]{8}$/.test(telefono)) {
+        alert("El teléfono debe empezar con 9 y tener 9 dígitos.");
+        return;
+      }
+      try {
+        // Buscar el ID del distrito por nombre o usar el ID si ya es número
+        let distritoId = distrito;
+        if (isNaN(Number(distrito))) {
+          const distritosList = await getAllDistritos();
+          const distritoObj = distritosList.find(
+            (d) => d.nombre_distrito.toLowerCase() === distrito.trim().toLowerCase()
+          );
+          if (!distritoObj) {
+            alert("El distrito ingresado no existe.");
+            return;
+          }
+          distritoId = distritoObj.id;
+        }
+
+        await createBotica({
+          nombre: name,
+          direccion,
+          telefono_botica: telefono,
+          horario_apertura: horarioApertura,
+          horario_cierre: horarioCierre,
+          distrito_id: distritoId,
+        });
+
+        setName("");
+        setDireccion("");
+        setTelefono("");
+        setHorarioApertura("");
+        setHorarioCierre("");
+        setDistrito("");
+        if (typeof reloadPharmacies === "function") {
+          reloadPharmacies();
+        }
+      } catch (error) {
+        alert(error.message || "Error al crear la botica");
+      }
+    } else {
+      alert("Por favor, completa todos los campos antes de guardar.");
+    }
+  };
+
+  const removePharmacy = async (id) => {
+    const confirm = window.confirm("¿Estás seguro de eliminar esta botica?");
+    if (!confirm) return;
     try {
-      // Buscar el ID del distrito por nombre o usar el ID si ya es número
+      // Eliminar todos los inventarios asociados a la botica
+      const inventarios = await getInventarioByBoticaId(id);
+      if (Array.isArray(inventarios) && inventarios.length > 0) {
+        await Promise.all(inventarios.map(inv => deleteInventarioBotica(inv.id)));
+      }
+      await deleteBotica(id);
+      setPharmacies(pharmacies.filter((p) => p.id !== id));
+      if (editId === id) setEditId(null);
+      if (typeof reloadPharmacies === "function") reloadPharmacies();
+      alert("Botica eliminada correctamente");
+    } catch (error) {
+      alert(error.message || "Error al eliminar la botica");
+    }
+  };
+
+  // Iniciar edición
+  const startEdit = (pharmacy) => {
+    const normalizeTime = (t) => (t ? t.slice(0,5) : "");
+    const distritoObj = distritos.find(d => d.nombre_distrito === pharmacy.distrito);
+    setEditId(pharmacy.id);
+    setEditFields({
+      name: pharmacy.name,
+      direccion: pharmacy.direccion,
+      telefono: pharmacy.telefono,
+      horarioApertura: normalizeTime(pharmacy.horarioApertura),
+      horarioCierre: normalizeTime(pharmacy.horarioCierre),
+      distrito: distritoObj ? distritoObj.id : "",
+    });
+  };
+
+  const handleEditChange = (e) => {
+    setEditFields({ ...editFields, [e.target.name]: e.target.value });
+  };
+
+  const saveEdit = async (id) => {
+    const { name, direccion, telefono, horarioApertura, horarioCierre, distrito } = editFields;
+    if (
+      String(name).trim() &&
+      String(direccion).trim() &&
+      String(telefono).trim() &&
+      String(horarioApertura).trim() &&
+      String(horarioCierre).trim() &&
+      String(distrito).trim()
+    ) {
+      if (!/^9[0-9]{8}$/.test(telefono)) {
+        alert("El teléfono debe empezar con 9 y tener 9 dígitos.");
+        return;
+      }
+      // Buscar el ID del distrito por nombre
       let distritoId = distrito;
       if (isNaN(Number(distrito))) {
+        // Si el usuario escribió el nombre, busca el ID
         const distritosList = await getAllDistritos();
         const distritoObj = distritosList.find(
           (d) => d.nombre_distrito.toLowerCase() === distrito.trim().toLowerCase()
@@ -45,99 +145,26 @@ export const PharmacyManagement = ({ pharmacies, setPharmacies, reloadPharmacies
         }
         distritoId = distritoObj.id;
       }
-
-      await createBotica({
-        nombre: name,
-        direccion,
-        telefono_botica: telefono,
-        horario_apertura: horarioApertura,
-        horario_cierre: horarioCierre,
-        distrito_id: distritoId,
-      });
-
-      setName("");
-      setDireccion("");
-      setTelefono("");
-      setHorarioApertura("");
-      setHorarioCierre("");
-      setDistrito("");
-      if (typeof reloadPharmacies === "function") {
-        reloadPharmacies();
+      try {
+        await updateBotica(id, {
+          nombre: name,
+          direccion,
+          telefono_botica: Number(telefono),
+          horario_apertura: horarioApertura,
+          horario_cierre: horarioCierre,
+          distrito_id: distritoId,
+        });
+        setEditId(null);
+        if (typeof reloadPharmacies === "function") {
+          reloadPharmacies();
+        }
+      } catch (error) {
+        alert("Error al guardar los cambios");
       }
-    } catch (error) {
-      alert(error.message || "Error al crear la botica");
+    } else {
+      alert("Por favor, completa todos los campos antes de guardar.");
     }
-  } else {
-    alert("Por favor, completa todos los campos antes de guardar.");
-  }
-};
-
-  const removePharmacy = (id) => {
-    setPharmacies(pharmacies.filter((p) => p.id !== id));
-    if (editId === id) setEditId(null);
   };
-
-  // Iniciar edición
-  const startEdit = (pharmacy) => {
-    setEditId(pharmacy.id);
-    setEditFields({
-      name: pharmacy.name,
-      direccion: pharmacy.direccion,
-      telefono: pharmacy.telefono,
-      horarioApertura: pharmacy.horarioApertura,
-      horarioCierre: pharmacy.horarioCierre,
-      distrito: pharmacy.distrito,
-    });
-  };
-
-  const handleEditChange = (e) => {
-    setEditFields({ ...editFields, [e.target.name]: e.target.value });
-  };
-
-    const saveEdit = async (id) => {
-  const { name, direccion, telefono, horarioApertura, horarioCierre, distrito } = editFields;
-  if (
-    name.trim() &&
-    direccion.trim() &&
-    telefono.trim() &&
-    horarioApertura.trim() &&
-    horarioCierre.trim() &&
-    distrito.trim()
-  ) {
-    // Buscar el ID del distrito por nombre
-    let distritoId = distrito;
-    if (isNaN(Number(distrito))) {
-      // Si el usuario escribió el nombre, busca el ID
-      const distritosList = await getAllDistritos();
-      const distritoObj = distritosList.find(
-        (d) => d.nombre_distrito.toLowerCase() === distrito.trim().toLowerCase()
-      );
-      if (!distritoObj) {
-        alert("El distrito ingresado no existe.");
-        return;
-      }
-      distritoId = distritoObj.id;
-    }
-    try {
-      await updateBotica(id, {
-        nombre: name,
-        direccion,
-        telefono_botica: telefono,
-        horario_apertura: horarioApertura,
-        horario_cierre: horarioCierre,
-        distrito_id: distritoId,
-      });
-      setEditId(null);
-      if (typeof reloadPharmacies === "function") {
-        reloadPharmacies();
-      }
-    } catch (error) {
-      alert("Error al guardar los cambios");
-    }
-  } else {
-    alert("Por favor, completa todos los campos antes de guardar.");
-  }
-};
 
   const cancelEdit = () => {
     setEditId(null);
@@ -146,6 +173,7 @@ export const PharmacyManagement = ({ pharmacies, setPharmacies, reloadPharmacies
   return (
     <div>
       <h2 className="text-2xl font-semibold text-green-700 mb-4">Boticas Asociadas</h2>
+      <h3 className="text-xl font-semibold text-green-700 mb-4 w-full">Agregar nueva botica</h3>
       <div className="mb-4 flex flex-wrap gap-x-2 gap-y-4">
         <input
           type="text"
@@ -162,33 +190,54 @@ export const PharmacyManagement = ({ pharmacies, setPharmacies, reloadPharmacies
           className="border border-green-400 rounded px-3 py-2 mr-2"
         />
         <input
-          type="text"
+          type="tel"
           placeholder="Teléfono de la botica"
           value={telefono}
           onChange={(e) => setTelefono(e.target.value)}
           className="border border-green-400 rounded px-3 py-2 mr-2"
+          pattern="9[0-9]{8}"
+          inputMode="numeric"
+          maxLength={9}
+          required
+          onKeyDown={e => {
+            if (e.key.length === 1 && !/[0-9]/.test(e.key)) {
+              e.preventDefault();
+            }
+          }}
         />
-        <input
-          type="text"
-          placeholder="Horario de apertura"
-          value={horarioApertura}
-          onChange={(e) => setHorarioApertura(e.target.value)}
-          className="border border-green-400 rounded px-3 py-2 mr-2"
-        />
-        <input
-          type="text"
-          placeholder="Horario de cierre"
-          value={horarioCierre}
-          onChange={(e) => setHorarioCierre(e.target.value)}
-          className="border border-green-400 rounded px-3 py-2 mr-2"
-        />
-        <input
-          type="text"
-          placeholder="Distrito"
+        <div className="flex flex-col mr-2">
+          <label htmlFor="horarioApertura" className="text-green-700 text-sm mb-1">Horario de apertura</label>
+          <input
+            id="horarioApertura"
+            type="time"
+            placeholder="Horario de apertura"
+            value={horarioApertura}
+            onChange={(e) => setHorarioApertura(e.target.value)}
+            className="border border-green-400 rounded px-2 py-1 text-base"
+          />
+        </div>
+        <div className="flex flex-col mr-2">
+          <label htmlFor="horarioCierre" className="text-green-700 text-sm mb-1">Horario de cierre</label>
+          <input
+            id="horarioCierre"
+            type="time"
+            placeholder="Horario de cierre"
+            value={horarioCierre}
+            onChange={(e) => setHorarioCierre(e.target.value)}
+            className="border border-green-400 rounded px-2 py-1 text-base"
+          />
+        </div>
+        <select
           value={distrito}
-          onChange={(e) => setDistrito(e.target.value)}
+          onChange={e => setDistrito(e.target.value)}
           className="border border-green-400 rounded px-3 py-2 mr-2"
-        />
+          required
+        >
+          <option value="">Distrito</option>
+          {distritos.map(d => (
+            <option key={d.id} value={d.id}>{d.nombre_distrito}</option>
+          ))}
+        </select>
         <button onClick={addPharmacy} className="bg-green-600 text-white px-4 py-2 rounded">
           Añadir
         </button>
@@ -215,15 +264,24 @@ export const PharmacyManagement = ({ pharmacies, setPharmacies, reloadPharmacies
                   className="border border-green-400 rounded px-2 py-1"
                 />
                 <input
-                  type="text"
+                  type="tel"
                   name="telefono"
                   value={editFields.telefono}
                   onChange={handleEditChange}
                   placeholder="Teléfono"
                   className="border border-green-400 rounded px-2 py-1"
+                  pattern="9[0-9]{8}"
+                  inputMode="numeric"
+                  maxLength={9}
+                  required
+                  onKeyDown={e => {
+                    if (e.key.length === 1 && !/[0-9]/.test(e.key)) {
+                      e.preventDefault();
+                    }
+                  }}
                 />
                 <input
-                  type="text"
+                  type="time"
                   name="horarioApertura"
                   value={editFields.horarioApertura}
                   onChange={handleEditChange}
@@ -231,21 +289,25 @@ export const PharmacyManagement = ({ pharmacies, setPharmacies, reloadPharmacies
                   className="border border-green-400 rounded px-2 py-1"
                 />
                 <input
-                  type="text"
+                  type="time"
                   name="horarioCierre"
                   value={editFields.horarioCierre}
                   onChange={handleEditChange}
                   placeholder="Horario Cierre"
                   className="border border-green-400 rounded px-2 py-1"
                 />
-                <input
-                  type="text"
+                <select
                   name="distrito"
                   value={editFields.distrito}
                   onChange={handleEditChange}
-                  placeholder="Distrito"
                   className="border border-green-400 rounded px-2 py-1"
-                />
+                  required
+                >
+                  <option value="">Distrito</option>
+                  {distritos.map(d => (
+                    <option key={d.id} value={d.id}>{d.nombre_distrito}</option>
+                  ))}
+                </select>
                 <button
                   onClick={() => saveEdit(pharmacy.id)}
                   className="bg-blue-600 text-white px-3 py-1 rounded"

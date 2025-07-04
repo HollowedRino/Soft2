@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { addMedicamentoToBotica, getAllMedicamentos, getInventarioByBoticaId, updateInventarioBotica } from "../services/boticaService";
+import { addMedicamentoToBotica, getAllMedicamentos, getInventarioByBoticaId, updateInventarioBotica, deleteInventarioBotica } from "../services/boticaService";
 
 export const InventoryManagement = ({
   pharmacy,
@@ -35,6 +35,10 @@ export const InventoryManagement = ({
     }
     if (!selectedMedId || !medStock) {
       alert("Selecciona un medicamento y stock");
+      return;
+    }
+    if (isNaN(medStock) || Number(medStock) <= 0) {
+      alert("El stock debe ser un número positivo");
       return;
     }
     try {
@@ -83,9 +87,18 @@ export const InventoryManagement = ({
       !medPrice.trim() ||
       medReceta === "" ||
       medEstado === "" ||
-      !medStockNuevo
+      !medStockNuevo ||
+      !medImagen.trim()
     ) {
       alert("Completa todos los campos obligatorios");
+      return;
+    }
+    if (isNaN(medPrice) || Number(medPrice) < 0) {
+      alert("El precio debe ser un número válido");
+      return;
+    }
+    if (isNaN(medStockNuevo) || Number(medStockNuevo) <= 0) {
+      alert("El stock debe ser un número positivo");
       return;
     }
     try {
@@ -131,6 +144,18 @@ export const InventoryManagement = ({
     }
   };
 
+  const handleDeleteMedicamento = async (inventarioId) => {
+    const confirm = window.confirm("¿Estás seguro de eliminar este medicamento del inventario?");
+    if (!confirm) return;
+    try {
+      await deleteInventarioBotica(inventarioId);
+      if (typeof reloadInventory === "function") reloadInventory();
+      alert("Medicamento eliminado correctamente");
+    } catch (error) {
+      alert(error.message || "Error al eliminar el medicamento");
+    }
+  };
+
   return (
     <div>
       <h2 className="text-2xl font-semibold text-green-700 mb-4">
@@ -157,6 +182,13 @@ export const InventoryManagement = ({
           onChange={(e) => setMedStock(e.target.value)}
           className="border border-green-400 rounded px-3 py-2"
           min="1"
+          inputMode="numeric"
+          pattern="[0-9]*"
+          onKeyDown={e => {
+            if (e.key.length === 1 && !/\d/.test(e.key)) {
+              e.preventDefault();
+            }
+          }}
         />
         <button
           type="submit"
@@ -229,6 +261,13 @@ export const InventoryManagement = ({
               min="0"
               step="0.1"
               required
+              inputMode="numeric"
+              pattern="[0-9]*"
+              onKeyDown={e => {
+                if (e.key.length === 1 && !/[\d.]/.test(e.key)) {
+                  e.preventDefault();
+                }
+              }}
             />
             <input
               type="number"
@@ -238,6 +277,13 @@ export const InventoryManagement = ({
               className="border border-green-400 rounded px-3 py-2 flex-1"
               min="1"
               required
+              inputMode="numeric"
+              pattern="[0-9]*"
+              onKeyDown={e => {
+                if (e.key.length === 1 && !/\d/.test(e.key)) {
+                  e.preventDefault();
+                }
+              }}
             />
             <select
               value={medReceta}
@@ -268,6 +314,7 @@ export const InventoryManagement = ({
               value={medImagen}
               onChange={(e) => setMedImagen(e.target.value)}
               className="border border-green-400 rounded px-3 py-2 flex-1"
+              required
             />
             {/* Botones al costado del campo de imagen */}
             <button
@@ -295,22 +342,30 @@ export const InventoryManagement = ({
           {pharmacy.inventory.map((item) => (
             <li
               key={item.id}
-              className="flex flex-col border p-2 rounded"
+              className="flex flex-col md:flex-row md:items-center border p-2 rounded justify-between"
             >
-              <span><strong>Nombre:</strong> {item.name}</span>
-              <span><strong>Descripción:</strong> {item.descripcion}</span>
-              <span><strong>Categoría:</strong> {item.categoria}</span>
-              <span><strong>Fabricante:</strong> {item.fabricante}</span>
-              <span><strong>Precio:</strong> S/ {item.price}</span>
-              <span><strong>Stock:</strong> {item.stock}</span>
-              <span><strong>Requiere receta:</strong> {item.requiere_receta ? "Sí" : "No"}</span>
-              <span><strong>Activo:</strong> {item.estado_medicamento ? "Sí" : "No"}</span>
-              {item.imagen_url && (
-                <span>
-                  <strong>Imagen:</strong><br />
-                  <img src={item.imagen_url} alt={item.name} style={{ maxWidth: 120, maxHeight: 120 }} />
-                </span>
-              )}
+              <div>
+                <span><strong>Nombre:</strong> {item.name}</span><br />
+                <span><strong>Descripción:</strong> {item.descripcion}</span><br />
+                <span><strong>Categoría:</strong> {item.categoria}</span><br />
+                <span><strong>Fabricante:</strong> {item.fabricante}</span><br />
+                <span><strong>Precio:</strong> S/ {item.price}</span><br />
+                <span><strong>Stock:</strong> {item.stock}</span><br />
+                <span><strong>Requiere receta:</strong> {item.requiere_receta ? "Sí" : "No"}</span><br />
+                <span><strong>Activo:</strong> {item.estado_medicamento ? "Sí" : "No"}</span><br />
+                {item.imagen_url && (
+                  <span>
+                    <strong>Imagen:</strong><br />
+                    <img src={item.imagen_url} alt={item.name} style={{ maxWidth: 120, maxHeight: 120 }} />
+                  </span>
+                )}
+              </div>
+              <button
+                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded mt-2 md:mt-0"
+                onClick={() => handleDeleteMedicamento(item.id)}
+              >
+                Eliminar
+              </button>
             </li>
           ))}
         </ul>
