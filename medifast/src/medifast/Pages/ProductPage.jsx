@@ -2,10 +2,34 @@ import { useLocation, useParams } from "react-router-dom";
 import { BuildingStorefrontIcon, TruckIcon } from '@heroicons/react/16/solid';
 import { motion } from "framer-motion";
 import { AddToCartButton } from "../components/AddToCartButton";
+import { useEffect, useState } from "react";
+import { getLatLngFromAddress } from "../services/geocodeService";
+import MapComponent from "../components/MapComponent";
 export const ProductPage = () => {
   const { id } = useParams();
   const location = useLocation();
   const producto = location.state;
+  const [boticaCoords, setBoticaCoords] = useState(null);
+  const [loadingCoords, setLoadingCoords] = useState(true);
+  const [coordsError, setCoordsError] = useState(null);
+  const [selectedBoticaIdx, setSelectedBoticaIdx] = useState(0);
+  
+  useEffect(() => {
+    if (producto && producto.boticas && producto.boticas.length > 0) {
+      const direccion = producto.boticas[selectedBoticaIdx].direccion;
+      setLoadingCoords(true);
+      getLatLngFromAddress(direccion)
+        .then(coords => {
+          setBoticaCoords(coords);
+          setCoordsError(null);
+        })
+        .catch(err => {
+          setCoordsError("No se pudo obtener la ubicación de la botica.");
+          setBoticaCoords(null);
+        })
+        .finally(() => setLoadingCoords(false));
+    }
+  }, [producto, selectedBoticaIdx]);
 
   return (
     <motion.div 
@@ -70,17 +94,18 @@ export const ProductPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {
-                  producto.boticas.map((botica, idx) => (
-                    <tr key={idx} className="text-gray-700">
-                      <td className="py-1">
-                        <button className={`px-2 py-1 rounded-full border w-full text-left`}>
-                          {botica.nombre}
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                }
+                {producto.boticas.map((botica, idx) => (
+                  <tr key={idx} className="text-gray-700">
+                    <td className="py-1">
+                      <button 
+                        className={`px-2 py-1 rounded-full border w-full text-left ${selectedBoticaIdx === idx ? 'bg-green-300 font-bold' : ''}`}
+                        onClick={() => setSelectedBoticaIdx(idx)}
+                      >
+                        {botica.nombre}
+                      </button>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -88,28 +113,13 @@ export const ProductPage = () => {
 
         {/* Buscar boticas */}
         <div className="mt-10">
-          <h3 className="font-semibold text-lg mb-3">Buscar boticas más cercanas</h3>
+          <h3 className="font-semibold text-lg mb-3">Ubicación de la botica</h3>
           <div className="w-full rounded-xl overflow-hidden shadow-md">
-            {/* Mapa y barra de búsqueda simulados */}
-            <div className="relative">
-              <img
-                src="https://elcomercio.pe/resizer/-CijCLiHN49WgBZlRCO-m9ap9BI=/1200x680/smart/filters:format(jpeg):quality(75)/arc-anglerfish-arc2-prod-elcomercio.s3.amazonaws.com/public/UAGOCODQDJDNRG7KSJ7Z3PTJ2E.jpg"
-                alt="Mapa"
-                className="w-full h-80 object-cover"
-                />
-              <div className="absolute top-4 left-4 flex bg-white rounded-full shadow px-2 py-1">
-                <input
-                  type="text"
-                  placeholder="Ingrese una dirección"
-                  className="px-2 py-1 text-sm rounded-l-full outline-none"
-                  />
-                <button 
-                  className="bg-black text-white px-4 py-1 text-sm rounded-full transition-transform hover:scale-[1.02] cursor-pointer"
-                >
-                  Buscar
-                </button>
-              </div>
-            </div>
+              {loadingCoords && <p>Cargando mapa...</p>}
+              {coordsError && <p className="text-red-500">{coordsError}</p>}
+              {boticaCoords && !loadingCoords && !coordsError && (
+                <MapComponent lat={boticaCoords.lat} lng={boticaCoords.lng} />
+              )}
           </div>
         </div>
       </div>
