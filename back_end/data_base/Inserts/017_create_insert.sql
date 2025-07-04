@@ -1,4 +1,4 @@
--- CREATES
+-- Creates
 CREATE TABLE distrito (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   nombre_distrito VARCHAR(20) NOT NULL
@@ -34,7 +34,6 @@ CREATE TABLE medicamento (
   imagen_url TEXT
 );
 
-
 CREATE TABLE usuario (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   nombre VARCHAR(20) NOT NULL,
@@ -51,8 +50,8 @@ CREATE TABLE direccion_usuario (
   alias VARCHAR(30),
   usuario_id INTEGER,
   distrito_id INTEGER,
-  FOREIGN KEY (usuario_id) REFERENCES usuario(id),
-  FOREIGN KEY (distrito_id) REFERENCES distrito(id)
+  FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE,
+  FOREIGN KEY (distrito_id) REFERENCES distrito(id) ON DELETE CASCADE
 );
 
 CREATE TABLE botica (
@@ -63,7 +62,7 @@ CREATE TABLE botica (
   horario_apertura VARCHAR(10) NOT NULL,
   horario_cierre VARCHAR(10) NOT NULL,
   distrito_id INTEGER,
-  FOREIGN KEY (distrito_id) REFERENCES distrito(id)
+  FOREIGN KEY (distrito_id) REFERENCES distrito(id) ON DELETE CASCADE
 );
 
 CREATE TABLE inventario_botica (
@@ -72,8 +71,8 @@ CREATE TABLE inventario_botica (
   fecha_actualizacion DATE NOT NULL,
   botica_id INTEGER,
   medicamento_id INTEGER,
-  FOREIGN KEY (botica_id) REFERENCES botica(id),
-  FOREIGN KEY (medicamento_id) REFERENCES medicamento(id),
+  FOREIGN KEY (botica_id) REFERENCES botica(id) ON DELETE CASCADE,
+  FOREIGN KEY (medicamento_id) REFERENCES medicamento(id) ON DELETE CASCADE,
   UNIQUE(botica_id, medicamento_id)
 );
 
@@ -86,11 +85,11 @@ CREATE TABLE pedido (
   metodo_pago_id INTEGER,
   direccion_usuario_id INTEGER,
   repartidor_id INTEGER,
-  FOREIGN KEY (usuario_id) REFERENCES usuario(id),
-  FOREIGN KEY (botica_id) REFERENCES botica(id),
-  FOREIGN KEY (metodo_pago_id) REFERENCES metodo_pago(id),
-  FOREIGN KEY (direccion_usuario_id) REFERENCES direccion_usuario(id),
-  FOREIGN KEY (repartidor_id) REFERENCES repartidor(id)
+  FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE,
+  FOREIGN KEY (botica_id) REFERENCES botica(id) ON DELETE CASCADE,
+  FOREIGN KEY (metodo_pago_id) REFERENCES metodo_pago(id) ON DELETE CASCADE,
+  FOREIGN KEY (direccion_usuario_id) REFERENCES direccion_usuario(id) ON DELETE CASCADE,
+  FOREIGN KEY (repartidor_id) REFERENCES repartidor(id) ON DELETE CASCADE
 );
 
 CREATE TABLE detalle_pedido (
@@ -100,8 +99,8 @@ CREATE TABLE detalle_pedido (
   subtotal REAL GENERATED ALWAYS AS (cantidad * precio_unitario) STORED,  
   pedido_id INTEGER,
   medicamento_id INTEGER,
-  FOREIGN KEY (pedido_id) REFERENCES pedido(id),
-  FOREIGN KEY (medicamento_id) REFERENCES medicamento(id)
+  FOREIGN KEY (pedido_id) REFERENCES pedido(id) ON DELETE CASCADE,
+  FOREIGN KEY (medicamento_id) REFERENCES medicamento(id) ON DELETE CASCADE
 );
 
 CREATE TABLE pago (
@@ -113,17 +112,17 @@ CREATE TABLE pago (
   detalle_pedido_id INTEGER,
   metodo_pago_id INTEGER,
   cupon_id INTEGER NOT NULL DEFAULT 1,
-  FOREIGN KEY (usuario_id) REFERENCES usuario(id),
-  FOREIGN KEY (detalle_pedido_id) REFERENCES detalle_pedido(id),
-  FOREIGN KEY (metodo_pago_id) REFERENCES metodo_pago(id),
-  FOREIGN KEY (cupon_id) REFERENCES cupon(id)
+  FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE,
+  FOREIGN KEY (detalle_pedido_id) REFERENCES detalle_pedido(id) ON DELETE CASCADE,
+  FOREIGN KEY (metodo_pago_id) REFERENCES metodo_pago(id) ON DELETE CASCADE,
+  FOREIGN KEY (cupon_id) REFERENCES cupon(id) ON DELETE CASCADE
 );
 
 CREATE TABLE carrito (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   usuario_id INTEGER,
   fecha_actualizacion TIMESTAMP,
-  FOREIGN KEY (usuario_id) REFERENCES usuario(id)
+  FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE
 );
 
 CREATE TABLE item_carrito (
@@ -131,16 +130,26 @@ CREATE TABLE item_carrito (
   carrito_id INTEGER,
   medicamento_id INTEGER,
   cantidad INTEGER NOT NULL,
-  FOREIGN KEY (carrito_id) REFERENCES carrito(id),
-  FOREIGN KEY (medicamento_id) REFERENCES medicamento(id)
+  FOREIGN KEY (carrito_id) REFERENCES carrito(id) ON DELETE CASCADE,
+  FOREIGN KEY (medicamento_id) REFERENCES medicamento(id) ON DELETE CASCADE
 );
 
 CREATE TABLE chat (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   estado VARCHAR(255) NOT NULL,
   pedido_id INTEGER,
-  FOREIGN KEY (pedido_id) REFERENCES pedido(id)
+  FOREIGN KEY (pedido_id) REFERENCES pedido(id) ON DELETE CASCADE
 );
+
+CREATE TABLE mensaje (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	texto VARCHAR(255) NOT NULL,
+	chat_id INTEGER,
+	usuario_id INTEGER,
+	FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE,
+	FOREIGN KEY (chat_id) REFERENCES chat(id) ON DELETE CASCADE
+);
+
 
 -- Distritos de Lima
 INSERT INTO distrito(nombre_distrito) VALUES ('Ancón');
@@ -283,43 +292,43 @@ VALUES ('Diego', 'Rojas', 'diego.rojas@email.com', 'rojDiego#', 943210987, 'admi
 INSERT INTO inventario_botica(cantidad_disponible, fecha_actualizacion, botica_id, medicamento_id)
 VALUES (20, '2025-06-16', 1, 1);
 INSERT INTO inventario_botica(cantidad_disponible, fecha_actualizacion, botica_id, medicamento_id)
-VALUES (15, '2025-06-15', 1, 2);
+VALUES (15, '2025-06-15', 2, 2);
 INSERT INTO inventario_botica(cantidad_disponible, fecha_actualizacion, botica_id, medicamento_id)
-VALUES (40, '2025-06-02', 1, 3);
+VALUES (40, '2025-06-02', 3, 3);
 INSERT INTO inventario_botica(cantidad_disponible, fecha_actualizacion, botica_id, medicamento_id)
-VALUES (200, '2025-06-02', 2, 4);
+VALUES (200, '2025-06-02', 4, 4);
 INSERT INTO inventario_botica(cantidad_disponible, fecha_actualizacion, botica_id, medicamento_id)
-VALUES (100, '2025-06-03', 2, 5);
+VALUES (100, '2025-06-03', 5, 5);
 INSERT INTO inventario_botica(cantidad_disponible, fecha_actualizacion, botica_id, medicamento_id)
-VALUES (60, '2025-06-03', 2, 6);
+VALUES (60, '2025-06-03', 1, 6);
 INSERT INTO inventario_botica(cantidad_disponible, fecha_actualizacion, botica_id, medicamento_id)
-VALUES (30, '2025-06-03', 3, 7);
+VALUES (30, '2025-06-03', 2, 7);
 INSERT INTO inventario_botica(cantidad_disponible, fecha_actualizacion, botica_id, medicamento_id)
 VALUES (75, '2025-06-03', 3, 8);
 INSERT INTO inventario_botica(cantidad_disponible, fecha_actualizacion, botica_id, medicamento_id)
-VALUES (50, '2025-06-04', 3, 9);
+VALUES (50, '2025-06-04', 4, 9);
 INSERT INTO inventario_botica(cantidad_disponible, fecha_actualizacion, botica_id, medicamento_id)
-VALUES (110, '2025-06-04', 3, 10);
+VALUES (110, '2025-06-04', 5, 10);
 INSERT INTO inventario_botica(cantidad_disponible, fecha_actualizacion, botica_id, medicamento_id)
 VALUES (25, '2025-06-06', 1, 11);
 INSERT INTO inventario_botica(cantidad_disponible, fecha_actualizacion, botica_id, medicamento_id)
-VALUES (30, '2025-06-06', 1, 12);
+VALUES (30, '2025-06-06', 2, 12);
 INSERT INTO inventario_botica(cantidad_disponible, fecha_actualizacion, botica_id, medicamento_id)
-VALUES (45, '2025-06-06', 1, 13);
+VALUES (45, '2025-06-06', 3, 13);
 INSERT INTO inventario_botica(cantidad_disponible, fecha_actualizacion, botica_id, medicamento_id)
-VALUES (35, '2025-06-07', 2, 14);
+VALUES (35, '2025-06-07', 4, 14);
 INSERT INTO inventario_botica(cantidad_disponible, fecha_actualizacion, botica_id, medicamento_id)
-VALUES (40, '2025-06-07', 2, 15);
+VALUES (40, '2025-06-07', 5, 15);
 INSERT INTO inventario_botica(cantidad_disponible, fecha_actualizacion, botica_id, medicamento_id)
-VALUES (28, '2025-06-08', 2, 16);
+VALUES (28, '2025-06-08', 1, 16);
 INSERT INTO inventario_botica(cantidad_disponible, fecha_actualizacion, botica_id, medicamento_id)
-VALUES (50, '2025-06-08', 3, 17);
+VALUES (50, '2025-06-08', 2, 17);
 INSERT INTO inventario_botica(cantidad_disponible, fecha_actualizacion, botica_id, medicamento_id)
 VALUES (60, '2025-06-09', 3, 18);
 INSERT INTO inventario_botica(cantidad_disponible, fecha_actualizacion, botica_id, medicamento_id)
-VALUES (70, '2025-06-09', 3, 19);
+VALUES (70, '2025-06-09', 4, 19);
 INSERT INTO inventario_botica(cantidad_disponible, fecha_actualizacion, botica_id, medicamento_id)
-VALUES (55, '2025-06-10', 3, 20);
+VALUES (55, '2025-06-10', 5, 20);
 
 -- Direcciones de usuario
 INSERT INTO direccion_usuario(direccion, alias, usuario_id, distrito_id)
@@ -436,8 +445,12 @@ VALUES (5, 8, 2);
 
 -- Chat
 INSERT INTO chat(estado, pedido_id) VALUES ('Activo', 1);
-INSERT INTO chat(estado, pedido_id) VALUES ('Pendiente', 2);
-INSERT INTO chat(estado, pedido_id) VALUES ('Cerrado', 3);
+INSERT INTO chat(estado, pedido_id) VALUES ('Activo', 2);
+INSERT INTO chat(estado, pedido_id) VALUES ('Inactivo', 3);
 INSERT INTO chat(estado, pedido_id) VALUES ('Activo', 4);
-INSERT INTO chat(estado, pedido_id) VALUES ('Pendiente', 5);
-INSERT INTO chat(estado, pedido_id) VALUES ('Cerrado', 6);
+INSERT INTO chat(estado, pedido_id) VALUES ('Activo', 5);
+INSERT INTO chat(estado, pedido_id) VALUES ('Activo', 6);
+
+-- Mensajes
+INSERT INTO mensaje(texto, chat_id, usuario_id) VALUES ('Hola, ¿cómo puedo ayudarte?', 1, 1);
+INSERT INTO mensaje(texto, chat_id, usuario_id) VALUES ('Tengo un problema con mi pedido', 1, 2);
