@@ -174,7 +174,7 @@ export default function Orders() {
 
       <div className="w-1/2 overflow-y-auto order-l border-green-300 pl-4">
         {pedidoSeleccionado ? (
-          pedidoSeleccionado.estado_pedido === "En camino" ? (
+          pedidoSeleccionado.estado_pedido === "pendiente" ? (
             <ChatRoom
               pedidoId={pedidoSeleccionado.id}
               currentUserId={user?.id} 
