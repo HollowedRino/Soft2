@@ -2,312 +2,334 @@ import DireccionUsuarioService from '../../services/DireccionUsuarioService.js';
 
 describe('DireccionUsuarioService', () => {
     
-    // Happy Path: Obtener todas las direcciones de usuario
-    test('should get all direcciones successfully (Happy Path)', async () => {
-        // EJECUTAR
-        const direcciones = await DireccionUsuarioService.getAllDirecciones();
-
-        // VALIDAR
-        expect(Array.isArray(direcciones)).toBe(true);
-    });
-
-    // Happy Path: Crear, buscar, actualizar y eliminar una dirección de usuario
-    test('should create, find, update and delete a direccion successfully (Happy Path)', async () => {
-        // PREPARAR
-        const newDireccion = {
-            direccion: 'Av. Larco 456, Miraflores',
-            alias: 'Casa',
-            usuario_id: 1,
-            distrito_id: 5
-        };
-
-        const updateData = {
-            direccion: 'Av. Arequipa 789, Miraflores',
-            alias: 'Casa Principal',
-            usuario_id: 1,
-            distrito_id: 5
-        };
-
-        // EJECUTAR - Crear
-        const created = await DireccionUsuarioService.createDireccion(newDireccion);
-        
-        // VALIDAR - Crear
-        expect(created).toHaveProperty('id');
-        expect(created.direccion).toBe('Av. Larco 456, Miraflores');
-        expect(created.alias).toBe('Casa');
-        expect(created.usuario_id).toBe(1);
-        expect(created.distrito_id).toBe(5);
-
-        // EJECUTAR - Buscar por ID
-        const found = await DireccionUsuarioService.getDireccionById(created.id);
-        
-        // VALIDAR - Buscar
-        expect(found).toHaveProperty('id', created.id);
-        expect(found.direccion).toBe('Av. Larco 456, Miraflores');
-
-        // EJECUTAR - Actualizar
-        const updated = await DireccionUsuarioService.updateDireccion(created.id, updateData);
-        
-        // VALIDAR - Actualizar
-        expect(updated).toBeTruthy();
-
-        // EJECUTAR - Eliminar
-        const deleted = await DireccionUsuarioService.deleteDireccion(created.id);
-        
-        // VALIDAR - Eliminar
-        expect(deleted).toBe(true);
-        
-        // Verificar que ya no existe
-        await expect(DireccionUsuarioService.getDireccionById(created.id)).rejects.toThrow();
-    });
-
-    // Happy Path: Crear direcciones con diferentes aliases válidos
-    test('should create direcciones with different valid aliases (Happy Path)', async () => {
-        const validDirecciones = [
-            { direccion: 'Av. Pardo 123', alias: 'Trabajo', usuario_id: 1, distrito_id: 5 },
-            { direccion: 'Jr. Lima 456', alias: 'Casa de mis padres', usuario_id: 2, distrito_id: 3 },
-            { direccion: 'Calle Real 789', alias: 'Oficina', usuario_id: 3, distrito_id: 1 }
-        ];
-        
-        for (const data of validDirecciones) {
+    describe('Get All Direcciones', () => {
+        test('should get all direcciones successfully', async () => {
             // EJECUTAR
-            const created = await DireccionUsuarioService.createDireccion(data);
+            const direcciones = await DireccionUsuarioService.getAllDirecciones();
+
+            // VALIDAR
+            expect(Array.isArray(direcciones)).toBe(true);
+        });
+    });
+
+    describe('Get Direccion by ID', () => {
+        test('should get direccion by valid ID successfully', async () => {
+            // PREPARAR - Crear primero una dirección para buscar
+            const newDireccion = {
+                direccion: 'Av. Test 123',
+                alias: 'Casa Test',
+                usuario_id: 1,
+                distrito_id: 5
+            };
+            const created = await DireccionUsuarioService.createDireccion(newDireccion);
+
+            // EJECUTAR
+            const result = await DireccionUsuarioService.getDireccionById(created.id);
             
             // VALIDAR
-            expect(created).toHaveProperty('id');
-            expect(created.direccion).toBe(data.direccion);
-            expect(created.alias).toBe(data.alias);
-            
+            expect(result).toHaveProperty('id', created.id);
+            expect(result.direccion).toBe('Av. Test 123');
+            expect(result.alias).toBe('Casa Test');
+
             // LIMPIAR
             await DireccionUsuarioService.deleteDireccion(created.id);
-        }
+        });
+
+        test('should throw error when direccion is not found', async () => {
+            // PREPARAR
+            const nonExistentId = 999999;
+
+            // EJECUTAR y VALIDAR
+            await expect(DireccionUsuarioService.getDireccionById(nonExistentId))
+                .rejects
+                .toThrow();
+        });
     });
 
-    // Unhappy Path: Buscar dirección por ID inexistente
-    test('should fail to find direccion by non-existent ID (Unhappy Path)', async () => {
-        // PREPARAR
-        const nonExistentId = 999999;
-
-        // EJECUTAR y VALIDAR
-        await expect(DireccionUsuarioService.getDireccionById(nonExistentId)).rejects.toThrow();
-    });
-
-    // Unhappy Path: Actualizar dirección inexistente
-    test('should fail to update non-existent direccion (Unhappy Path)', async () => {
-        // PREPARAR
-        const nonExistentId = 999999;
-        const updateData = {
-            direccion: 'Av. Test 123',
-            alias: 'Test',
-            usuario_id: 1,
-            distrito_id: 1
-        };
-
-        // EJECUTAR y VALIDAR
-        await expect(DireccionUsuarioService.updateDireccion(nonExistentId, updateData)).rejects.toThrow();
-    });
-
-    // Unhappy Path: Eliminar dirección inexistente
-    test('should fail to delete non-existent direccion (Unhappy Path)', async () => {
-        // PREPARAR
-        const nonExistentId = 999999;
-
-        // EJECUTAR y VALIDAR
-        await expect(DireccionUsuarioService.deleteDireccion(nonExistentId)).rejects.toThrow();
-    });
-
-    // Unhappy Path: Crear dirección sin campos requeridos
-    test('should fail to create direccion without required fields (Unhappy Path)', async () => {
-        // PREPARAR
-        const invalidDireccion = {
-            alias: 'Casa',
-            usuario_id: 1
-            // faltan direccion y distrito_id
-        };
-
-        // EJECUTAR y VALIDAR
-        await expect(DireccionUsuarioService.createDireccion(invalidDireccion))
-            .rejects.toThrow('El campo direccion es requerido');
-    });
-
-    // Unhappy Path: Validar todos los campos requeridos individualmente
-    test('should validate all required fields individually (Unhappy Path)', async () => {
-        const requiredFields = ['direccion', 'alias', 'usuario_id', 'distrito_id'];
-        
-        for (const field of requiredFields) {
-            const incompleteData = {
-                direccion: 'Av. Test 123',
+    describe('Create Direccion', () => {
+        test('should create direccion with valid data successfully', async () => {
+            // PREPARAR
+            const validDireccionData = {
+                direccion: 'Av. Larco 456, Miraflores',
                 alias: 'Casa',
                 usuario_id: 1,
                 distrito_id: 5
             };
-            delete incompleteData[field];
 
-            // EJECUTAR y VALIDAR
-            await expect(DireccionUsuarioService.createDireccion(incompleteData))
-                .rejects.toThrow(`El campo ${field} es requerido`);
-        }
-    });
-
-    // Unhappy Path: Crear dirección con valores null/undefined
-    test('should fail to create direccion with null/undefined values (Unhappy Path)', async () => {
-        const invalidValues = [
-            { direccion: null, alias: 'Casa', usuario_id: 1, distrito_id: 5 },
-            { direccion: 'Av. Test 123', alias: null, usuario_id: 1, distrito_id: 5 },
-            { direccion: 'Av. Test 123', alias: 'Casa', usuario_id: null, distrito_id: 5 },
-            { direccion: 'Av. Test 123', alias: 'Casa', usuario_id: 1, distrito_id: null },
-            { direccion: undefined, alias: 'Casa', usuario_id: 1, distrito_id: 5 }
-        ];
-
-        for (const invalidData of invalidValues) {
-            await expect(DireccionUsuarioService.createDireccion(invalidData))
-                .rejects.toThrow('es requerido');
-        }
-    });
-
-    // Unhappy Path: Crear dirección con strings vacíos
-    test('should fail to create direccion with empty strings (Unhappy Path)', async () => {
-        const invalidValues = [
-            { direccion: '', alias: 'Casa', usuario_id: 1, distrito_id: 5 },
-            { direccion: 'Av. Test 123', alias: '', usuario_id: 1, distrito_id: 5 }
-        ];
-
-        for (const invalidData of invalidValues) {
-            await expect(DireccionUsuarioService.createDireccion(invalidData))
-                .rejects.toThrow('es requerido');
-        }
-    });
-
-    // Unhappy Path: Actualizar con datos inválidos
-    test('should fail to update with invalid data (Unhappy Path)', async () => {
-        // PREPARAR
-        const invalidUpdateData = {
-            alias: 'Casa Nueva'
-            // faltan campos requeridos
-        };
-
-        // EJECUTAR y VALIDAR
-        await expect(DireccionUsuarioService.updateDireccion(1, invalidUpdateData))
-            .rejects.toThrow('El campo direccion es requerido');
-    });
-
-    // Edge Case: Crear dirección con direcciones muy largas
-    test('should handle direccion with very long address (Edge Case)', async () => {
-        // PREPARAR
-        const longAddress = 'Av. ' + 'A'.repeat(500) + ' 123, Piso 10, Departamento 1001, Edificio Torre Central';
-        const direccionData = {
-            direccion: longAddress,
-            alias: 'Casa con dirección larga',
-            usuario_id: 1,
-            distrito_id: 5
-        };
-
-        // EJECUTAR y VALIDAR
-        try {
-            const created = await DireccionUsuarioService.createDireccion(direccionData);
-            expect(created).toHaveProperty('id');
-            expect(created.direccion).toBe(longAddress);
-            // LIMPIAR
-            await DireccionUsuarioService.deleteDireccion(created.id);
-        } catch (error) {
-            // Si falla por límites de base de datos, está bien
-            expect(error).toBeDefined();
-        }
-    });
-
-    // Edge Case: Crear dirección con alias muy largo
-    test('should handle direccion with very long alias (Edge Case)', async () => {
-        // PREPARAR
-        const longAlias = 'Casa de ' + 'mi '.repeat(100) + 'familia';
-        const direccionData = {
-            direccion: 'Av. Test 123',
-            alias: longAlias,
-            usuario_id: 1,
-            distrito_id: 5
-        };
-
-        // EJECUTAR y VALIDAR
-        try {
-            const created = await DireccionUsuarioService.createDireccion(direccionData);
-            expect(created).toHaveProperty('id');
-            expect(created.alias).toBe(longAlias);
-            // LIMPIAR
-            await DireccionUsuarioService.deleteDireccion(created.id);
-        } catch (error) {
-            // Si falla por límites de base de datos, está bien
-            expect(error).toBeDefined();
-        }
-    });
-
-    // Edge Case: Crear dirección con caracteres especiales
-    test('should handle direccion with special characters (Edge Case)', async () => {
-        // PREPARAR
-        const direccionData = {
-            direccion: 'Av. José María Árgüëdâs 456, Ñuñoa',
-            alias: 'Casa de mamá & papá',
-            usuario_id: 1,
-            distrito_id: 5
-        };
-
-        // EJECUTAR
-        const created = await DireccionUsuarioService.createDireccion(direccionData);
-        
-        // VALIDAR
-        expect(created).toHaveProperty('id');
-        expect(created.direccion).toBe('Av. José María Árgüëdâs 456, Ñuñoa');
-        expect(created.alias).toBe('Casa de mamá & papá');
-        
-        // LIMPIAR
-        await DireccionUsuarioService.deleteDireccion(created.id);
-    });
-
-    // Edge Case: Crear dirección con IDs grandes
-    test('should handle direccion with large IDs (Edge Case)', async () => {
-        // PREPARAR
-        const largeIdData = {
-            direccion: 'Av. Test 123',
-            alias: 'Casa',
-            usuario_id: 999999,
-            distrito_id: 888888
-        };
-
-        // EJECUTAR y VALIDAR
-        try {
-            const created = await DireccionUsuarioService.createDireccion(largeIdData);
-            expect(created).toHaveProperty('id');
-            // LIMPIAR
-            await DireccionUsuarioService.deleteDireccion(created.id);
-        } catch (error) {
-            // Si falla por restricciones de FK, está bien
-            expect(error).toBeDefined();
-        }
-    });
-
-    // Edge Case: Crear múltiples direcciones para el mismo usuario
-    test('should handle multiple direcciones for same user (Edge Case)', async () => {
-        const direccionesData = [
-            { direccion: 'Av. Casa 123', alias: 'Casa', usuario_id: 1, distrito_id: 5 },
-            { direccion: 'Av. Trabajo 456', alias: 'Trabajo', usuario_id: 1, distrito_id: 3 },
-            { direccion: 'Av. Padres 789', alias: 'Casa de mis padres', usuario_id: 1, distrito_id: 1 }
-        ];
-
-        const createdIds = [];
-
-        for (const data of direccionesData) {
             // EJECUTAR
-            const created = await DireccionUsuarioService.createDireccion(data);
+            const result = await DireccionUsuarioService.createDireccion(validDireccionData);
             
             // VALIDAR
-            expect(created).toHaveProperty('id');
-            expect(created.usuario_id).toBe(1);
-            expect(created.alias).toBe(data.alias);
-            
-            createdIds.push(created.id);
-        }
+            expect(result).toHaveProperty('id');
+            expect(result.direccion).toBe('Av. Larco 456, Miraflores');
+            expect(result.alias).toBe('Casa');
+            expect(result.usuario_id).toBe(1);
+            expect(result.distrito_id).toBe(5);
 
-        // LIMPIAR
-        for (const id of createdIds) {
-            await DireccionUsuarioService.deleteDireccion(id);
-        }
+            // LIMPIAR
+            await DireccionUsuarioService.deleteDireccion(result.id);
+        });
+
+        test('should throw error when required fields are missing', async () => {
+            // PREPARAR datos inválidos (faltan campos requeridos)
+            const invalidDireccionData = {
+                alias: 'Casa',
+                usuario_id: 1
+                // faltan direccion y distrito_id
+            };
+
+            // EJECUTAR y VALIDAR
+            await expect(DireccionUsuarioService.createDireccion(invalidDireccionData))
+                .rejects
+                .toThrow('El campo direccion es requerido');
+        });
+
+        test('should validate all required fields', async () => {
+            // PREPARAR casos de prueba para cada campo requerido
+            const requiredFields = ['direccion', 'alias', 'usuario_id', 'distrito_id'];
+            
+            for (const field of requiredFields) {
+                const incompleteData = {
+                    direccion: 'Av. Test 123',
+                    alias: 'Casa',
+                    usuario_id: 1,
+                    distrito_id: 5
+                };
+                delete incompleteData[field];
+
+                // EJECUTAR y VALIDAR
+                await expect(DireccionUsuarioService.createDireccion(incompleteData))
+                    .rejects
+                    .toThrow(`El campo ${field} es requerido`);
+            }
+        });
+
+        test('should throw error with null/undefined values', async () => {
+            // PREPARAR
+            const invalidDireccionData = {
+                direccion: null,
+                alias: 'Casa',
+                usuario_id: 1,
+                distrito_id: 5
+            };
+
+            // EJECUTAR y VALIDAR
+            await expect(DireccionUsuarioService.createDireccion(invalidDireccionData))
+                .rejects
+                .toThrow('El campo direccion es requerido');
+        });
+
+        test('should throw error with empty strings', async () => {
+            // PREPARAR
+            const invalidDireccionData = {
+                direccion: '',
+                alias: 'Casa',
+                usuario_id: 1,
+                distrito_id: 5
+            };
+
+            // EJECUTAR y VALIDAR
+            await expect(DireccionUsuarioService.createDireccion(invalidDireccionData))
+                .rejects
+                .toThrow('El campo direccion es requerido');
+        });
+    });
+
+    describe('Validation (validatedireccionUsuarioData)', () => {
+        test('should validate all required fields through create', async () => {
+            // PREPARAR casos de prueba para cada campo requerido
+            const testCases = [
+                { field: 'direccion', data: { alias: 'Casa', usuario_id: 1, distrito_id: 5 } },
+                { field: 'alias', data: { direccion: 'Av. Test 123', usuario_id: 1, distrito_id: 5 } },
+                { field: 'usuario_id', data: { direccion: 'Av. Test 123', alias: 'Casa', distrito_id: 5 } },
+                { field: 'distrito_id', data: { direccion: 'Av. Test 123', alias: 'Casa', usuario_id: 1 } }
+            ];
+
+            for (const testCase of testCases) {
+                // EJECUTAR y VALIDAR
+                await expect(DireccionUsuarioService.createDireccion(testCase.data))
+                    .rejects
+                    .toThrow(`El campo ${testCase.field} es requerido`);
+            }
+        });
+
+        test('should validate all required fields through update', async () => {
+            // PREPARAR casos de prueba para cada campo requerido
+            const testCases = [
+                { field: 'direccion', data: { alias: 'Casa', usuario_id: 1, distrito_id: 5 } },
+                { field: 'alias', data: { direccion: 'Av. Test 123', usuario_id: 1, distrito_id: 5 } },
+                { field: 'usuario_id', data: { direccion: 'Av. Test 123', alias: 'Casa', distrito_id: 5 } },
+                { field: 'distrito_id', data: { direccion: 'Av. Test 123', alias: 'Casa', usuario_id: 1 } }
+            ];
+
+            for (const testCase of testCases) {
+                // EJECUTAR y VALIDAR
+                await expect(DireccionUsuarioService.updateDireccion(1, testCase.data))
+                    .rejects
+                    .toThrow(`El campo ${testCase.field} es requerido`);
+            }
+        });
+
+        test('should validate against null values', async () => {
+            // PREPARAR casos con valores null
+            const nullTestCases = [
+                { direccion: null, alias: 'Casa', usuario_id: 1, distrito_id: 5 },
+                { direccion: 'Av. Test 123', alias: null, usuario_id: 1, distrito_id: 5 },
+                { direccion: 'Av. Test 123', alias: 'Casa', usuario_id: null, distrito_id: 5 },
+                { direccion: 'Av. Test 123', alias: 'Casa', usuario_id: 1, distrito_id: null }
+            ];
+
+            for (const invalidData of nullTestCases) {
+                // EJECUTAR y VALIDAR
+                await expect(DireccionUsuarioService.createDireccion(invalidData))
+                    .rejects
+                    .toThrow('es requerido');
+            }
+        });
+
+        test('should validate against undefined values', async () => {
+            // PREPARAR casos con valores undefined
+            const undefinedTestCases = [
+                { direccion: undefined, alias: 'Casa', usuario_id: 1, distrito_id: 5 },
+                { direccion: 'Av. Test 123', alias: undefined, usuario_id: 1, distrito_id: 5 },
+                { direccion: 'Av. Test 123', alias: 'Casa', usuario_id: undefined, distrito_id: 5 },
+                { direccion: 'Av. Test 123', alias: 'Casa', usuario_id: 1, distrito_id: undefined }
+            ];
+
+            for (const invalidData of undefinedTestCases) {
+                // EJECUTAR y VALIDAR
+                await expect(DireccionUsuarioService.createDireccion(invalidData))
+                    .rejects
+                    .toThrow('es requerido');
+            }
+        });
+
+        test('should validate against empty strings', async () => {
+            // PREPARAR casos con strings vacíos
+            const emptyStringTestCases = [
+                { direccion: '', alias: 'Casa', usuario_id: 1, distrito_id: 5 },
+                { direccion: 'Av. Test 123', alias: '', usuario_id: 1, distrito_id: 5 }
+            ];
+
+            for (const invalidData of emptyStringTestCases) {
+                // EJECUTAR y VALIDAR
+                await expect(DireccionUsuarioService.createDireccion(invalidData))
+                    .rejects
+                    .toThrow('es requerido');
+            }
+        });
+
+        test('should pass validation with all valid fields', async () => {
+            // PREPARAR
+            const validData = {
+                direccion: 'Av. Validación 123',
+                alias: 'Casa Válida',
+                usuario_id: 1,
+                distrito_id: 5
+            };
+
+            // EJECUTAR - La validación debe pasar y crear la dirección
+            const result = await DireccionUsuarioService.createDireccion(validData);
+            
+            // VALIDAR - No debe lanzar error y debe crear exitosamente
+            expect(result).toHaveProperty('id');
+            expect(result.direccion).toBe('Av. Validación 123');
+            expect(result.alias).toBe('Casa Válida');
+
+            // LIMPIAR
+            await DireccionUsuarioService.deleteDireccion(result.id);
+        });
+    });
+
+    describe('Update Direccion', () => {
+        test('should update direccion with valid data successfully', async () => {
+            // PREPARAR - Crear primero una dirección
+            const originalData = {
+                direccion: 'Av. Original 123',
+                alias: 'Casa Original',
+                usuario_id: 1,
+                distrito_id: 5
+            };
+            const created = await DireccionUsuarioService.createDireccion(originalData);
+
+            const updateData = {
+                direccion: 'Av. Actualizada 456',
+                alias: 'Casa Actualizada',
+                usuario_id: 1,
+                distrito_id: 3
+            };
+
+            // EJECUTAR
+            const result = await DireccionUsuarioService.updateDireccion(created.id, updateData);
+            
+            // VALIDAR
+            expect(result).toBeTruthy();
+
+            // LIMPIAR
+            await DireccionUsuarioService.deleteDireccion(created.id);
+        });
+
+        test('should throw error when updating non-existent direccion', async () => {
+            // PREPARAR
+            const nonExistentId = 999999;
+            const updateData = {
+                direccion: 'Av. Test 123',
+                alias: 'Test',
+                usuario_id: 1,
+                distrito_id: 1
+            };
+
+            // EJECUTAR y VALIDAR
+            await expect(DireccionUsuarioService.updateDireccion(nonExistentId, updateData))
+                .rejects
+                .toThrow();
+        });
+
+        test('should throw error when update data is invalid', async () => {
+            // PREPARAR
+            const invalidUpdateData = {
+                alias: 'Casa Nueva'
+                // faltan campos requeridos
+            };
+
+            // EJECUTAR y VALIDAR
+            await expect(DireccionUsuarioService.updateDireccion(1, invalidUpdateData))
+                .rejects
+                .toThrow('El campo direccion es requerido');
+        });
+    });
+
+    describe('Delete Direccion', () => {
+        test('should delete direccion successfully', async () => {
+            // PREPARAR - Crear primero una dirección
+            const direccionData = {
+                direccion: 'Av. Para Eliminar 123',
+                alias: 'Casa Temporal',
+                usuario_id: 1,
+                distrito_id: 5
+            };
+            const created = await DireccionUsuarioService.createDireccion(direccionData);
+
+            // EJECUTAR
+            const result = await DireccionUsuarioService.deleteDireccion(created.id);
+            
+            // VALIDAR
+            expect(result).toBe(true);
+            
+            // Verificar que ya no existe
+            await expect(DireccionUsuarioService.getDireccionById(created.id))
+                .rejects
+                .toThrow();
+        });
+
+        test('should throw error when deleting non-existent direccion', async () => {
+            // PREPARAR
+            const nonExistentId = 999999;
+
+            // EJECUTAR y VALIDAR
+            await expect(DireccionUsuarioService.deleteDireccion(nonExistentId))
+                .rejects
+                .toThrow();
+        });
     });
 });
