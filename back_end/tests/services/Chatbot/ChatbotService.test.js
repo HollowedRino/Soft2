@@ -1,106 +1,164 @@
-import ChatbotService from "../../../services/Chatbot/ChatbotService.js";
-import * as obtenerIntencionModule from "../../../utils/obtenerIntencion.js";
-import * as MedicamentoService from "../../../services/MedicamentoService.js";
-import * as BoticaService from "../../../services/BoticaService.js";
-import * as formatResults from "../../../utils/formatResults.js";
-import * as generarPromptRespuestaModule from "../../../prompts/generarPromptRespuesta.js";
-import * as obtenerRespuestaRedactadaModule from "../../../utils/obtenerRespuestaRedactada.js";
+import chatbotService from "../../../services/Chatbot/ChatbotService";
+import { obtenerIntencion } from "../../../utils/obtenerIntencion";
+import { obtenerRespuestaRedactada } from "../../../utils/obtenerRespuestaRedactada";
+import BoticaService from "../../../services/BoticaService";
+import MedicamentoService from "../../../services/MedicamentoService";
+import { intencionFuncionalidades, intencionBuscarMed, intencionBuscarBotiPorDistrito, intencionBuscarBotiPorNombre, intencionDesconocida } from "../../fixtures/ChatbotIntents";
+import { generarPromptRespuesta } from "../../../prompts/generarPromptRespuesta";
 
-jest.mock("../../../services/MedicamentoService.js", () => ({
-  __esModule: true,
-  default: {
-    findByNombre: jest.fn(),
-  },
+jest.mock('../../../utils/obtenerIntencion', () => ({
+    obtenerIntencion: jest.fn(),
 }));
-jest.mock("../../../services/BoticaService.js", () => ({
-  __esModule: true,
-  default: {
+jest.mock('../../../utils/obtenerRespuestaRedactada', () => ({
+    obtenerRespuestaRedactada: jest.fn(),
+}));
+jest.mock('../../../services/BoticaService', () => ({
     getBoticaByDistrito: jest.fn(),
     getBoticaByNombre: jest.fn(),
-  },
+}));
+jest.mock('../../../services/MedicamentoService', () => ({
+    findByNombre: jest.fn(),
+}));
+jest.mock('../../../prompts/generarPromptRespuesta', () => ({
+    generarPromptRespuesta: jest.fn(),
 }));
 
-describe("ChatbotService", () => {
-    beforeEach(() => { 
-        jest.clearAllMocks();
-        MedicamentoService.default.findByNombre = jest.fn();
-        BoticaService.default.getBoticaByDistrito = jest.fn();
-        BoticaService.default.getBoticaByNombre = jest.fn();
+beforeEach(() => {
+    jest.clearAllMocks();
+});
+
+describe('Pruebas en ChatbotService', () => {
+
+    test('procesarMensaje debe de usar consultar_funcionalidades', async () => {
+        // mensaje de usuario que solicita funcionalidades
+        const mensajeUsuario = "¿Qué opciones puedes realizar?";
+        // Mock de la intención de consultar funcionalidades
+        obtenerIntencion.mockResolvedValue(intencionFuncionalidades);
+        // respuesta final que se devolvera al usuario q llama a la api de gemini
+        obtenerRespuestaRedactada.mockResolvedValue("Puedo ayudarte a consultar productos disponibles.");
+        // se llama a la api de gemini para generar la respuesta final q llegara al usuario
+        generarPromptRespuesta.mockReturnValue("Mocked prompt");
+
+        // se llama al metodo procesarMensaje del servicio chatbotService
+        const respuesta = await chatbotService.procesarMensaje(mensajeUsuario);
+
+        // se verifica que se llame con la intencion correcta
+        expect(generarPromptRespuesta).toHaveBeenCalledWith(
+            "consultar_funcionalidades",
+            "-",
+            expect.stringContaining("Por ahora solo puedo ayudarte"),
+            mensajeUsuario
+        );
+        expect(respuesta.mensaje).toContain("Puedo ayudarte a consultar productos");
     });
 
-    it("should return funcionalidades message for consultar_funcionalidades", async () => {
-        jest.spyOn(obtenerIntencionModule, "obtenerIntencion").mockResolvedValue({
-            INTENCION: "consultar_funcionalidades"
-        });
-        jest.spyOn(formatResults, "formatearResultados").mockReturnValue("Funcionalidades disponibles.");
-        jest.spyOn(generarPromptRespuestaModule, "generarPromptRespuesta").mockReturnValue("prompt");
-        jest.spyOn(obtenerRespuestaRedactadaModule, "obtenerRespuestaRedactada").mockResolvedValue("Respuesta redactada");
+    test('procesarMensaje debe de buscar medicamento', async () => {
+        // mensaje de usuario que solicita buscar un medicamento
+        const mensajeUsuario = "Estoy buscando paracetamol";
+        // Mock de la intención de buscar medicamento
+        obtenerIntencion.mockResolvedValue(intencionBuscarMed);
+        // respuesta final que se devolvera al usuario q llama a la api de gemini
+        MedicamentoService.findByNombre.mockResolvedValue([{ nombre: "Paracetamol", descripcion: "Analgésico" }]);
+        // se llama a la api de gemini para generar la respuesta final q llegara al usuario
+        obtenerRespuestaRedactada.mockResolvedValue("Aquí tienes los medicamentos encontrados.");
+        // se genera el prompt que se enviara a la api de gemini
+        generarPromptRespuesta.mockReturnValue("Mocked prompt");
 
-        const result = await ChatbotService.procesarMensaje("¿Qué puedes hacer?");
-        console.log(result);
-        expect(result).toEqual({ mensaje: "Respuesta redactada" });
+        // se llama al metodo procesarMensaje del servicio chatbotService
+        const respuesta = await chatbotService.procesarMensaje(mensajeUsuario);
+
+        // se verifica que se llame al servicio de MedicamentoService con el nombre correcto
+        expect(MedicamentoService.findByNombre).toHaveBeenCalledWith("paracetamol");
+
+        // se verifica que se llame a generarPromptRespuesta con los parametros correctos
+        expect(generarPromptRespuesta).toHaveBeenCalledWith(
+            "buscar_medicamento",
+            "paracetamol",
+            expect.any(String),
+            mensajeUsuario
+        );
+        // se verifica que la respuesta contenga la información esperada
+        expect(respuesta.mensaje).toContain("Aquí tienes los medicamentos encontrados");
     });
 
-    it("should search medicamento for buscar_medicamento", async () => {
-        jest.spyOn(obtenerIntencionModule, "obtenerIntencion").mockResolvedValue({
-            INTENCION: "buscar_medicamento",
-            VALOR: "paracetamol"
-        });
-        MedicamentoService.default.findByNombre.mockResolvedValue([{ nombre: "Paracetamol" }]);
-        jest.spyOn(formatResults, "formatearResultados").mockReturnValue("Paracetamol encontrado.");
-        jest.spyOn(generarPromptRespuestaModule, "generarPromptRespuesta").mockReturnValue("prompt");
-        jest.spyOn(obtenerRespuestaRedactadaModule, "obtenerRespuestaRedactada").mockResolvedValue("Medicamento encontrado");
+    test('procesarMensaje debe de buscar botica por distrito', async () => {
+        // mensaje de usuario que solicita buscar boticas en un distrito específico
+        const mensajeUsuario = "Quiero buscar boticas en Jesús María";
+        // Mock de la intención de buscar botica por distrito
+        obtenerIntencion.mockResolvedValue(intencionBuscarBotiPorDistrito);
+        // respuesta final que se devolvera al usuario q llama a la api de gemini
+        BoticaService.getBoticaByDistrito.mockResolvedValue([{ nombre: "Botica Salud", distrito: "Jesús María" }]);
+        // se llama a la api de gemini para generar la respuesta final q llegara al usuario
+        obtenerRespuestaRedactada.mockResolvedValue("Estas son las boticas en el distrito.");
+        // se genera el prompt que se enviara a la api de gemini
+        generarPromptRespuesta.mockReturnValue("Mocked prompt");
 
-        const result = await ChatbotService.procesarMensaje("Busco paracetamol");
-        expect(MedicamentoService.default.findByNombre).toHaveBeenCalledWith("paracetamol");
-        expect(result).toEqual({ mensaje: "Medicamento encontrado" });
+        // se llama al metodo procesarMensaje del servicio chatbotService
+        const respuesta = await chatbotService.procesarMensaje(mensajeUsuario);
+
+        // se verifica que se llame al servicio de BoticaService con el distrito correcto
+        expect(BoticaService.getBoticaByDistrito).toHaveBeenCalledWith("Jesús María");
+        // se verifica que se llame a generarPromptRespuesta con los parametros correctos
+        expect(generarPromptRespuesta).toHaveBeenCalledWith(
+            "buscar_botica_distrito",
+            "Jesús María",
+            expect.any(String),
+            mensajeUsuario
+        );
+        // se verifica que la respuesta contenga la información esperada
+        expect(respuesta.mensaje).toContain("Estas son las boticas en el distrito");
     });
 
-    it("should search botica by distrito for buscar_botica_distrito", async () => {
-        jest.spyOn(obtenerIntencionModule, "obtenerIntencion").mockResolvedValue({
-            INTENCION: "buscar_botica_distrito",
-            VALOR: "Miraflores"
-        });
-        BoticaService.default.getBoticaByDistrito.mockResolvedValue([{ nombre: "Botica Miraflores" }]);
-        jest.spyOn(formatResults, "formatearResultados").mockReturnValue("Boticas en Miraflores.");
-        jest.spyOn(generarPromptRespuestaModule, "generarPromptRespuesta").mockReturnValue("prompt");
-        jest.spyOn(obtenerRespuestaRedactadaModule, "obtenerRespuestaRedactada").mockResolvedValue("Boticas encontradas");
+    test('procesarMensaje debe de buscar botica por nombre', async () => {
+        // mensaje de usuario que solicita buscar una botica por nombre
+        const mensajeUsuario = "Quiero buscar la botica BTL";
+        // Mock de la intención de buscar botica por nombre
+        obtenerIntencion.mockResolvedValue(intencionBuscarBotiPorNombre);
+        // respuesta final que se devolvera al usuario q llama a la api de gemini
+        BoticaService.getBoticaByNombre.mockResolvedValue([{ nombre: "BTL", direccion: "Av. Principal 123" }]);
+        // se llama a la api de gemini para generar la respuesta final q llegara al usuario
+        obtenerRespuestaRedactada.mockResolvedValue("Aquí tienes la información de la botica.");
+        // se genera el prompt que se enviara a la api de gemini
+        generarPromptRespuesta.mockReturnValue("Mocked prompt");
 
-        const result = await ChatbotService.procesarMensaje("Boticas en Miraflores");
-        expect(BoticaService.default.getBoticaByDistrito).toHaveBeenCalledWith("Miraflores");
-        expect(result).toEqual({ mensaje: "Boticas encontradas" });
+        // se llama al metodo procesarMensaje del servicio chatbotService
+        const respuesta = await chatbotService.procesarMensaje(mensajeUsuario);
+
+        // se verifica que se llame al servicio de BoticaService con el nombre correcto
+        expect(BoticaService.getBoticaByNombre).toHaveBeenCalledWith("BTL");
+        // se verifica que se llame a generarPromptRespuesta con los parametros correctos
+        expect(generarPromptRespuesta).toHaveBeenCalledWith(
+            "buscar_botica_nombre",
+            "BTL",
+            expect.any(String),
+            mensajeUsuario
+        ); 
+        // se verifica que la respuesta contenga la información esperada
+        expect(respuesta.mensaje).toContain("Aquí tienes la información de la botica");
     });
 
-    it("should search botica by nombre for buscar_botica_nombre", async () => {
-        jest.spyOn(obtenerIntencionModule, "obtenerIntencion").mockResolvedValue({
-            INTENCION: "buscar_botica_nombre",
-            VALOR: "Inkafarma"
-        });
-        BoticaService.default.getBoticaByNombre.mockResolvedValue([{ nombre: "Inkafarma" }]);
-        jest.spyOn(formatResults, "formatearResultados").mockReturnValue("Inkafarma encontrada.");
-        jest.spyOn(generarPromptRespuestaModule, "generarPromptRespuesta").mockReturnValue("prompt");
-        jest.spyOn(obtenerRespuestaRedactadaModule, "obtenerRespuestaRedactada").mockResolvedValue("Botica encontrada");
+    // UNHAPPY PATH
+    test('procesarMensaje debe de manejar intención desconocida', async () => {
+        // mensaje de usuario que no se entiende
+        const mensajeUsuario = "asdfgh";
+        // Mock de la intención desconocida
+        obtenerIntencion.mockResolvedValue(intencionDesconocida);
+        // respuesta final que se devolvera al usuario q llama a la api de gemini
+        obtenerRespuestaRedactada.mockResolvedValue("No entendí tu solicitud.");
+        // se llama a la api de gemini para generar la respuesta final q llegara al usuario
+        generarPromptRespuesta.mockReturnValue("Mocked prompt");
 
-        const result = await ChatbotService.procesarMensaje("¿Dónde está Inkafarma?");
-        expect(BoticaService.default.getBoticaByNombre).toHaveBeenCalledWith("Inkafarma");
-        expect(result).toEqual({ mensaje: "Botica encontrada" });
-    });
+        // se llama al metodo procesarMensaje del servicio chatbotService
+        const respuesta = await chatbotService.procesarMensaje(mensajeUsuario);
 
-    it("should return default message for desconocido", async () => {
-        jest.spyOn(obtenerIntencionModule, "obtenerIntencion").mockResolvedValue({
-            INTENCION: "desconocido"
-        });
-        jest.spyOn(formatResults, "formatearResultados").mockReturnValue("No entendí tu solicitud.");
-        jest.spyOn(generarPromptRespuestaModule, "generarPromptRespuesta").mockReturnValue("prompt");
-        jest.spyOn(obtenerRespuestaRedactadaModule, "obtenerRespuestaRedactada").mockResolvedValue("No entendí tu solicitud");
-
-        const result = await ChatbotService.procesarMensaje("Mensaje irreconocible");
-        expect(result).toEqual({ mensaje: "No entendí tu solicitud" });
-    });
-
-    it("should throw error if obtenerIntencion returns invalid data", async () => {
-        jest.spyOn(obtenerIntencionModule, "obtenerIntencion").mockResolvedValue(null);
-
-        await expect(ChatbotService.procesarMensaje("Hola")).rejects.toThrow("Respuesta inválida del modelo");
+        // se verifica que se llame a generarPromptRespuesta con los parametros correctos
+        expect(generarPromptRespuesta).toHaveBeenCalledWith(
+            "desconocido",
+            "-",
+            expect.stringContaining("No entendí tu solicitud"),
+            mensajeUsuario
+        );
+        // se verifica que la respuesta contenga el mensaje de error esperado
+        expect(respuesta.mensaje).toContain("No entendí tu solicitud");
     });
 });
