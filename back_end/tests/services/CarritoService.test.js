@@ -3,7 +3,7 @@ import CarritoService from '../../services/CarritoService.js';
 describe('CarritoService', () => {
     
     // Happy Path: Obtener todos los carritos
-    it('should get all carritos successfully (Happy Path)', async () => {
+    test('should get all carritos successfully (Happy Path)', async () => {
         // EJECUTAR
         const carritos = await CarritoService.findAll();
 
@@ -12,7 +12,7 @@ describe('CarritoService', () => {
     });
 
     // Happy Path: Crear, buscar, actualizar y eliminar un carrito
-    it('should create, find, update and delete a carrito successfully (Happy Path)', async () => {
+    test('should create, find, update and delete a carrito successfully (Happy Path)', async () => {
         // PREPARAR
         const newCarrito = {
             usuario_id: 1,
