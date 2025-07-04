@@ -52,7 +52,7 @@ export const addMedicamentoToBotica = async (boticaId, medicamentoData) => {
   const now = new Date();
   const fecha_actualizacion = `${String(now.getDate()).padStart(2, "0")}-${String(now.getMonth() + 1).padStart(2, "0")}-${now.getFullYear()}`;
 
-  const res = await fetch(`${API_URL}/inventariobotica`, {
+  const res = await fetch(`${API_URL}/inventarioBotica`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -62,5 +62,20 @@ export const addMedicamentoToBotica = async (boticaId, medicamentoData) => {
     }),
   });
   if (!res.ok) throw new Error("Error al agregar medicamento al inventario");
+  return res.json();
+};
+
+export const updateInventarioBotica = async (inventarioId, data) => {
+  const now = new Date();
+  const fecha_actualizacion = `${String(now.getDate()).padStart(2, "0")}-${String(now.getMonth() + 1).padStart(2, "0")}-${now.getFullYear()}`;
+  const res = await fetch(`${API_URL}/inventarioBotica/${inventarioId}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      ...data,
+      fecha_actualizacion,
+    }),
+  });
+  if (!res.ok) throw new Error("Error al actualizar inventario de botica");
   return res.json();
 };

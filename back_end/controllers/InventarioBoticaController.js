@@ -27,6 +27,7 @@ class InventarioBoticaController {
 
     async create(req, res) {
     try {
+
         let medicamentoId = req.body.medicamento_id;
 
         if (!medicamentoId && req.body.nombre) {
@@ -45,11 +46,17 @@ class InventarioBoticaController {
             }
             medicamentoId = medicamento.id; 
         }
+        const now = new Date();
+        const fecha_actualizacion = req.body.fecha_actualizacion || `${String(now.getDate()).padStart(2, "0")}-${String(now.getMonth() + 1).padStart(2, "0")}-${now.getFullYear()}`;
+
+        const [day, month, year] = fecha_actualizacion.split('-');
+        const fechaDate = new Date(year, month - 1, day);
 
         const inventarioBotica = await InventarioBoticaService.create({
             botica_id: req.body.botica_id,
             medicamento_id: medicamentoId,
             cantidad_disponible: req.body.cantidad_disponible,
+            fecha_actualizacion: fechaDate,
         });
 
         res.status(201).json(inventarioBotica);

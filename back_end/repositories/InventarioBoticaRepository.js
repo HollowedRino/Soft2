@@ -33,10 +33,10 @@ class InventarioBoticaRepository {
         }
     }
 
-    async update(id, inventarioBotica) {
+    async update(id, inventarioBoticaData) {
         try {
             const inventarioBotica = await this.findById(id);
-            return await inventarioBotica.update(inventarioBotica);
+            return await inventarioBotica.update(inventarioBoticaData);
         } catch (error) {
             throw new Error(`Error al actualizar el inventario de la botica: ${error.message}`);
         }

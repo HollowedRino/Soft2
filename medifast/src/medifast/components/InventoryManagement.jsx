@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { addMedicamentoToBotica, getAllMedicamentos } from "../services/boticaService";
+import { addMedicamentoToBotica, getAllMedicamentos, getInventarioByBoticaId, updateInventarioBotica } from "../services/boticaService";
 
 export const InventoryManagement = ({
   pharmacy,
@@ -38,15 +38,33 @@ export const InventoryManagement = ({
       return;
     }
     try {
-      await addMedicamentoToBotica(pharmacyId, {
-        medicamento_id: selectedMedId,
-        cantidad_disponible: Number(medStock),
-      });
+     
+      const inventario = await getInventarioByBoticaId(pharmacyId);
+      const existente = inventario.find(item => Number(item.medicamento_id) === Number(selectedMedId));
+      if (existente) {
+        // Si ya existe, actualizar el stock sumando la cantidad nueva
+        await updateInventarioBotica(existente.id, {
+          botica_id: pharmacyId,
+          medicamento_id: Number(selectedMedId),
+          cantidad_disponible: Number(existente.cantidad_disponible) + Number(medStock),
+        });
+        alert('Stock actualizado');
+      } else {
+        // Si no existe, agregar normalmente
+        await addMedicamentoToBotica(pharmacyId, {
+          medicamento_id: Number(selectedMedId),
+          cantidad_disponible: Number(medStock),
+        });
+      }
       setSelectedMedId("");
       setMedStock("");
       if (typeof reloadInventory === "function") reloadInventory();
     } catch (error) {
-      alert(error.message || "Error al agregar medicamento");
+      if (error && error.message) {
+        alert(error.message);
+      } else {
+        alert("Error al agregar medicamento al inventario");
+      }
     }
   };
 
@@ -71,6 +89,20 @@ export const InventoryManagement = ({
       return;
     }
     try {
+      // Consultar inventario actual de la botica
+      const inventario = await getInventarioByBoticaId(pharmacyId);
+      const existeNombre = inventario.find(item =>
+        (item.name && item.name.trim().toLowerCase() === medName.trim().toLowerCase()) ||
+        (item.nombre && item.nombre.trim().toLowerCase() === medName.trim().toLowerCase()) ||
+        (item.Medicamento && item.Medicamento.nombre && item.Medicamento.nombre.trim().toLowerCase() === medName.trim().toLowerCase()) ||
+        (item.medicamento && item.medicamento.nombre && item.medicamento.nombre.trim().toLowerCase() === medName.trim().toLowerCase())
+      );
+      if (existeNombre) {
+        alert('Medicamento ya existente');
+        return;
+      }
+      const now = new Date();
+      const fecha_actualizacion = `${String(now.getDate()).padStart(2, "0")}-${String(now.getMonth() + 1).padStart(2, "0")}-${now.getFullYear()}`;
       await addMedicamentoToBotica(pharmacyId, {
         nombre: medName,
         descripcion: medDescripcion,
@@ -81,6 +113,7 @@ export const InventoryManagement = ({
         requiere_receta: medReceta === "true",
         estado_medicamento: medEstado === "true",
         imagen_url: medImagen,
+        fecha_actualizacion,
       });
       setMedName("");
       setMedDescripcion("");

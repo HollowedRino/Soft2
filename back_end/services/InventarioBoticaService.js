@@ -55,10 +55,9 @@ class InventarioBoticaService {
             }
         }
 
-        // Validar formato de fecha (DD-MM-YYYY)
-        const dateRegex = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-\d{4}$/;
-        if (!dateRegex.test(inventarioBoticaData.fecha_actualizacion)) {
-            throw new Error('La fecha debe tener el formato DD-MM-YYYY');
+        // Validar que fecha_actualizacion sea una fecha válida
+        if (!(inventarioBoticaData.fecha_actualizacion instanceof Date) && isNaN(Date.parse(inventarioBoticaData.fecha_actualizacion))) {
+            throw new Error('La fecha de actualización debe ser una fecha válida');
         }
     }
 
