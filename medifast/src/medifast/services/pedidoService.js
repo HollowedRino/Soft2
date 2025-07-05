@@ -1,4 +1,4 @@
-import { post, getSimple } from "./api";
+import { post, getSimple, put } from "./api";
 
 const BASE_PATH = "/pedido";
 
@@ -35,6 +35,26 @@ export const getPedidosByUsuario = async (usuarioId) => {
     }
 };
 
+export const getPedidosByRepartidor = async (repartidorId) => {
+    try {
+        console.log('Calling getPedidosByRepartidor with ID:', repartidorId);
+        const url = `${BASE_PATH}/repartidor/${repartidorId}`;
+        console.log('URL:', url);
+        const resp = await getSimple(url);
+        console.log('Response:', resp);
+        return {
+            ok: true,
+            resp,
+        };
+    } catch (error) {
+        console.error('Error in getPedidosByRepartidor:', error);
+        return {
+            ok: false,
+            errorMessage: error.message || "Error al obtener los pedidos del repartidor",
+        };
+    }
+};
+
 export const getPedidoById = async (pedidoId) => {
     try {
         const resp = await getSimple(`${BASE_PATH}/${pedidoId}`);
@@ -46,6 +66,21 @@ export const getPedidoById = async (pedidoId) => {
         return {
             ok: false,
             errorMessage: error.message || "Error al obtener el pedido",
+        };
+    }
+};
+
+export const updatePedidoById = async (pedidoId, pedidoData) => {
+    try {
+        const resp = await put(`${BASE_PATH}/${pedidoId}`, pedidoData);
+        return {
+            ok: true,
+            resp,
+        };
+    } catch (error) {
+        return {
+            ok: false,
+            errorMessage: error.message || "Error al actualizar el pedido",
         };
     }
 };

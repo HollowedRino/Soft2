@@ -3,7 +3,6 @@ import Usuario from '../models/Usuario.js';
 import Botica from '../models/Botica.js';
 import MetodoPago from '../models/MetodoPago.js';
 import DireccionUsuario from '../models/DireccionUsuario.js';
-import Repartidor from '../models/Repartidor.js';
 import DetallePedido from '../models/DetallePedido.js';
 import Medicamento from '../models/Medicamento.js';
 
@@ -11,7 +10,31 @@ class PedidoRepository {
     async findAll() {
         try {
             return await Pedido.findAll({
-                include: ['Usuario','Botica','MetodoPago','DireccionUsuario','Repartidor']
+                include: [
+                    {
+                        model: Usuario,
+                        as: 'cliente'
+                    },
+                    {
+                        model: Botica
+                    },
+                    {
+                        model: MetodoPago
+                    },
+                    {
+                        model: DireccionUsuario
+                    },
+                    {
+                        model: Usuario,
+                        as: 'repartidor'
+                    },
+                    {
+                        model: DetallePedido,
+                        include: [{
+                            model: Medicamento
+                        }]
+                    }
+                ]
             });
         } catch (error) {
             throw new Error(`Error al obtener todas los pedidos: ${error.message}`);
@@ -21,7 +44,31 @@ class PedidoRepository {
     async findById(id) {
         try {
             const pedido = await Pedido.findByPk(id, {
-                include: ['Usuario','Botica','MetodoPago','DireccionUsuario','Repartidor']
+                include: [
+                    {
+                        model: Usuario,
+                        as: 'cliente'
+                    },
+                    {
+                        model: Botica
+                    },
+                    {
+                        model: MetodoPago
+                    },
+                    {
+                        model: DireccionUsuario
+                    },
+                    {
+                        model: Usuario,
+                        as: 'repartidor'
+                    },
+                    {
+                        model: DetallePedido,
+                        include: [{
+                            model: Medicamento
+                        }]
+                    }
+                ]
             });
             if (!pedido) {
                 throw new Error('Pedido no encontrada');
@@ -42,8 +89,14 @@ class PedidoRepository {
 
     async update(id, pedidoData) {
         try {
-            const pedido = await this.findById(id);
-            return await pedido.update(pedidoData);
+            const pedido = await Pedido.findByPk(id);
+            if (!pedido) {
+                throw new Error('Pedido no encontrado');
+            }
+            const updatedPedido = await pedido.update(pedidoData);
+            
+            // Return the updated pedido with all relationships
+            return await this.findById(id);
         } catch (error) {
             throw new Error(`Error al actualizar el pedido: ${error.message}`);
         }
@@ -93,6 +146,43 @@ class PedidoRepository {
         } catch (error) {
             console.error('Error en findByUsuarioId:', error);
             throw new Error(`Error al obtener los pedidos del usuario: ${error.message}`);
+        }
+    }
+
+    async findByRepartidorId(repartidorId) {
+        try {
+            return await Pedido.findAll({
+                where: { repartidor_id: repartidorId },
+                include: [
+                    {
+                        model: Usuario,
+                        as: 'cliente'
+                    },
+                    {
+                        model: Botica
+                    },
+                    {
+                        model: MetodoPago
+                    },
+                    {
+                        model: DireccionUsuario
+                    },
+                    {
+                        model: Usuario,
+                        as: 'repartidor'
+                    },
+                    {
+                        model: DetallePedido,
+                        include: [{
+                            model: Medicamento
+                        }]
+                    }
+                ],
+                order: [['fecha_pedido', 'DESC']]
+            });
+        } catch (error) {
+            console.error('Error en findByRepartidorId:', error);
+            throw new Error(`Error al obtener los pedidos del repartidor: ${error.message}`);
         }
     }
 }

@@ -25,11 +25,13 @@ Chat.init(
     sequelize: connection,
     modelName: "Chat",
     tableName: "chat",
-    timestamps: true
+    timestamps: false,
+    createdAt: false,
+    updatedAt: false
   }
 );
 
-Pedido.hasOne(Chat, { foreignKey: "pedido_id" });
 Chat.belongsTo(Pedido, { foreignKey: "pedido_id" });
+Pedido.hasOne(Chat, { foreignKey: "pedido_id" });
 
 export default Chat;

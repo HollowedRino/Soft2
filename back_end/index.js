@@ -89,7 +89,7 @@ io.on("connection", (socket) => {
 
   socket.on("join_room", (data) => {
     socket.join(data);
-    console.log(`Usuario ${socket.id} se unió a la sala ${roomId}`);
+    console.log(`Usuario ${socket.id} se unió a la sala ${data}`);
   })
 
   socket.on("leavechat", (roomId) => {
@@ -98,10 +98,15 @@ io.on("connection", (socket) => {
   });
 
   socket.on("send_message", (data) => {
-    const { roomId, message } = data;
-    console.log(`Mensaje recibido en sala ${roomId}:`, message);
-    socket.to(roomId).emit("receive_message", data);
-  })
+    console.log(`Mensaje recibido:`, data);
+    socket.to(data.chat_id).emit("receive_message", data);
+  });
+
+  socket.on("pedido_status_changed", (data) => {
+    console.log(`Pedido status changed:`, data);
+    // Broadcast to all users in the same chat room
+    socket.to(data.pedidoId).emit("pedido_updated", data.updatedPedido);
+  });
 
   socket.on("disconnect", () => {
     console.log(`Usuario desconectado: ${socket.id}`);

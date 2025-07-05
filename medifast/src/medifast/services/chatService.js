@@ -1,4 +1,4 @@
-import { getSimple, getWithPathParam } from "./api";
+import { getSimple, getWithPathParam, post } from "./api";
 
 const BASE_PATH = "/chat";
 
@@ -46,3 +46,21 @@ export const findByPedido = async (pedidoId) => {
         };
     }
 }
+
+export const createChat = async (pedidoId, estado = "activo") => {
+    try {
+        const res = await post(`${BASE_PATH}`, {
+            pedido_id: pedidoId,
+            estado
+        });
+        return {
+            ok: true,
+            res,
+        };
+    } catch (error) {
+        return {
+            ok: false,
+            errorMessage: error.message || "Error al crear el chat",
+        };
+    }
+};

@@ -38,7 +38,9 @@ class PedidoController {
         try {
             const { id } = req.params;
             const pedidoData = req.body;
+            
             const updatedPedido = await PedidoService.updatePedido(id, pedidoData);
+            
             res.json(updatedPedido);
         } catch (error) {
             if (error.message === 'Pedido no encontrado') {
@@ -71,6 +73,21 @@ class PedidoController {
             res.json(pedidos);
         } catch (error) {
             console.error('Error en getPedidosByUsuario:', error);
+            res.status(500).json({ error: error.message });
+        }
+    }
+
+    async getPedidosByRepartidor(req, res) {
+        try {
+            const { repartidorId } = req.params;
+            console.log('=== getPedidosByRepartidor called ===');
+            console.log('repartidorId from params:', repartidorId);
+            console.log('req.params:', req.params);
+            const pedidos = await PedidoService.getPedidosByRepartidor(repartidorId);
+            console.log('Pedidos found:', pedidos.length);
+            res.json(pedidos);
+        } catch (error) {
+            console.error('Error en getPedidosByRepartidor:', error);
             res.status(500).json({ error: error.message });
         }
     }

@@ -25,7 +25,7 @@ class MensajeController {
 
     async findByChat(req,res) {
         try {
-            const mensaje = await MensajeService.findByChat(req.params.chatId);
+            const mensaje = await MensajeService.findByChat(req.params.id);
             res.status(200).json(mensaje);
         } catch (error) {
             if (error.message === 'Mensajes por chat no encontrados') {

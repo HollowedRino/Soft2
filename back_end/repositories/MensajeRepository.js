@@ -19,10 +19,11 @@ class MensajeRepository {
 
     async findByChat(chatId) {
         try {
-            
             const mensajes = await Mensaje.findAll({
-                where: { chat_id: chatId }
+                where: { chat_id: chatId },
+                order: [['fecha_hora', 'ASC']] // Ordenar por fecha_hora (más antiguos primero)
             });
+            return mensajes;
         } catch (error) {
             throw new Error(`Error al obtener mensajes por chat: ${error.message}`);
         }

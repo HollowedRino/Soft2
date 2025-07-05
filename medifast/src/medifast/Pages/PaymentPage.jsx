@@ -72,7 +72,7 @@ export const PaymentPage = () => {
       botica_id: 2,
       metodo_pago_id: paymentMethod,
       direccion_usuario_id: null,
-      repartidor_id: 4
+      repartidor_id: 17
     });
 
     if (!ok) {

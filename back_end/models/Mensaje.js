@@ -16,27 +16,32 @@ Mensaje.init(
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    emisor_id: {
+    usuario_id: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
     texto: {
       type: DataTypes.TEXT,
       allowNull: false
+    },
+    fecha_hora: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW
     }
   },
   {
     sequelize: connection,
     modelName: "Mensaje",
-    tableName: "mensajes",
-    timestamps: true
+    tableName: "mensaje",
+    timestamps: false
   }
 );
 
 Chat.hasMany(Mensaje, { foreignKey: "chat_id" });
 Mensaje.belongsTo(Chat, { foreignKey: "chat_id" });
 
-Usuario.hasMany(Mensaje, { foreignKey: "emisor_id" });
-Mensaje.belongsTo(Usuario, { foreignKey: "emisor_id" });
+Usuario.hasMany(Mensaje, { foreignKey: "usuario_id" });
+Mensaje.belongsTo(Usuario, { foreignKey: "usuario_id" });
 
 export default Mensaje;

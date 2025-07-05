@@ -16,7 +16,6 @@ class ChatRepository {
             const chat = await Chat.findByPk(id, {
                 include: {
                     model: Pedido,
-                    as: "pedido",
                     include: [
                         {
                             model: Usuario,
@@ -42,11 +41,11 @@ class ChatRepository {
 
     async findByPedidoId(pedidoId) {
         try {
-            const chat = await chat.findAll({
+            console.log('ChatRepository.findByPedidoId - pedidoId:', pedidoId);
+            const chats = await Chat.findAll({
                 where: { pedido_id: pedidoId },
                 include: {
                     model: Pedido,
-                    as: "pedido",
                     include: [
                         {
                             model: Usuario,
@@ -61,19 +60,22 @@ class ChatRepository {
                     ]
                 }
             });
-            if (!chat) {
-                throw new Error('Chat asignado al pedido no encontrado');
-            }
-            return chat;
+            console.log('ChatRepository.findByPedidoId - result:', chats);
+            return chats;
         } catch (error) {
+            console.error('ChatRepository.findByPedidoId - error:', error);
             throw new Error(`Error al obtener los chats del pedido solicitado: ${error.message}`);
         }
     }
   
     async create(chatData) {
         try {
-            return await Chat.create(chatData);
+            console.log('ChatRepository.create - chatData:', chatData);
+            const result = await Chat.create(chatData);
+            console.log('ChatRepository.create - result:', result);
+            return result;
         } catch (error) {
+            console.error('ChatRepository.create - error:', error);
             throw new Error(`Error al crear el chat: ${error.message}`);
         }
     }

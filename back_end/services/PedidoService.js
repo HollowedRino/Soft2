@@ -29,9 +29,12 @@ class PedidoService {
 
     async updatePedido(id, pedidoData) {
         try {
-            // Validaciones de negocio
-            this.validatePedidoData(pedidoData);
-            return await PedidoRepository.update(id, pedidoData);
+            // Validaciones de negocio para actualización
+            this.validatePedidoUpdateData(pedidoData);
+            
+            const result = await PedidoRepository.update(id, pedidoData);
+            
+            return result;
         } catch (error) {
             throw new Error(`Error en el servicio al actualizar pedido: ${error.message}`);
         }
@@ -56,7 +59,18 @@ class PedidoService {
         }
     }
 
-    // Método privado para validaciones
+    async getPedidosByRepartidor(repartidorId) {
+        try {
+            if (!repartidorId) {
+                throw new Error('El ID del repartidor es requerido');
+            }
+            return await PedidoRepository.findByRepartidorId(repartidorId);
+        } catch (error) {
+            throw new Error(`Error en el servicio al obtener pedidos del repartidor: ${error.message}`);
+        }
+    }
+
+    // Método privado para validaciones de creación
     validatePedidoData(pedidoData) {
         const requiredFields = ['fecha_pedido', 'estado_pedido', 'usuario_id', 'botica_id', 'metodo_pago_id','repartidor_id'];
         
@@ -65,7 +79,23 @@ class PedidoService {
                 throw new Error(`El campo ${field} es requerido`);
             }
         }
+    }
 
+    // Método privado para validaciones de actualización
+    validatePedidoUpdateData(pedidoData) {
+        // Para actualizaciones, validamos que todos los campos requeridos estén presentes
+        const requiredFields = ['fecha_pedido', 'estado_pedido', 'usuario_id', 'botica_id', 'metodo_pago_id', 'repartidor_id'];
+        
+        for (const field of requiredFields) {
+            if (!pedidoData[field]) {
+                throw new Error(`El campo ${field} es requerido para la actualización`);
+            }
+        }
+
+        // Validar que el estado_pedido sea válido
+        if (!['pendiente', 'completado', 'cancelado'].includes(pedidoData.estado_pedido)) {
+            throw new Error('El estado del pedido debe ser: pendiente, completado o cancelado');
+        }
     }
 }
 
