@@ -109,6 +109,15 @@ class MedicamentoController {
             }
         }
     }
+
+    async findDisponibles(req, res) {
+        try {
+            const medicamentos = await MedicamentoService.findDisponibles();
+            res.status(200).json(medicamentos);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
 }
 
 export default new MedicamentoController();

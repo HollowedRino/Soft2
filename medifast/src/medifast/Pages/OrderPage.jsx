@@ -23,10 +23,12 @@ export const OrderPage = () => {
     navigate('/');
   };
 
-  const total = pedidoDetalles.reduce(
+  const subtotal = pedidoDetalles.reduce(
     (sum, item) => sum + item.precio_unitario * item.cantidad,
     0
   );
+  const descuento = pedido.descuento || 0;
+  const totalFinal = pedido.total_final ?? (subtotal - descuento);
 
   return (
     <motion.section
@@ -63,8 +65,16 @@ export const OrderPage = () => {
                 </li>
               ))}
             </ul>
+            <p>
+              <strong>Subtotal:</strong> ${subtotal.toFixed(2)}
+            </p>
+            {descuento > 0 && (
+              <p>
+                <strong>Descuento:</strong> -${descuento.toFixed(2)}
+              </p>
+            )}
             <p className="font-semibold text-xl mt-2">
-              <strong>Total:</strong> ${total.toFixed(2)}
+              <strong>Total:</strong> ${totalFinal.toFixed(2)}
             </p>
           </div>
         </div>

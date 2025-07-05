@@ -40,7 +40,7 @@ const carritoInicial = [
 
 export const PaymentPage = () => {
   const navigate = useNavigate();
-  const { cart, cartItems, deleteOnlyItemsCart, removeFromCart } = useContext(CartContext);
+  const { cart, cartItems, getDiscount, deleteOnlyItemsCart, removeFromCart } = useContext(CartContext);
   const { user } = useContext(UserContext);
 
   const [paymentMethod, setPaymentMethod] = useState('');
@@ -60,6 +60,10 @@ export const PaymentPage = () => {
       alert('Por favor selecciona un método de pago.');
       return;
     }
+
+    const total = cartItems.reduce((sum, item) => sum + item.medicamento.precio * item.cantidad, 0);
+    const discount = getDiscount(total);
+    const totalFinal = Math.max(0, total - discount);
 
     const { ok, resp: pedidoResp } = await createPedido({
       fecha_pedido: new Date().toISOString(),
@@ -113,7 +117,11 @@ export const PaymentPage = () => {
     deleteOnlyItemsCart();
     navigate('/checkout/order', {
       state: {
-        pedido: pedidoResp,
+        pedido: {
+          ...pedidoResp,
+          total_final: totalFinal,
+          descuento: discount,
+        },
         pedidoDetalles: detalles
       }
     });

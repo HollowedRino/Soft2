@@ -51,7 +51,7 @@ export const AdminProfile = () => {
         .then((data) => {
           const inventarioArray = Array.isArray(data) ? data : [data];
           const mappedInventory = inventarioArray.map((item) => ({
-            id: item.Medicamento.id,
+            id: item.id,
             name: item.Medicamento.nombre,
             descripcion: item.Medicamento.descripcion,
             categoria: item.Medicamento.categoria,
