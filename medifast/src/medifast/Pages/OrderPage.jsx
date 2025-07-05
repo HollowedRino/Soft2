@@ -61,20 +61,20 @@ export const OrderPage = () => {
               {pedidoDetalles.map((item, index) => (
                 <li key={index} className="flex justify-between">
                   <span>{item.medicamento?.nombre || `Medicamento ID ${item.medicamento_id}`} (x{item.cantidad})</span>
-                  <span>${(item.precio_unitario * item.cantidad).toFixed(2)}</span>
+                  <span>S/. {(item.precio_unitario * item.cantidad).toFixed(2)}</span>
                 </li>
               ))}
             </ul>
             <p>
-              <strong>Subtotal:</strong> ${subtotal.toFixed(2)}
+              <strong>Subtotal: </strong> S/. {subtotal.toFixed(2)}
             </p>
             {descuento > 0 && (
               <p>
-                <strong>Descuento:</strong> -${descuento.toFixed(2)}
+                <strong>Descuento:</strong> -S/. {descuento.toFixed(2)}
               </p>
             )}
             <p className="font-semibold text-xl mt-2">
-              <strong>Total:</strong> ${totalFinal.toFixed(2)}
+              <strong>Total: </strong>  S/. {totalFinal.toFixed(2)}
             </p>
           </div>
         </div>
