@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import Grupo2 from "../../../img_src/Grupo2.jpg";
 import { FireworksEffect } from "../components/FireworksEffect";
 
@@ -42,6 +43,25 @@ const memberVariant = {
 };
 
 export const ContactUsPage = () => {
+  const [audio] = useState(() => {
+    const a = new Audio("/audio/1254274376052904007.ogg");
+    a.loop = true;
+    return a;
+  });
+
+  useEffect(() => {
+    // Play audio when component mounts
+    audio.play().catch(error => {
+      console.log("Audio playback failed:", error);
+    });
+
+    // Cleanup function to pause audio when component unmounts
+    return () => {
+      audio.pause();
+      audio.currentTime = 0;
+    };
+  }, [audio]);
+
   return (
     <>
       <motion.div
